@@ -3,6 +3,8 @@
 
 > 项目背景：WOnePC(Avalon) + WOnePC-Vue(Vue3)微前端融合
 
+> micro-app 是由京东前端团队推出的一款微前端框架，旨在降低上手难度、提升工作效率。MicroApp无关技术栈，也不和业务绑定，可以用于任何前端框架。基于WebComponents思想，通过Custom Element结合自定义的ShadowDom，将微前端封装成一个类WebComponent组件，从而实现微前端的组件化渲染。
+
 ## 目录
 
 - [1. 微前端概述](#1-微前端概述)
@@ -19,7 +21,9 @@
 
 ### 1.1 什么是微前端
 
-微前端是一种前端架构模式，它将前端应用分解成更小、更简单的应用，这些应用可以独立开发、测试和部署，同时仍然共同组成一个整体应用。
+微前端是一种前端架构模式，它将前端应用分解成更小、更简单的应用，这些应用可以独立开发、测试和部署，同时仍然共同组成一个整体应用。微前端是借鉴了微服务的架构理念，它既可以将多个项目融合为一，又可以减少项目之间的耦合，提升项目扩展性，相比一整块的前端仓库，微前端架构下的前端仓库倾向于更小更灵活。
+
+微前端的核心三大原则：**独立运行**、**独立部署**、**独立开发**。
 
 ### 1.2 微前端解决的问题
 
@@ -27,6 +31,10 @@
 - **渐进式升级**：可以逐步将旧系统迁移到新技术栈
 - **团队自主性**：不同团队可以独立开发和部署
 - **代码隔离**：减少代码耦合，提高可维护性
+- **独立部署**：可以独立部署每一个单页面应用
+- **改善加载性能**：通过延迟加载代码，改善初始化加载时间
+- **统一规范**：解决基于多页的子应用缺乏管理，规范/标准不统一的问题
+- **资源共享**：统一控制视觉呈现、共享功能和依赖，避免重复工作
 
 ### 1.3 微前端的挑战
 
@@ -52,9 +60,14 @@
 - **基于Web Components**：使用Custom Elements，符合Web标准
 - **简单易用**：使用类似HTML标签的方式集成应用
 - **低侵入性**：子应用几乎不需要改造
-- **完善的沙箱机制**：JS沙箱、样式隔离
+- **完善的沙箱机制**：JS沙箱、样式隔离、元素隔离
 - **预加载能力**：提升用户体验
+- **轻量的体积**：≈10kb (gzip)
+- **零依赖**：不依赖于任何第三方库
 - **适合我们的场景**：从Avalon逐步迁移到Vue3
+- **丰富的功能**：提供了数据通信、静态资源补全等一系列完善的功能
+- **高扩展性**：没有任何依赖，赋予它小巧的体积和更高的扩展性
+- **技术兼容性**：为了保证各个业务之间独立开发、独立部署的能力，micro-app做了诸多兼容，在任何技术框架中都可以正常运行
 
 ## 3. micro-app基础知识
 
@@ -66,15 +79,77 @@
 - **生命周期**：created, beforemount, mounted, unmount
 - **沙箱**：JS隔离、样式隔离
 
+#### 3.1.1 核心流程
+
+micro-app的核心功能是将子应用封装成一个类WebComponent组件，从而实现微前端的组件化渲染。整体流程如下：
+
+1. 创建自定义元素：通过`customElements.define()`方法定义一个自定义元素`micro-app`
+2. 获取子应用资源：通过fetch请求获取子应用的html、js、css等资源
+3. 解析HTML：解析子应用的HTML，提取出js、css等资源
+4. 创建沙箱环境：为子应用创建一个独立的沙箱环境，包括JS沙箱和样式隔离
+5. 执行JS：在沙箱环境中执行子应用的JS代码
+6. 渲染页面：将子应用的HTML渲染到主应用中
+7. 生命周期管理：管理子应用的生命周期，包括创建、挂载、卸载等
+
+#### 3.1.2 生命周期详解
+
+- **created**：子应用创建后触发，此时子应用的DOM还未渲染，适合做一些初始化工作
+- **beforemount**：子应用渲染前触发，此时子应用的DOM已创建但还未挂载到文档流中
+- **mounted**：子应用渲染后触发，此时子应用的DOM已挂载到文档流中，可以进行DOM操作
+- **unmount**：子应用卸载时触发，适合做一些清理工作，如清除定时器、解绑事件等
+
 ### 3.2 基础使用方法
+
+#### 3.2.1 NPM方式引入（官方推荐）
+
+```bash
+# 安装依赖
+npm i @micro-zoe/micro-app --save
+```
+
+```javascript
+// 在项目入口文件中引入
+import microApp from '@micro-zoe/micro-app'
+
+// 初始化
+microApp.start({
+  shadowDOM: false // 在Avalon项目中建议关闭shadowDOM
+})
+```
+
+#### 3.2.2 UMD方式引入（适用于非npm项目）
 
 ```html
 <!-- 主应用引入micro-app -->
 <script src="js/libs/micro-app/index.umd.js"></script>
 <script>
-  // 初始化micro-app
-  window.microApp.start({
-    shadowDOM: false // 在Avalon项目中建议关闭shadowDOM
+  // 等待文档加载完成后再初始化micro-app
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.microApp) {
+      console.log('microApp found, starting...');
+      // 如果microApp.MicroApp是一个类，需要先创建实例
+      if (window.microApp.MicroApp) {
+        // 创建MicroApp类的实例
+        const microAppInstance = new window.microApp.MicroApp();
+        // 调用实例的start方法
+        microAppInstance.start({
+          shadowDOM: false // 在Avalon项目中建议关闭shadowDOM
+        });
+        console.log('microApp initialized using MicroApp class');
+      } else {
+        // 尝试直接调用microApp上的start方法
+        try {
+          window.microApp.start({
+            shadowDOM: false // 在Avalon项目中建议关闭shadowDOM
+          });
+          console.log('microApp initialized using direct start method');
+        } catch (error) {
+          console.error('Error initializing microApp:', error);
+        }
+      }
+    } else {
+      console.error('microApp not found! Please check if micro-app library is loaded correctly.');
+    }
   });
 </script>
 
@@ -87,13 +162,45 @@
 </micro-app>
 ```
 
+> **注意**：UMD方式引入时，不同版本的micro-app初始化方式可能有所不同。上述代码提供了一种兼容性写法，可以适应不同版本的micro-app库。
+
 ### 3.3 主要配置参数
 
-- **name**：子应用名称，必填且唯一
-- **url**：子应用入口，必填
-- **baseroute**：基础路由，用于路由匹配
+- **name**：子应用名称，必填且唯一，必须以字母开头，且不可以带有除中划线和下划线外的特殊符号
+- **url**：子应用入口，必填，会被自动补全，如 http://localhost:3000/index.html
+- **baseroute**：基础路由，用于路由匹配，主应用分配给子应用的基础路由
 - **iframe**：是否使用iframe模式（解决一些兼容性问题）
 - **shadowDOM**：是否开启shadowDOM隔离样式
+- **disable-memory-router**：是否禁用虚拟路由系统，在1.X版本中默认开启虚拟路由系统
+- **inline**：是否使用内联script
+- **disableScopecss**：是否禁用样式隔离
+- **disableSandbox**：是否禁用沙箱
+- **data**：初始化数据，可以通过data属性向子应用传递数据
+
+#### 3.3.1 micro-app初始化配置
+
+```javascript
+// 完整配置示例
+window.microApp.start({
+  shadowDOM: false,         // 是否开启shadowDOM
+  destroy: true,            // 是否在卸载时销毁实例
+  inline: false,            // 是否使用内联script
+  disableScopecss: false,   // 是否禁用样式隔离
+  disableSandbox: false,    // 是否禁用沙箱
+  ssr: false                // 是否启用SSR
+});
+```
+
+### 3.4 生命周期钩子
+
+```javascript
+// 生命周期钩子示例
+document.querySelector('micro-app').addEventListener('created', () => {});
+document.querySelector('micro-app').addEventListener('beforemount', () => {});
+document.querySelector('micro-app').addEventListener('mounted', () => {});
+document.querySelector('micro-app').addEventListener('unmount', () => {});
+document.querySelector('micro-app').addEventListener('error', () => {});
+```
 
 ## 4. 项目架构设计
 
@@ -147,7 +254,35 @@ WOnePC-Vue (Vue3子应用)
 
 #### 5.1.1 主应用向子应用传递数据
 
+##### NPM方式
+
 ```javascript
+// 引入micro-app
+import microApp from '@micro-zoe/micro-app'
+
+// 向指定子应用发送数据
+microApp.setData('vue3-app-appoint', {
+  campusList: [
+    {ID: '1', Name: '校区1'},
+    {ID: '2', Name: '校区2'},
+    {ID: '3', Name: '校区3'}
+  ]
+});
+
+// 发送全局数据（所有子应用可接收）
+microApp.setGlobalData({
+  userInfo: {
+    id: '001',
+    name: '张三'
+  }
+});
+```
+
+##### UMD方式
+
+```javascript
+// 直接使用window.microApp发送数据
+
 // 向指定子应用发送数据
 window.microApp.setData('vue3-app-appoint', {
   campusList: [
@@ -164,9 +299,53 @@ window.microApp.setGlobalData({
     name: '张三'
   }
 });
+
+// 使用EventCenterForMicroApp发送数据（适用于沙箱关闭或特殊场景）
+if (window.microApp && window.microApp.EventCenterForMicroApp) {
+  try {
+    // 创建事件中心实例，参数为子应用名称（不传参数则为全局事件中心）
+    const eventCenter = new window.microApp.EventCenterForMicroApp('vue3-app-appoint');
+    // 发送数据给特定子应用
+    eventCenter.dispatch({
+      type: 'campusSelected',
+      data: {
+        campusId: '1',
+        campusName: '校区1'
+      }
+    });
+    console.log('已通过EventCenterForMicroApp实例发送数据给特定子应用');
+  } catch (error) {
+    console.error('发送数据时发生错误:', error);
+  }
+}
+
+// 发送全局数据（所有子应用可接收）
+if (window.microApp && window.microApp.EventCenterForMicroApp) {
+  try {
+    // 创建全局事件中心实例，不指定子应用名称
+    const globalEventCenter = new window.microApp.EventCenterForMicroApp();
+    // 发送全局数据，所有子应用都能接收
+    globalEventCenter.setGlobalData({
+      campusIds: ['1', '2', '3'],
+      campusNames: ['校区1', '校区2', '校区3'],
+      campusList: [
+        {ID: '1', Name: '校区1'},
+        {ID: '2', Name: '校区2'},
+        {ID: '3', Name: '校区3'}
+      ]
+    });
+    console.log('已通过EventCenterForMicroApp实例的setGlobalData发送全局数据');
+  } catch (error) {
+    console.error('发送全局数据时发生错误:', error);
+  }
+}
 ```
 
+> **注意**：EventCenterForMicroApp类主要用于沙箱关闭或特殊场景下的通信，一般情况下使用window.microApp提供的方法即可。
+
 #### 5.1.2 子应用接收数据
+
+##### 标准方式
 
 ```javascript
 // Vue3子应用中
@@ -215,6 +394,44 @@ export default {
 };
 ```
 
+##### 直接获取数据方式
+
+```javascript
+// 直接获取主应用传递的数据
+const data = window.microApp.getData();
+console.log('主应用传递的数据:', data);
+
+// 直接获取全局数据
+const globalData = window.microApp.getGlobalData();
+console.log('全局数据:', globalData);
+```
+
+##### 使用EventCenterForMicroApp接收数据（沙箱关闭时）
+
+```javascript
+// 当沙箱关闭时，使用主应用注册的通信对象
+// 假设主应用已经注册了eventCenterForAppxx对象
+
+// 直接获取数据
+const data = window.eventCenterForAppxx.getData();
+console.log('主应用传递的数据:', data);
+
+// 添加数据监听器
+function dataListener(data) {
+  console.log('收到来自主应用的数据:', data);
+}
+
+// 添加监听器，autoTrigger设置为true可以在初次绑定时自动触发一次
+// 这在子应用加载晚于主应用发送数据的情况下很有用
+window.eventCenterForAppxx.addDataListener(dataListener, true);
+
+// 移除监听器
+window.eventCenterForAppxx.removeDataListener(dataListener);
+
+// 清空当前子应用的所有绑定函数(全局数据函数除外)
+window.eventCenterForAppxx.clearDataListener();
+```
+
 #### 5.1.3 子应用向主应用传递数据
 
 ```javascript
@@ -248,6 +465,86 @@ document.querySelector('micro-app[name="vue3-app-appoint"]').addEventListener('d
 - **错误处理**：添加适当的错误处理机制
 - **状态同步**：保持主子应用状态一致性
 - **避免循环依赖**：防止数据循环传递
+- **使用autoTrigger**：在添加监听器时考虑设置autoTrigger为true，确保子应用能获取到主应用已经发送的数据
+- **适当的通信方式选择**：
+  - 对于特定子应用通信，使用setData/addDataListener
+  - 对于全局通信，使用setGlobalData/addGlobalDataListener
+  - 对于沙箱关闭场景，使用EventCenterForMicroApp
+
+#### 5.2.1 UMD方式下的通信实践
+
+```javascript
+// 主应用中发送数据的安全写法
+if (window.microApp) {
+  try {
+    // 尝试使用标准方式发送数据
+    window.microApp.setData('vue3-app-appoint', {
+      campusIds: idarr,
+      campusNames: handleSchoolName(idarr),
+      campusList: schools.lists.$model.filter(function(item) {
+        return idarr.includes(item.ID);
+      })
+    });
+    console.log('已通过setData发送校区数据');
+  } catch (error) {
+    console.error('使用setData发送数据时发生错误:', error);
+    
+    // 如果标准方式失败，尝试使用EventCenterForMicroApp
+    if (window.microApp.EventCenterForMicroApp) {
+      try {
+        const eventCenter = new window.microApp.EventCenterForMicroApp('vue3-app-appoint');
+        eventCenter.dispatch({
+          type: 'campusData',
+          data: {
+            campusIds: idarr,
+            campusNames: handleSchoolName(idarr),
+            campusList: schools.lists.$model.filter(function(item) {
+              return idarr.includes(item.ID);
+            })
+          }
+        });
+        console.log('已通过EventCenterForMicroApp实例发送校区数据');
+      } catch (innerError) {
+        console.error('使用EventCenterForMicroApp发送数据时发生错误:', innerError);
+      }
+    }
+  }
+}
+
+// 发送全局数据的安全写法
+if (window.microApp) {
+  try {
+    // 尝试使用标准方式发送全局数据
+    window.microApp.setGlobalData({
+      campusIds: idarr,
+      campusNames: handleSchoolName(idarr),
+      campusList: schools.lists.$model.filter(function(item) {
+        return idarr.includes(item.ID);
+      })
+    });
+    console.log('已通过setGlobalData发送全局校区数据');
+  } catch (error) {
+    console.error('使用setGlobalData发送数据时发生错误:', error);
+    
+    // 如果标准方式失败，尝试使用EventCenterForMicroApp
+    if (window.microApp.EventCenterForMicroApp) {
+      try {
+        const globalEventCenter = new window.microApp.EventCenterForMicroApp();
+        globalEventCenter.setGlobalData({
+          campusIds: idarr,
+          campusNames: handleSchoolName(idarr),
+          campusList: schools.lists.$model.filter(function(item) {
+            return idarr.includes(item.ID);
+          })
+        });
+        console.log('已通过EventCenterForMicroApp实例的setGlobalData发送全局校区数据');
+      } catch (innerError) {
+        console.error('使用EventCenterForMicroApp的setGlobalData发送数据时发生错误:', innerError);
+      }
+    }
+  }
+}
+```
 
 ## 6. 团队协作规范
 
@@ -535,6 +832,7 @@ export default {
 - 在unmounted阶段移除监听器
 - 添加错误处理和日志
 - 考虑使用状态管理工具
+- 使用autoTrigger参数确保获取到初始数据
 
 ### 8.3 路由冲突
 
@@ -544,6 +842,7 @@ export default {
 - 子应用使用hash路由
 - 或使用带前缀的history路由
 - 设置正确的baseroute
+- 在1.X版本中可以通过disable-memory-router属性关闭虚拟路由系统
 
 ### 8.4 加载性能问题
 
@@ -554,6 +853,7 @@ export default {
 - 代码分割
 - 资源压缩
 - 考虑使用CDN
+- 使用Service Worker缓存子应用资源
 
 ### 8.5 沙箱逃逸问题
 
@@ -563,6 +863,110 @@ export default {
 - 避免修改window原型
 - 不使用非标准的全局API
 - 使用iframe模式加强隔离
+
+### 8.6 子应用路由跳转问题
+
+**问题**：子应用切换路由时会重新回到当前路由
+
+**解决方案**：
+- 在micro-app标签中添加disable-memory-router属性关闭虚拟路由系统
+- 或者使用micro-app的0.8版本
+
+```html
+<micro-app
+  name="micro-app-manage"
+  :url="microData.url"
+  :data="microData"
+  disable-memory-router  // 关闭虚拟路由系统
+  @datachange="handleDataChange"
+  @mounted="handleMount"
+></micro-app>
+```
+
+### 8.7 子应用返回上一页问题
+
+**问题**：子应用返回上一页时（或者在浏览器回退），会无法切换回基座应用
+
+**解决方案**：
+- 使用1.X版本可以解决这个问题
+- 0.8版本需要在基座应用的beforeEach里添加以下逻辑：
+
+```javascript
+if (!window.history?.state?.current) {
+   // 解决子应用是vue-router3 与 vue-router4冲突
+   Object.assign(window.history.state, { current: from.fullPath });
+}
+```
+
+### 8.8 回退两次才能回到主应用问题
+
+**解决方案**：
+- 子应用的main.js里使用router.replace而不是router.push
+
+```javascript
+// main.js
+function handleMicroData() {
+  // 是否是微前端环境
+  if (window.__MICRO_APP_ENVIRONMENT__) {
+    // 主动获取基座下发的数据
+    const microData = window.microApp.getData()
+    if (microData.path) {
+      router.replace({ path: microData.path, query: microData.query })  // 这里不能用router.push
+    }
+  }
+}
+```
+
+### 8.9 部署环境接口请求问题
+
+**问题**：部署测试环境后，子应用接口无法正常请求
+
+**解决方案**：
+1. 子应用vue.config.js里publicPath要设置绝对路径
+2. request请求封装里baseURL也要设置绝对路径
+
+```javascript
+// vue.config.js
+module.exports = {
+  publicPath: process.env.NODE_ENV !== 'development' ? process.env.VUE_APP_WEB_URL : ''
+  // 其他配置
+}
+
+// request.js
+service.interceptors.request.use(
+  async config => {
+    config.baseURL = process.env.VUE_APP_WEB_URL + (config.baseUrl || process.env.VUE_APP_BASE_API) // url = base url + request url
+    // 其他配置
+    return config
+  },
+)
+```
+
+### 8.10 子应用接口跨域问题
+
+**问题**：子应用请求接口时出现跨域问题
+
+**解决方案**：
+1. 确保后端接口支持跨域（后端配置）
+2. 前端配置跨域支持：
+   - 本地开发环境：在vue.config.js中配置
+   ```javascript
+   devServer: {
+     headers: {
+       'Access-Control-Allow-Origin': '*'  // 允许跨域配置
+     },
+   }
+   ```
+   - 部署环境：在nginx中配置
+   ```
+   location / {
+     root   /usr/share/nginx/html;
+     index  index.html index.htm;
+     # 跨域配置
+     add_header Access-Control-Allow-Origin *;
+   }
+   ```
+3. 注意：如果前端配置了withCredentials，需要确保后端的Access-Control-Allow-Origin不是*，而是具体的域名
 
 ## 9. Q&A环节
 
@@ -594,7 +998,14 @@ export default {
 
 - **社区支持**：
   - qiankun由蚂蚁金服团队维护，社区更大，资源更丰富
-  - micro-app相对较新，但发展迅速，更符合Web标准
+  - micro-app由京东前端团队维护，相对较新，但发展迅速，更符合Web标准
+
+- **体积**：
+  - micro-app体积更小，约10kb(gzip)
+  - qiankun体积相对较大
+
+- **版本差异**：
+  - micro-app的0.8版本和1.X版本在虚拟路由系统等方面有一些差异，1.X版本默认开启虚拟路由系统
 
 ### 2. 如何处理子应用之间的通信？
 
@@ -918,10 +1329,7 @@ window.microApp.start({
 ### 生命周期钩子
 
 ```javascript
-// 创建前
-window.microApp.preFetchApps([{ name: 'app-name', url: 'app-url' }]);
-
-// 各个生命周期
+// 生命周期钩子示例
 document.querySelector('micro-app').addEventListener('created', () => {});
 document.querySelector('micro-app').addEventListener('beforemount', () => {});
 document.querySelector('micro-app').addEventListener('mounted', () => {});
@@ -929,7 +1337,10 @@ document.querySelector('micro-app').addEventListener('unmount', () => {});
 document.querySelector('micro-app').addEventListener('error', () => {});
 ```
 
+## 参考资料
 
-
-<!-- 说明 -->
-https://juejin.cn/post/7472210592540065833
+- [浅析微前端 micro-app 框架](https://juejin.cn/post/7472210592540065833)
+- [微前端micro-app踩坑记录](https://juejin.cn/post/7273072756157481018)
+- [万字长文: 如何使用micro-app实现微前端应用](https://juejin.cn/post/7094163332495573023)
+- [微前端（micro-app）使用手册](https://juejin.cn/post/7248496133873745976)
+- [浅入深出的微前端MicroApp | 京东云技术团队](https://juejin.cn/post/7280786332711632954)
