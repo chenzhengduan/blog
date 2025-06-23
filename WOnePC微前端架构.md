@@ -3,7 +3,7 @@
 
 > 项目背景：WOnePC(Avalon) + WOnePC-Vue(Vue3)微前端融合
 
-> micro-app 是由京东前端团队推出的一款微前端框架，旨在降低上手难度、提升工作效率。MicroApp无关技术栈，也不和业务绑定，可以用于任何前端框架。基于WebComponents思想，通过Custom Element结合自定义的ShadowDom，将微前端封装成一个类WebComponent组件，从而实现微前端的组件化渲染。
+> micro-app 是由京东前端团队推出的一款微前端框架，旨在降低上手难度、提升工作效率。micro-app无关技术栈，也不和业务绑定，可以用于任何前端框架。基于WebComponents思想，通过Custom Element结合自定义的ShadowDom，将微前端封装成一个类WebComponent组件，从而实现微前端的组件化渲染。
 
 ## 目录
 
