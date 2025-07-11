@@ -1,0 +1,7 @@
+// 设置Element Plus的命名空间为'sub'
+@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
+  $namespace: 'sub'
+);
+
+// 导入Element Plus的完整样式
+@import 'element-plus/theme-chalk/src/index.scss';

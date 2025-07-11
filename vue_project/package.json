@@ -1,0 +1,35 @@
+{
+  "name": "admin-template",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --force",
+    "tsc": "vue-tsc -b",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "s deploy -t s.master.yaml --use-local"
+  },
+  "dependencies": {
+    "@micro-zoe/micro-app": "1.0.0-rc.19",
+    "axios": "^1.7.7",
+    "element-plus": "^2.10.3",
+    "pinia": "2.0.36",
+    "pinia-plugin-persistedstate": "^4.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5",
+    "vue": "3.5.2",
+    "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "local-tool": "^1.1.2",
+    "typescript": "^5.2.2",
+    "unocss": "^0.63.6",
+    "vite": "~5.3.6",
+    "vue-tsc": "^2.0.21"
+  }
+}
