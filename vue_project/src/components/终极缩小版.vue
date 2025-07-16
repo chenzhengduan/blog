@@ -1091,7 +1091,7 @@ const getDragPreviewStyle = () => {
     }
   }
   let actualWidth = 150; // 默认宽度
-  let actualHeight =`${defaultHeight/2}px`; // 默认高度
+  let actualHeight = '40px'; // 默认高度
   
   if (targetCourseElement) {
     // 获取元素的实际渲染尺寸

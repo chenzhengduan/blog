@@ -1,6 +1,91 @@
 <script setup>
-import { ref, onMounted, computed, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, computed, onUnmounted, nextTick, watch } from 'vue'
 import helperDrawer from './helpDrawer.vue';
+
+// === 组件属性定义 ===
+const props = defineProps({
+  // 课程数据
+  courses: {
+    type: Array,
+    default: () => [],
+    validator: (courses) => {
+      // 验证课程数据格式
+      return courses.every(course => 
+        course.id && 
+        course.name && 
+        typeof course.day === 'number' && 
+        course.startTime && 
+        course.endTime
+      )
+    }
+  },
+  // 是否显示当前时间线
+  showCurrentTimeLine: {
+    type: Boolean,
+    default: true
+  },
+  // 是否启用拖拽功能
+  enableDrag: {
+    type: Boolean,
+    default: true
+  },
+  // 是否显示帮助按钮
+  showHelpButton: {
+    type: Boolean,
+    default: true
+  },
+  // 周几的显示文本
+  weekDays: {
+    type: Array,
+    default: () => ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+  }
+})
+
+// === 组件事件定义 ===
+const emit = defineEmits([
+  'course-update',      // 课程位置更新事件
+  'course-click',       // 课程点击事件
+  'course-hover',       // 课程悬浮事件
+  'fullscreen-change'   // 全屏状态改变事件
+])
+
+// === 内部响应式数据 ===
+const internalCourses = ref([])
+
+// 监听外部courses数据变化，同步到内部
+watch(() => props.courses, (newCourses) => {
+  internalCourses.value = [...newCourses]
+}, { immediate: true, deep: true })
+
+// 更新课程位置时通知父组件
+const updateCoursePosition = (course, newDay, newStartTime, newEndTime) => {
+  // 找到课程在数组中的索引
+  const courseIndex = internalCourses.value.findIndex(c => c.id === course.id)
+  if (courseIndex === -1) return
+  
+  // 更新内部数据
+  const updatedCourse = {
+    ...course,
+    day: newDay,
+    startTime: newStartTime,
+    endTime: newEndTime
+  }
+  
+  internalCourses.value[courseIndex] = updatedCourse
+  
+  // 通知父组件
+  emit('course-update', {
+    course: updatedCourse,
+    originalCourse: course,
+    newPosition: { day: newDay, startTime: newStartTime, endTime: newEndTime }
+  })
+  
+  console.log('课程位置已更新:', {
+    课程: course.name,
+    新天: props.weekDays[newDay],
+    新时间: `${newStartTime} - ${newEndTime}`
+  })
+}
 
 // 拖拽功能状态管理
 const dragState = ref({
@@ -26,6 +111,7 @@ const dragState = ref({
   currentTime: '',         // 当前拖拽对应的时间字符串
   targetDay: -1            // 当前拖拽目标的天（0-6，-1表示无效）
 })
+
 const defaultHeight=80;
 const scheduleContainerRef = ref(null)
 const cardContainerRef = ref(null)
@@ -37,6 +123,7 @@ const hoverTimer = ref(null)
 
 const toggleFullscreen = () => {
   isFullscreen.value = !isFullscreen.value
+  emit('fullscreen-change', isFullscreen.value)
 }
 
 // 鼠标悬浮处理函数
@@ -54,6 +141,7 @@ const handleCourseMouseEnter = (course) => {
     // 再次检查是否在拖拽状态（防止定时器执行时状态改变）
     if (!dragState.value.isDragging) {
       hoveredCourse.value = course
+      emit('course-hover', course)
     }
   }, 500)
 }
@@ -67,6 +155,14 @@ const handleCourseMouseLeave = () => {
   
   // 立即清除毛玻璃效果
   hoveredCourse.value = null
+  emit('course-hover', null)
+}
+
+// 处理课程点击事件
+const handleCourseClick = (course, event) => {
+  if (!dragState.value.isDragging) {
+    emit('course-click', { course, event })
+  }
 }
 
 // 判断课程是否应该显示毛玻璃效果
@@ -174,7 +270,7 @@ const pixelToTime = (x, y) => {
         最终dayIndex: dayIndex,
         范围限制前: dayIndex,
         范围限制后: Math.max(0, Math.min(6, dayIndex)),
-        对应天名: weekDays[Math.max(0, Math.min(6, dayIndex))] || '超出范围'
+        对应天名: props.weekDays[Math.max(0, Math.min(6, dayIndex))] || '超出范围'
       })
     }
   }
@@ -217,6 +313,9 @@ const getContainerBounds = () => {
 
 // 开始拖拽
 const handleMouseDown = (event, course) => {
+  // 检查是否启用拖拽功能
+  if (!props.enableDrag) return
+  
   // 只有按下鼠标左键才开始拖拽
   if (event.button !== 0) return
   
@@ -288,7 +387,7 @@ const handleMouseDown = (event, course) => {
   document.addEventListener('mouseup', handleMouseUp)
   
   console.log('开始拖拽课程:', course.name, {
-    原始天: weekDays[course.day],
+    原始天: props.weekDays[course.day],
     起始位置: { x: Math.round(finalStartX), y: Math.round(finalStartY) },
     使用DOM位置: useActualDOMPosition,
     动态列宽: dayWidth,
@@ -330,10 +429,10 @@ const handleMouseMove = (event) => {
         鼠标移动X: deltaX,
         计算newX: newX,
         课程: dragState.value.draggedCourse.name,
-        原始天: weekDays[dragState.value.draggedCourse.day],
+        原始天: props.weekDays[dragState.value.draggedCourse.day],
         动态列宽: dayWidth,
         计算目标天: Math.floor(newX / dayWidth),
-        目标天名称: weekDays[Math.floor(newX / dayWidth)] || '超出范围'
+        目标天名称: props.weekDays[Math.floor(newX / dayWidth)] || '超出范围'
       })
     }
     
@@ -364,7 +463,7 @@ const handleMouseMove = (event) => {
     if (import.meta.env.DEV && Math.random() < 0.05) {
       console.log('拖拽实时位置:', { 
         当前像素: { x: Math.round(newX), y: Math.round(newY) },
-        预览位置: { day: weekDays[day], time: hourToTimeString(hour) },
+        预览位置: { day: props.weekDays[day], time: hourToTimeString(hour) },
         动态列宽: dayWidth
       })
     }
@@ -414,8 +513,8 @@ const handleMouseUp = (event) => {
   const newEndTime = hourToTimeString(hour + courseDuration)
   
   console.log('拖拽结束:', {
-    原始: { day: weekDays[course.day], start: course.startTime, end: course.endTime },
-    新位置: { day: weekDays[day], start: newStartTime, end: newEndTime },
+    原始: { day: props.weekDays[course.day], start: course.startTime, end: course.endTime },
+    新位置: { day: props.weekDays[day], start: newStartTime, end: newEndTime },
     动态列宽: dayWidth,
     理论对齐位置: { x: alignedX, y: alignedY },
     实际停留位置: { x: dragState.value.currentPosition.x, y: dragState.value.currentPosition.y }
@@ -447,27 +546,6 @@ const handleMouseUp = (event) => {
   nextTick(() => {
     // 重新计算所有布局，确保没有冲突
     recalculateAllLayouts()
-  })
-}
-
-// 更新课程位置
-const updateCoursePosition = (course, newDay, newStartTime, newEndTime) => {
-  // 找到课程在数组中的索引
-  const courseIndex = courses.value.findIndex(c => c.id === course.id)
-  if (courseIndex === -1) return
-  
-  // 更新课程数据
-  courses.value[courseIndex] = {
-    ...course,
-    day: newDay,
-    startTime: newStartTime,
-    endTime: newEndTime
-  }
-  
-  console.log('课程位置已更新:', {
-    课程: course.name,
-    新天: weekDays[newDay],
-    新时间: `${newStartTime} - ${newEndTime}`
   })
 }
 
@@ -526,7 +604,7 @@ const getCourseStyle = (course, day) => {
     borderRadius: '4px',
     boxSizing: 'border-box',
     zIndex: isDraggedCourse ? 1 : 2, // 被拖拽的课程降低层级
-    cursor: 'pointer',
+    cursor: props.enableDrag ? 'pointer' : 'default',
     transition: 'all 0.2s ease',
     // 统一的毛玻璃效果处理
     filter: filterValue,
@@ -540,15 +618,13 @@ const helperDrawerRef = ref();
 function openHelp(){
     helperDrawerRef.value?.open({})
 }
+
 // 生成时间刻度数据 - 每半小时为一个单位，每小时80px
 const timeSlots = Array.from({ length: 48 }, (_, i) => {
   const hour = Math.floor(i / 2)
   const minute = i % 2 === 0 ? '00' : '30'
   return { value: i / 2, label: `${hour}:${minute}` }
 })
-
-// 生成一周的日期数据
-const weekDays = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
 
 // 时间格式转换函数
 const parseTime = (timeStr) => {
@@ -571,7 +647,6 @@ const timeToMinutes = (timeStr) => {
 // 当前时间线位置
 const currentTimePosition = ref(0)
 const currentDay = ref(new Date().getDay() - 1) // 0表示周一，-1表示周日
-const showCurrentTimeLine = ref(true)
 
 // 更新当前时间线位置
 const updateCurrentTimePosition = () => {
@@ -617,277 +692,10 @@ onUnmounted(() => {
   }
 })
 
-// 定义20门基础课程
-const baseCourses = [
-  { name: '高等数学', className: '数学1班', studentName: '张小明', color: '#1890ff' },
-  { name: '大学物理', className: '物理1班', studentName: '李小红', color: '#fa8c16' },
-  { name: '线性代数', className: '数学2班', studentName: '王小强', color: '#fadb14' },
-  { name: '编程入门', className: '计算机1班', studentName: '陈小华', color: '#13c2c2' },
-  { name: '数据库原理', className: '软件1班', studentName: '刘小磊', color: '#722ed1' },
-  { name: '计算机网络', className: '网络1班', studentName: '赵小丽', color: '#f5222d' },
-  { name: '操作系统', className: '系统1班', studentName: '孙小军', color: '#52c41a' },
-  { name: '软件工程', className: '工程1班', studentName: '周小芳', color: '#eb2f96' },
-  { name: '算法设计', className: '算法1班', studentName: '吴小东', color: '#2f54eb' },
-  { name: '数据结构', className: '结构1班', studentName: '郑小美', color: '#fa541c' },
-  { name: '人工智能', className: 'AI1班', studentName: '冯小刚', color: '#096dd9' },
-  { name: '机器学习', className: 'ML1班', studentName: '何小静', color: '#d48806' },
-  { name: '计算机图形学', className: '图形1班', studentName: '蒋小宇', color: '#d4b106' },
-  { name: '编译原理', className: '编译1班', studentName: '韩小雪', color: '#08979c' },
-  { name: '网络安全', className: '安全1班', studentName: '邓小平', color: '#531dab' },
-  { name: '移动开发', className: '移动1班', studentName: '彭小江', color: '#cf1322' },
-  { name: '前端开发', className: '前端1班', studentName: '曾小慧', color: '#389e0d' },
-  { name: '后端开发', className: '后端1班', studentName: '肖小波', color: '#c41d7f' },
-  { name: '项目管理', className: '管理1班', studentName: '廖小明', color: '#1d39c4' },
-  { name: '软件测试', className: '测试1班', studentName: '姚小敏', color: '#722ed1' }
-];
-
-// 定义每天不同的时间段安排
-const timeSchedules = {
-  // 周一时间段
-  0: [
-    { startTime: '08:00', endTime: '10:00' },
-    { startTime: '08:30', endTime: '09:30' },
-    { startTime: '09:00', endTime: '11:00' },
-    { startTime: '09:30', endTime: '10:30' },
-    { startTime: '10:00', endTime: '12:00' },
-    { startTime: '10:30', endTime: '11:30' },
-    { startTime: '11:00', endTime: '12:00' },
-    { startTime: '13:00', endTime: '15:00' },
-    { startTime: '13:30', endTime: '14:30' },
-    { startTime: '14:00', endTime: '16:00' },
-    { startTime: '14:30', endTime: '15:30' },
-    { startTime: '15:00', endTime: '17:00' },
-    { startTime: '15:30', endTime: '16:30' },
-    { startTime: '16:00', endTime: '18:00' },
-    { startTime: '16:30', endTime: '17:30' },
-    { startTime: '17:00', endTime: '18:00' },
-    { startTime: '18:00', endTime: '19:00' },
-    { startTime: '18:30', endTime: '19:30' },
-    { startTime: '19:00', endTime: '20:00' },
-    { startTime: '19:30', endTime: '20:30' }
-  ],
-  // 周二时间段
-  1: [
-    { startTime: '07:00', endTime: '09:00' },
-    { startTime: '07:30', endTime: '08:30' },
-    { startTime: '08:00', endTime: '10:00' },
-    { startTime: '08:30', endTime: '09:30' },
-    { startTime: '09:00', endTime: '11:00' },
-    { startTime: '09:30', endTime: '10:30' },
-    { startTime: '10:00', endTime: '11:00' },
-    { startTime: '12:00', endTime: '14:00' },
-    { startTime: '12:30', endTime: '13:30' },
-    { startTime: '13:00', endTime: '15:00' },
-    { startTime: '13:30', endTime: '14:30' },
-    { startTime: '14:00', endTime: '16:00' },
-    { startTime: '14:30', endTime: '15:30' },
-    { startTime: '15:00', endTime: '17:00' },
-    { startTime: '15:30', endTime: '16:30' },
-    { startTime: '16:00', endTime: '17:00' },
-    { startTime: '17:00', endTime: '18:00' },
-    { startTime: '17:30', endTime: '18:30' },
-    { startTime: '18:00', endTime: '19:00' },
-    { startTime: '18:30', endTime: '19:30' }
-  ],
-  // 周三时间段
-  2: [
-    { startTime: '06:30', endTime: '08:30' },
-    { startTime: '07:00', endTime: '08:00' },
-    { startTime: '07:30', endTime: '09:30' },
-    { startTime: '08:00', endTime: '09:00' },
-    { startTime: '08:30', endTime: '10:30' },
-    { startTime: '09:00', endTime: '10:00' },
-    { startTime: '09:30', endTime: '10:30' },
-    { startTime: '11:00', endTime: '13:00' },
-    { startTime: '11:30', endTime: '12:30' },
-    { startTime: '12:00', endTime: '14:00' },
-    { startTime: '12:30', endTime: '13:30' },
-    { startTime: '13:00', endTime: '15:00' },
-    { startTime: '13:30', endTime: '14:30' },
-    { startTime: '14:00', endTime: '16:00' },
-    { startTime: '14:30', endTime: '15:30' },
-    { startTime: '15:00', endTime: '16:00' },
-    { startTime: '16:00', endTime: '17:00' },
-    { startTime: '16:30', endTime: '17:30' },
-    { startTime: '17:00', endTime: '18:00' },
-    { startTime: '17:30', endTime: '18:30' },
-    // 周三额外增加的时间段 - 增加同时段冲突
-    { startTime: '07:00', endTime: '09:00' }, // 与前面重叠
-    { startTime: '07:30', endTime: '08:30' }, // 与前面重叠
-    { startTime: '08:00', endTime: '10:00' }, // 与前面重叠
-    { startTime: '08:30', endTime: '09:30' }, // 与前面重叠
-    { startTime: '13:00', endTime: '14:00' }, // 与前面重叠
-    { startTime: '13:30', endTime: '15:30' }, // 与前面重叠
-    { startTime: '14:00', endTime: '15:00' }, // 与前面重叠
-    { startTime: '14:30', endTime: '16:30' }, // 与前面重叠
-    { startTime: '15:00', endTime: '17:00' }, // 与前面重叠
-    { startTime: '15:30', endTime: '16:30' }  // 与前面重叠
-  ],
-  // 周四时间段
-  3: [
-    { startTime: '06:00', endTime: '08:00' },
-    { startTime: '06:30', endTime: '07:30' },
-    { startTime: '07:00', endTime: '09:00' },
-    { startTime: '07:30', endTime: '08:30' },
-    { startTime: '08:00', endTime: '10:00' },
-    { startTime: '08:30', endTime: '09:30' },
-    { startTime: '09:00', endTime: '10:00' },
-    { startTime: '10:30', endTime: '12:30' },
-    { startTime: '11:00', endTime: '12:00' },
-    { startTime: '11:30', endTime: '13:30' },
-    { startTime: '12:00', endTime: '13:00' },
-    { startTime: '12:30', endTime: '14:30' },
-    { startTime: '13:00', endTime: '14:00' },
-    { startTime: '13:30', endTime: '15:30' },
-    { startTime: '14:00', endTime: '15:00' },
-    { startTime: '14:30', endTime: '15:30' },
-    { startTime: '15:30', endTime: '16:30' },
-    { startTime: '16:00', endTime: '17:00' },
-    { startTime: '16:30', endTime: '17:30' },
-    { startTime: '17:00', endTime: '18:00' },
-    // 周四额外增加的时间段 - 增加同时段冲突
-    { startTime: '06:30', endTime: '08:30' }, // 与前面重叠
-    { startTime: '07:00', endTime: '08:00' }, // 与前面重叠
-    { startTime: '07:30', endTime: '09:30' }, // 与前面重叠
-    { startTime: '08:00', endTime: '09:00' }, // 与前面重叠
-    { startTime: '11:00', endTime: '13:00' }, // 与前面重叠
-    { startTime: '11:30', endTime: '12:30' }, // 与前面重叠
-    { startTime: '12:00', endTime: '14:00' }, // 与前面重叠
-    { startTime: '12:30', endTime: '13:30' }, // 与前面重叠
-    { startTime: '13:30', endTime: '14:30' }, // 与前面重叠
-    { startTime: '14:00', endTime: '16:00' }  // 与前面重叠
-  ],
-  // 周五时间段
-  4: [
-    { startTime: '08:30', endTime: '10:30' },
-    { startTime: '09:00', endTime: '10:00' },
-    { startTime: '09:30', endTime: '11:30' },
-    { startTime: '10:00', endTime: '11:00' },
-    { startTime: '10:30', endTime: '12:30' },
-    { startTime: '11:00', endTime: '12:00' },
-    { startTime: '11:30', endTime: '12:30' },
-    { startTime: '13:30', endTime: '15:30' },
-    { startTime: '14:00', endTime: '15:00' },
-    { startTime: '14:30', endTime: '16:30' },
-    { startTime: '15:00', endTime: '16:00' },
-    { startTime: '15:30', endTime: '17:30' },
-    { startTime: '16:00', endTime: '17:00' },
-    { startTime: '16:30', endTime: '18:30' },
-    { startTime: '17:00', endTime: '18:00' },
-    { startTime: '17:30', endTime: '18:30' },
-    { startTime: '18:30', endTime: '19:30' },
-    { startTime: '19:00', endTime: '20:00' },
-    { startTime: '19:30', endTime: '20:30' },
-    { startTime: '20:00', endTime: '21:00' }
-  ],
-  // 周六时间段 - 周末实践课程
-  5: [
-    { startTime: '09:00', endTime: '11:00' },
-    { startTime: '09:30', endTime: '10:30' },
-    { startTime: '10:00', endTime: '12:00' },
-    { startTime: '10:30', endTime: '11:30' },
-    { startTime: '11:00', endTime: '13:00' },
-    { startTime: '14:00', endTime: '16:00' },
-    { startTime: '14:30', endTime: '15:30' },
-    { startTime: '15:00', endTime: '17:00' },
-    { startTime: '15:30', endTime: '16:30' },
-    { startTime: '16:00', endTime: '18:00' }
-  ],
-  // 周日时间段 - 复习和总结
-  6: [
-    { startTime: '10:00', endTime: '12:00' },
-    { startTime: '10:30', endTime: '11:30' },
-    { startTime: '11:00', endTime: '13:00' },
-    { startTime: '14:00', endTime: '16:00' },
-    { startTime: '14:30', endTime: '15:30' },
-    { startTime: '15:00', endTime: '17:00' },
-    { startTime: '15:30', endTime: '16:30' },
-    { startTime: '16:00', endTime: '17:00' }
-  ]
-};
-
-// 生成完整的课程数据
-const courses = ref([]);
-
-// 初始化课程数据
-const initializeCourses = () => {
-  const allCourses = [];
-  let courseId = 1;
-
-  // 遍历周一到周五
-  for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
-    const daySchedule = timeSchedules[dayIndex];
-    
-    // 周三和周四安排更多课程（30门），其他天安排20门
-    const courseCount = (dayIndex === 2 || dayIndex === 3) ? 30 : 20;
-    
-    for (let i = 0; i < courseCount; i++) {
-      const baseCourse = baseCourses[i % 20]; // 当超过20门时，循环使用基础课程
-      const timeSlot = daySchedule[i];
-      
-      // 如果是重复的课程，在名称后加上序号
-      const courseName = i >= 20 ? `${baseCourse.name}(${Math.floor(i/20) + 1})` : baseCourse.name;
-      const className = i >= 20 ? `${baseCourse.className}(${Math.floor(i/20) + 1})` : baseCourse.className;
-      
-      allCourses.push({
-        id: courseId++,
-        name: courseName,
-        className: className,
-        studentName: baseCourse.studentName,
-        day: dayIndex,
-        startTime: timeSlot.startTime,
-        endTime: timeSlot.endTime,
-        color: baseCourse.color
-      });
-    }
-  }
-  
-  // 处理周六 - 安排10门课程（实践和项目课程）
-  const saturdaySchedule = timeSchedules[5];
-  for (let i = 0; i < 10; i++) {
-    const baseCourse = baseCourses[i];
-    const timeSlot = saturdaySchedule[i];
-    
-    allCourses.push({
-      id: courseId++,
-      name: `${baseCourse.name}实践`,
-      className: `${baseCourse.className}(实践)`,
-      studentName: baseCourse.studentName,
-      day: 5, // 周六
-      startTime: timeSlot.startTime,
-      endTime: timeSlot.endTime,
-      color: baseCourse.color
-    });
-  }
-  
-  // 处理周日 - 安排8门课程（复习和总结）
-  const sundaySchedule = timeSchedules[6];
-  for (let i = 0; i < 8; i++) {
-    const baseCourse = baseCourses[i];
-    const timeSlot = sundaySchedule[i];
-    
-    allCourses.push({
-      id: courseId++,
-      name: `${baseCourse.name}复习`,
-      className: `${baseCourse.className}(复习)`,
-      studentName: baseCourse.studentName,
-      day: 6, // 周日
-      startTime: timeSlot.startTime,
-      endTime: timeSlot.endTime,
-      color: baseCourse.color
-    });
-  }
-  
-  courses.value = allCourses;
-};
-
-// 初始化课程数据
-initializeCourses();
-
 // 计算某一天所有课程的布局 - 重新设计的冲突处理算法
 const calculateDayLayout = (dayIndex) => {
   // 获取当天所有课程并按开始时间排序
-  const allCoursesInDay = courses.value.filter(c => c.day === dayIndex)
+  const allCoursesInDay = internalCourses.value.filter(c => c.day === dayIndex)
   
   if (allCoursesInDay.length === 0) {
     return new Map()
@@ -1208,13 +1016,26 @@ const getDragPreviewTimeStyle = () => {
   };
 };
 
-let input=ref('')
+// === 对外暴露的方法 ===
+defineExpose({
+  // 手动触发全屏切换
+  toggleFullscreen,
+  // 获取当前课程数据
+  getCourses: () => internalCourses.value,
+  // 设置课程数据（可选的手动更新方法）
+  setCourses: (newCourses) => {
+    internalCourses.value = [...newCourses]
+  },
+  // 重新计算布局
+  recalculateLayout: recalculateAllLayouts
+})
 </script>
 
 <template>
-  <helperDrawer  ref="helperDrawerRef"></helperDrawer>
-  <el-input v-model="input" style="width: 240px" placeholder="Please input" />
-  <div @click="openHelp">123213</div>
+  <helperDrawer ref="helperDrawerRef"></helperDrawer>
+  <div v-if="props.showHelpButton" @click="openHelp" class="help-button">
+    <el-button type="primary" size="small">帮助</el-button>
+  </div>
   <div class="schedule-container" :class="{'is-fullscreen': isFullscreen}" ref="scheduleContainerRef">
     <!-- 表头行 -->
     <div class="header">
@@ -1224,7 +1045,7 @@ let input=ref('')
         </el-button>
       </div>
       <div
-        v-for="(day, index) in weekDays"
+        v-for="(day, index) in props.weekDays"
         :key="index"
         class="day-column"
         :class="{ 'day-column-highlight': dragState.isDragging && dragState.targetDay === index }"
@@ -1284,7 +1105,7 @@ let input=ref('')
             <!-- 课程容器 - 绝对定位 -->
             <div class="courses-container">
               <div
-                v-for="course in courses.filter(c => c.day === dayIndex)"
+                v-for="course in internalCourses.filter(c => c.day === dayIndex)"
                 :key="course.id"
                 class="course-item"
                 :style="getCourseStyle(course, dayIndex)"
@@ -1292,6 +1113,7 @@ let input=ref('')
                 @mouseenter="handleCourseMouseEnter(course)"
                 @mouseleave="handleCourseMouseLeave"
                 @mousedown="handleMouseDown($event, course)"
+                @click="handleCourseClick(course, $event)"
               >
                 <!-- 头部时间区域 -->
                 <div class="course-header">
@@ -1337,7 +1159,7 @@ let input=ref('')
         
         <!-- 当前时间线 -->
         <div 
-          v-if="showCurrentTimeLine" 
+          v-if="props.showCurrentTimeLine" 
           class="current-time-line"
           :style="{ top: `${currentTimePosition}px` }"
         >
@@ -1811,5 +1633,11 @@ let input=ref('')
     transform: scale(1.08);
     box-shadow: 0 4px 16px rgba(82, 196, 26, 0.6);
   }
+}
+
+/* 帮助按钮样式 */
+.help-button {
+  margin-bottom: 16px;
+  text-align: right;
 }
 </style>
