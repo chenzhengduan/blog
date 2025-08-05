@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多鱼类存活率数据生成器</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .controls {
+            margin-bottom: 30px;
+        }
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .input-group label {
+            font-weight: bold;
+            color: #333;
+            min-width: 120px;
+        }
+        .input-group input, .input-group select {
+            padding: 10px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 150px;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .generate-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            margin: 10px;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .progress {
+            margin: 20px 0;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            color: #666;
+            font-size: 14px;
+        }
+        .stats {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+        .stats h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .preview {
+            margin-top: 30px;
+            display: none;
+        }
+        .preview h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .preview-table th,
+        .preview-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .preview-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+        .preview-table tr:hover {
+            background: #f8f9fa;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .desc-table {
+            margin: 0 auto 20px auto;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .desc-table th, .desc-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e1e5e9;
+            text-align: left;
+        }
+        .desc-table th {
+            background: #f0f0f0;
+            color: #333;
+            font-weight: bold;
+        }
+        .desc-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐟 多鱼类存活率数据生成器</h1>
+            <p>支持青鱼、草鱼、团头鲂、花䱻等多种鱼类，一键生成存活率Excel数据（16个鱼塘，2024年数据）</p>
+        </div>
+        <div class="controls">
+            <div class="input-group">
+                <label for="fishType">鱼类选择：</label>
+                <select id="fishType" onchange="onFishTypeChange()">
+                    <option value="qingyu">青鱼</option>
+                    <option value="caoyu">草鱼</option>
+                    <option value="tuantoufang">团头鲂</option>
+                    <option value="huazhao">花䱻</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="dataCount">数据条数：</label>
+                <input type="number" id="dataCount" value="500" min="1" max="10000">
+            </div>
+            <div class="input-group">
+                <label for="fileName">文件名：</label>
+                <input type="text" id="fileName" value="青鱼存活率数据" placeholder="请输入文件名">
+            </div>
+            <button class="generate-btn" onclick="generateData()">🚀 生成数据</button>
+        </div>
+        <div id="descTableContainer"></div>
+        <div class="progress" id="progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">准备生成数据...</div>
+        </div>
+        <div class="success-message" id="successMessage">
+            ✅ 数据生成成功！Excel文件已下载到您的下载文件夹。
+        </div>
+        <div class="error-message" id="errorMessage">
+            ❌ 生成失败，请检查输入参数后重试。
+        </div>
+        <div class="stats" id="stats">
+            <h3>📊 数据统计信息</h3>
+            <div class="stats-grid" id="statsGrid"></div>
+        </div>
+        <div class="preview" id="preview">
+            <h3>📋 数据预览（前5条）</h3>
+            <table class="preview-table" id="previewTable">
+                <thead>
+                    <tr id="previewHeader"></tr>
+                </thead>
+                <tbody id="previewBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        // 配置多鱼类信息
+        const fishConfig = {
+            qingyu: {
+                name: '青鱼',
+                fileName: '青鱼存活率数据',
+                sheetName: '青鱼存活率数据',
+                desc: [
+                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                    ['投放时间', '2024年内的随机日期'],
+                    ['检测时间', '投放时间（每天检测）'],
+                    ['投放数量（尾）', '3000-8000尾随机数'],
+                    ['存活数量（尾）', '根据基础存活率计算'],
+                    ['死亡原因', 'pH值异常/疾病/操作损伤/天敌/水质问题/饲料问题'],
+                    ['养殖周期（天）', '90-150天随机数'],
+                    ['负责人', 'EMP001/EMP002/EMP003/EMP004/EMP005'],
+                    ['水温（℃）', '正态分布生成'],
+                    ['溶氧（mg/L）', '正态分布生成'],
+                    ['pH', '正态分布生成'],
+                    ['氨氮（mg/L）', '正态分布生成'],
+                    ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
+                    ['综合存活率（%）', '基础存活率 × 环境修正因子']
+                ],
+                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+            },
+            caoyu: {
+                name: '草鱼',
+                fileName: '草鱼存活率数据',
+                sheetName: '草鱼存活率数据',
+                desc: [
+                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                    ['投放时间', '2024年内的随机日期'],
+                    ['检测时间', '投放时间（每天检测）'],
+                    ['投放数量（尾）', '3000-8000尾随机数'],
+                    ['存活数量（尾）', '根据基础存活率计算'],
+                    ['死亡原因', 'pH值异常/疾病/操作损伤/天敌/水质问题/饲料问题'],
+                    ['养殖周期（天）', '90-150天随机数'],
+                    ['负责人', 'EMP001/EMP002/EMP003/EMP004/EMP005'],
+                    ['水温（℃）', '正态分布生成'],
+                    ['溶氧（mg/L）', '正态分布生成'],
+                    ['pH', '正态分布生成'],
+                    ['氨氮（mg/L）', '正态分布生成'],
+                    ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
+                    ['综合存活率（%）', '基础存活率 × 环境修正因子']
+                ],
+                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+            },
+            tuantoufang: {
+                name: '团头鲂',
+                fileName: '团头鲂存活率数据',
+                sheetName: '团头鲂存活率数据',
+                desc: [
+                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                    ['投放时间', '2024年内的随机日期'],
+                    ['检测时间', '投放时间+0~10天'],
+                    ['投放数量（尾）', '3000-8000尾随机数'],
+                    ['存活数量（尾）', '根据基础存活率计算'],
+                    ['死亡原因', 'pH值异常/疾病/操作损伤/天敌/水质问题/饲料问题'],
+                    ['养殖周期（天）', '90-150天随机数'],
+                    ['负责人', 'EMP001/EMP002/EMP003/EMP004/EMP005'],
+                    ['水温（℃）', '正态分布生成'],
+                    ['溶氧（mg/L）', '正态分布生成'],
+                    ['pH', '正态分布生成'],
+                    ['氨氮（mg/L）', '正态分布生成'],
+                    ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
+                    ['综合存活率（%）', '基础存活率 × 环境修正因子']
+                ],
+                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+            },
+            huazhao: {
+                name: '花䱻',
+                fileName: '花䱻存活率数据',
+                sheetName: '花䱻存活率数据',
+                desc: [
+                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                    ['投放时间', '2024年内的随机日期'],
+                    ['检测时间', '投放时间+0~10天'],
+                    ['投放数量（尾）', '3000-8000尾随机数'],
+                    ['存活数量（尾）', '根据基础存活率计算'],
+                    ['死亡原因', 'pH值异常/疾病/操作损伤/天敌/水质问题/饲料问题'],
+                    ['养殖周期（天）', '90-150天随机数'],
+                    ['负责人', 'EMP001/EMP002/EMP003/EMP004/EMP005'],
+                    ['水温（℃）', '正态分布生成'],
+                    ['溶氧（mg/L）', '正态分布生成'],
+                    ['pH', '正态分布生成'],
+                    ['氨氮（mg/L）', '正态分布生成'],
+                    ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
+                    ['综合存活率（%）', '基础存活率 × 环境修正因子']
+                ],
+                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+            }
+        };
+
+        // 公共数据生成器
+        class 存活率数据生成器 {
+            constructor() {
+                this.环境最优值 = { '溶氧': 6.0, '水温': 24.0, 'pH': 7.0, '氨氮': 0.1 };
+                this.环境权重 = { '溶氧': 0.35, '水温': 0.30, 'pH': 0.20, '氨氮': 0.15 };
+                this.死亡原因列表 = ['pH值异常', '疾病', '操作损伤', '天敌', '水质问题', '饲料问题'];
+                this.负责人列表 = ['EMP001', 'EMP002', 'EMP003', 'EMP004', 'EMP005'];
+                
+                // 为16个养殖池生成固定的基础信息
+                this.养殖池信息 = {};
+                for (let i = 1; i <= 16; i++) {
+                    const poolId = `QY${i.toString().padStart(2, '0')}`;
+                    this.养殖池信息[poolId] = {
+                        '投放时间': this.生成投放时间(),
+                        '投放数量': this.生成投放数量(),
+                        '养殖周期': Math.floor(Math.random() * (150 - 90 + 1)) + 90,
+                        '负责人': this.负责人列表[Math.floor(Math.random() * this.负责人列表.length)]
+                    };
+                }
+            }
+            生成养殖池编号(index) {
+                const poolNum = (index % 16) + 1;
+                return `QY${poolNum.toString().padStart(2, '0')}`;
+            }
+            生成投放时间() {
+                // 模拟实际的投放时间分布（春季和秋季是主要投放期）
+                const 投放期概率 = Math.random();
+                let startDate, endDate;
+                
+                if (投放期概率 < 0.4) {
+                    // 春季投放期：3-5月
+                    startDate = new Date('2024-03-01');
+                    endDate = new Date('2024-05-31');
+                } else if (投放期概率 < 0.7) {
+                    // 秋季投放期：9-11月
+                    startDate = new Date('2024-09-01');
+                    endDate = new Date('2024-11-30');
+                } else {
+                    // 其他时间：1-2月，6-8月，12月
+                    const 其他期概率 = Math.random();
+                    if (其他期概率 < 0.5) {
+                        startDate = new Date('2024-01-01');
+                        endDate = new Date('2024-02-29');
+                    } else if (其他期概率 < 0.8) {
+                        startDate = new Date('2024-06-01');
+                        endDate = new Date('2024-08-31');
+                    } else {
+                        startDate = new Date('2024-12-01');
+                        endDate = new Date('2024-12-31');
+                    }
+                }
+                
+                const daysBetween = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+                const randomDays = Math.floor(Math.random() * daysBetween);
+                const randomDate = new Date(startDate.getTime() + randomDays * 24 * 60 * 60 * 1000);
+                return randomDate.toISOString().split('T')[0];
+            }
+            生成投放数量() {
+                // 根据养殖池大小生成合理的投放数量
+                const 池子大小 = Math.random();
+                if (池子大小 < 0.3) {
+                    // 小池子：3000-5000尾
+                    return Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000;
+                } else if (池子大小 < 0.7) {
+                    // 中池子：5000-7000尾
+                    return Math.floor(Math.random() * (7000 - 5000 + 1)) + 5000;
+                } else {
+                    // 大池子：7000-9000尾
+                    return Math.floor(Math.random() * (9000 - 7000 + 1)) + 7000;
+                }
+            }
+            生成基础存活率() {
+                return Math.random() * (0.98 - 0.90) + 0.90; // 提高基础存活率下限到90%
+            }
+            生成存活数量(投放数量, 基础存活率) {
+                return Math.floor(投放数量 * 基础存活率);
+            }
+            生成环境参数() {
+                // 根据季节调整水温（夏季偏高，冬季偏低）
+                const 当前月份 = new Date().getMonth() + 1;
+                let 水温均值 = 24.0;
+                if (当前月份 >= 6 && 当前月份 <= 8) {
+                    水温均值 = 26.0; // 夏季
+                } else if (当前月份 >= 12 || 当前月份 <= 2) {
+                    水温均值 = 18.0; // 冬季
+                }
+                
+                return {
+                    '水温': Math.max(16.0, Math.min(32.0, this.正态分布(水温均值, 1.5))),
+                    '溶氧': Math.max(4.5, Math.min(8.5, this.正态分布(6.0, 0.8))),
+                    'pH': Math.max(6.8, Math.min(8.2, this.正态分布(7.0, 0.3))),
+                    '氨氮': Math.max(0.02, Math.min(0.25, this.正态分布(0.1, 0.05)))
+                };
+            }
+            正态分布(均值, 标准差) {
+                let u = 0, v = 0;
+                while (u === 0) u = Math.random();
+                while (v === 0) v = Math.random();
+                const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+                return 均值 + z * 标准差;
+            }
+            计算环境修正因子(环境参数) {
+                let 修正因子 = 1.0;
+                for (const [参数名, 实测值] of Object.entries(环境参数)) {
+                    const 最优值 = this.环境最优值[参数名];
+                    const 权重 = this.环境权重[参数名];
+                    const 偏差 = Math.abs(实测值 - 最优值);
+                    修正因子 -= 权重 * 偏差 * 0.05; // 进一步降低环境参数对存活率的影响
+                }
+                return Math.max(0.95, Math.min(1.0, 修正因子)); // 确保修正因子在0.95-1.0之间
+            }
+            生成单条数据(index, 指定投放时间 = null, 指定检测时间 = null) {
+                const 养殖池编号 = this.生成养殖池编号(index);
+                const 投放时间 = 指定投放时间 || this.生成投放时间();
+                const 检测时间 = 指定检测时间 || 投放时间;
+                const 投放数量 = this.生成投放数量();
+                const 基础存活率 = this.生成基础存活率();
+                const 环境参数 = this.生成环境参数();
+                const 水温 = 环境参数['水温'];
+                const 溶氧 = 环境参数['溶氧'];
+                const pH = 环境参数['pH'];
+                const 氨氮 = 环境参数['氨氮'];
+                const 基础存活率百分比 = 基础存活率 * 100;
+                const 环境修正因子 = this.计算环境修正因子(环境参数);
+                let 综合存活率 = 基础存活率百分比 * 环境修正因子;
+                // 确保综合存活率不低于90%
+                综合存活率 = Math.max(90.0, 综合存活率);
+                const 存活数量 = Math.floor(投放数量 * (综合存活率 / 100));
+                // 根据环境参数智能判断死亡原因
+                let 死亡原因;
+                if (pH < 6.8 || pH > 7.8) {
+                    死亡原因 = 'pH值异常';
+                } else if (溶氧 < 5.0) {
+                    死亡原因 = '缺氧';
+                } else if (水温 < 18 || 水温 > 30) {
+                    死亡原因 = '温度异常';
+                } else if (氨氮 > 0.2) {
+                    死亡原因 = '水质异常';
+                } else if (Math.random() < 0.3) {
+                    死亡原因 = '疾病';
+                } else if (Math.random() < 0.2) {
+                    死亡原因 = '寄生虫感染';
+                } else if (Math.random() < 0.15) {
+                    死亡原因 = '细菌感染';
+                } else if (Math.random() < 0.1) {
+                    死亡原因 = '操作损伤';
+                } else if (Math.random() < 0.05) {
+                    死亡原因 = '天敌';
+                } else {
+                    死亡原因 = '饲料问题';
+                }
+                // 根据投放时间计算合理的养殖周期
+                const 投放月份 = new Date(投放时间).getMonth() + 1;
+                let 养殖周期;
+                
+                if (投放月份 >= 3 && 投放月份 <= 5) {
+                    // 春季投放：养殖周期较长 120-180天
+                    养殖周期 = Math.floor(Math.random() * (180 - 120 + 1)) + 120;
+                } else if (投放月份 >= 9 && 投放月份 <= 11) {
+                    // 秋季投放：养殖周期中等 90-150天
+                    养殖周期 = Math.floor(Math.random() * (150 - 90 + 1)) + 90;
+                } else {
+                    // 其他时间：养殖周期较短 60-120天
+                    养殖周期 = Math.floor(Math.random() * (120 - 60 + 1)) + 60;
+                }
+                // 根据养殖池编号分配负责人（模拟实际工作分配）
+                const 池子编号 = parseInt(养殖池编号.substring(2));
+                const 负责人索引 = (池子编号 - 1) % this.负责人列表.length;
+                const 负责人 = this.负责人列表[负责人索引];
+                return {
+                    '养殖池编号': 养殖池编号,
+                    '投放时间': 投放时间,
+                    '检测时间': 检测时间,
+                    '投放数量（尾）': 投放数量,
+                    '存活数量（尾）': 存活数量,
+                    '死亡原因': 死亡原因,
+                    '养殖周期（天）': 养殖周期,
+                    '负责人': 负责人,
+                    '水温（℃）': Math.round(水温 * 10) / 10,
+                    '溶氧（mg/L）': Math.round(溶氧 * 10) / 10,
+                    'pH': Math.round(pH * 10) / 10,
+                    '氨氮（mg/L）': Math.round(氨氮 * 100) / 100,
+                    '基础存活率（%）': Math.round(基础存活率百分比 * 10) / 10,
+                    '综合存活率（%）': Math.round(综合存活率 * 10) / 10
+                };
+            }
+            生成数据集(数据条数) {
+                const 数据列表 = [];
+                
+                // 计算需要多少天（每天16个鱼池）
+                const 天数 = Math.ceil(数据条数 / 16);
+                
+                // 生成检测时间序列（从2024-01-01开始，每天递增）
+                const 检测时间列表 = [];
+                const startDate = new Date('2024-01-01');
+                for (let i = 0; i < 天数; i++) {
+                    const 检测日期 = new Date(startDate);
+                    检测日期.setDate(startDate.getDate() + i);
+                    检测时间列表.push(检测日期.toISOString().split('T')[0]);
+                }
+                
+                // 生成数据
+                for (let i = 0; i < 数据条数; i++) {
+                    const 鱼池索引 = i % 16; // 0-15，对应QY01-QY16
+                    const 天数索引 = Math.floor(i / 16); // 第几天
+                    const 检测时间 = 检测时间列表[天数索引];
+                    
+                    // 投放时间 = 检测时间 - 随机天数(5-30天)
+                    const 投放天数偏移 = Math.floor(Math.random() * (30 - 5 + 1)) + 5;
+                    const 投放日期 = new Date(检测时间);
+                    投放日期.setDate(投放日期.getDate() - 投放天数偏移);
+                    const 投放时间 = 投放日期.toISOString().split('T')[0];
+                    
+                    数据列表.push(this.生成单条数据(鱼池索引, 投放时间, 检测时间));
+                }
+                
+                // 按优先级排序：1检测时间正序 > 2同一天内鱼池轮流 > 3投放时间正序
+                数据列表.sort((a, b) => {
+                    // 1. 检测时间正序
+                    if (a['检测时间'] !== b['检测时间']) {
+                        return a['检测时间'].localeCompare(b['检测时间']);
+                    }
+                    
+                    // 2. 同一天内鱼池轮流（QY01-QY16）
+                    const 鱼池A = parseInt(a['养殖池编号'].substring(2));
+                    const 鱼池B = parseInt(b['养殖池编号'].substring(2));
+                    if (鱼池A !== 鱼池B) return 鱼池A - 鱼池B;
+                    
+                    // 3. 投放时间正序
+                    return a['投放时间'].localeCompare(b['投放时间']);
+                });
+                
+                return 数据列表;
+            }
+        }
+
+        function onFishTypeChange() {
+            const fishType = document.getElementById('fishType').value;
+            const config = fishConfig[fishType];
+            document.getElementById('fileName').value = config.fileName;
+            renderDescTable(fishType);
+            renderPreviewHeader(fishType);
+        }
+
+        function renderDescTable(fishType) {
+            const config = fishConfig[fishType];
+            let html = '<table class="desc-table"><thead><tr><th>字段名称</th><th>说明</th></tr></thead><tbody>';
+            for (const [name, desc] of config.desc) {
+                html += `<tr><td>${name}</td><td>${desc}</td></tr>`;
+            }
+            html += '</tbody></table>';
+            document.getElementById('descTableContainer').innerHTML = html;
+        }
+
+        function renderPreviewHeader(fishType) {
+            const config = fishConfig[fishType];
+            const headerRow = document.getElementById('previewHeader');
+            headerRow.innerHTML = '';
+            for (const h of config.headers) {
+                const th = document.createElement('th');
+                th.textContent = h;
+                headerRow.appendChild(th);
+            }
+        }
+
+        function updateProgress(percent, text) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+        function showSuccess() {
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        function showError() {
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+        function updateStats(data) {
+            const stats = {
+                '总数据条数': data.length,
+                '养殖池数量': new Set(data.map(d => d['养殖池编号'])).size,
+                '员工编号数量': new Set(data.map(d => d['负责人'])).size,
+                '死亡原因种类': new Set(data.map(d => d['死亡原因'])).size,
+                '基础存活率平均值': (data.reduce((sum, d) => sum + d['基础存活率（%）'], 0) / data.length).toFixed(1) + '%',
+                '综合存活率平均值': (data.reduce((sum, d) => sum + d['综合存活率（%）'], 0) / data.length).toFixed(1) + '%'
+            };
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = '';
+            for (const [label, value] of Object.entries(stats)) {
+                const statItem = document.createElement('div');
+                statItem.className = 'stat-item';
+                statItem.innerHTML = `<div class="stat-label">${label}</div><div class="stat-value">${value}</div>`;
+                statsGrid.appendChild(statItem);
+            }
+            document.getElementById('stats').style.display = 'block';
+        }
+        function updatePreview(data, fishType) {
+            const previewBody = document.getElementById('previewBody');
+            previewBody.innerHTML = '';
+            const config = fishConfig[fishType];
+            const previewData = data.slice(0, 5);
+            for (const row of previewData) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = config.headers.map(h => `<td>${row[h]}</td>`).join('');
+                previewBody.appendChild(tr);
+            }
+            document.getElementById('preview').style.display = 'block';
+        }
+        function generateData() {
+            const fishType = document.getElementById('fishType').value;
+            const config = fishConfig[fishType];
+            const dataCount = parseInt(document.getElementById('dataCount').value);
+            const fileName = document.getElementById('fileName').value || config.fileName;
+            if (dataCount < 1 || dataCount > 10000) {
+                alert('请输入1-10000之间的数据条数');
+                return;
+            }
+            document.getElementById('progress').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('stats').style.display = 'none';
+            document.getElementById('preview').style.display = 'none';
+            const generateBtn = document.querySelector('.generate-btn');
+            generateBtn.disabled = true;
+            generateBtn.textContent = '🔄 生成中...';
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress > 90) progress = 90;
+                updateProgress(progress, `正在生成数据... ${Math.floor(progress)}%`);
+            }, 100);
+            setTimeout(() => {
+                try {
+                    updateProgress(95, '正在处理数据...');
+                    const 生成器 = new 存活率数据生成器();
+                    const data = 生成器.生成数据集(dataCount);
+                    updateProgress(98, '正在生成Excel文件...');
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.json_to_sheet(data);
+                    ws['!cols'] = config.headers.map(() => ({ wch: 12 }));
+                    XLSX.utils.book_append_sheet(wb, ws, config.sheetName);
+                    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${fileName}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    updateProgress(100, '生成完成！');
+                    updateStats(data);
+                    updatePreview(data, fishType);
+                    showSuccess();
+                } catch (error) {
+                    console.error('生成失败:', error);
+                    showError();
+                } finally {
+                    clearInterval(progressInterval);
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = '🚀 生成数据';
+                    setTimeout(() => {
+                        document.getElementById('progress').style.display = 'none';
+                    }, 2000);
+                }
+            }, 1000);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            onFishTypeChange();
+        });
+    </script>
+</body>
+</html> 
