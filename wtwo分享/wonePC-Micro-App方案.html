@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOnePC微前端架构方案 - 基于micro-app的解决方案</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #50E3C2;
+            --background-color: #F4F7F9;
+            --slide-background: #ffffff;
+            --text-color: #37474F;
+            --heading-color: #263238;
+            --border-radius: 16px;
+            --box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            width: 90%;
+            height: 90%;
+            max-width: 1200px;
+            max-height: 800px;
+            position: absolute;
+            background-color: var(--slide-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 50px 70px;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            z-index: 1;
+        }
+        
+        .slide-content {
+            flex-grow: 1;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--heading-color);
+            margin-top: 1em;
+            margin-bottom: 0.8em;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 3em;
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: none;
+            padding-bottom: 25px;
+            position: relative;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 3px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaecee;
+        }
+
+        h3 {
+            font-size: 1.6em;
+        }
+        
+        h4 {
+            font-size: 1.3em;
+            color: var(--primary-color);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+
+        a:hover {
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--secondary-color);
+        }
+
+        p, li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        
+        ul, ol {
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+
+        li::marker {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        th, td {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 16px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            border-top: none;
+        }
+        
+        td {
+             border-left: 1px solid #e0e0e0;
+        }
+        
+        td:first-child {
+            border-left: none;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        pre[class*="language-"] {
+            padding: 2em 1.5em;
+            margin: 2em 0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #5f6b7a;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            opacity: 0;
+            transition: opacity 0.3s, background-color 0.3s;
+        }
+        
+        pre:hover .copy-button {
+            opacity: 1;
+        }
+        
+        .copy-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 40px;
+            right: 50px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, transform 0.2s;
+            border-radius: 50%;
+        }
+
+        .nav-button:hover {
+            background-color: #f0f5fa;
+            transform: scale(1.1);
+        }
+        
+        .nav-button:disabled {
+            color: #bdc3c7;
+            cursor: not-allowed;
+            background-color: transparent;
+            transform: scale(1);
+        }
+
+        #slide-counter {
+            margin: 0 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            width: 0;
+            transition: width 0.4s ease-out;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="presentation-container">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="slide-content">
+                <h1>WOnePC微前端架构方案</h1>
+                <h2>基于micro-app的微前端解决方案</h2>
+                <br><br>
+                <p><strong>项目背景：</strong>WOnePC(Avalon) + WOnePC-Vue(Vue3)微前端融合方案</p>
+                <p><strong>技术选型：</strong>micro-app - 京东前端团队推出的轻量级微前端框架，基于WebComponents，无关技术栈，侵入性低，可以用于任何前端框架。</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: 目录 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>目录</h2>
+                <ul>
+                    <li>1. 微前端概述</li>
+                    <li>2. 为什么选择micro-app</li>
+                    <li>3. micro-app核心特性</li>
+                    <li>4. 项目架构设计</li>
+                    <li>5. 样式隔离方案</li>
+                    <li>6. 路由方案设计</li>
+                    <li>7. 通信机制详解</li>
+                    <li>8. iframe模式应用</li>
+                    <li>9. 开发与部署</li>
+                    <li>10. 最佳实践</li>
+                    <li>11. 常见问题与解决方案</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: 微前端概述 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>1. 微前端概述</h2>
+                <h3>1.1 核心理念</h3>
+                <p>微前端是一种将单体前端应用分解为多个可独立开发、部署和运行的前端应用的架构模式。</p>
+                <h4>三大核心原则：</h4>
+                <ul>
+                    <li><strong>独立开发</strong>：团队可使用不同技术栈独立开发</li>
+                    <li><strong>独立部署</strong>：应用可独立构建、测试和部署</li>
+                    <li><strong>独立运行</strong>：应用在主框架中能够独立运行</li>
+                </ul>
+                <h3>1.2 业务价值</h3>
+                <ul>
+                    <li>✅ <strong>技术栈无关</strong>：Avalon与Vue3共存，渐进式迁移</li>
+                    <li>✅ <strong>团队自主</strong>：不同团队独立开发，提高并行效率</li>
+                    <li>✅ <strong>代码隔离</strong>：减少耦合，提高可维护性</li>
+                    <li>✅ <strong>性能优化</strong>：按需加载，改善首屏性能</li>
+                    <li>✅ <strong>风险控制</strong>：单个应用故障不影响整体</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 4: 为什么选择micro-app -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>2. 为什么选择micro-app</h2>
+                <h3>2.1 技术对比</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>方案</th><th>实现原理</th><th>学习成本</th><th>侵入性</th><th>样式隔离</th><th>适用场景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>micro-app</strong></td><td>Web Components</td><td>低</td><td>低</td><td>完善</td><td><strong>我们的场景</strong></td>
+                        </tr>
+                        <tr>
+                            <td>qiankun</td><td>single-spa</td><td>中</td><td>中</td><td>一般</td><td>复杂应用</td>
+                        </tr>
+                        <tr>
+                            <td>single-spa</td><td>路由劫持</td><td>高</td><td>高</td><td>需配置</td><td>大型项目</td>
+                        </tr>
+                        <tr>
+                            <td>Module Federation</td><td>Webpack5</td><td>中</td><td>中</td><td>需配置</td><td>现代项目</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>2.2 micro-app优势</h3>
+                <ul>
+                    <li>🎯 <strong>使用简单</strong>：类似iframe的HTML标签方式</li>
+                    <li>🎯 <strong>轻量级</strong>：仅≈10kb (gzip)，零依赖</li>
+                    <li>🎯 <strong>完善沙箱</strong>：JS沙箱 + 样式隔离 + 元素隔离</li>
+                    <li>🎯 <strong>技术兼容</strong>：适配Avalon等传统框架</li>
+                    <li>🎯 <strong>功能丰富</strong>：数据通信、预加载、生命周期等</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: micro-app核心特性 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>3. micro-app核心特性</h2>
+                <h3>3.1 基础使用</h3>
+                <h4>3.1.1 初始化配置</h4>
+<pre><code class="language-js">// UMD方式 - 适合Avalon项目
+&lt;!-- micro-app 微前端框架 --&gt;
+&lt;script src="js/libs/micro-app/index.umd.js"&gt;&lt;/script&gt;
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.microApp) {
+    window.microApp.default.start({
+      shadowDOM: false,
+      disableScopecss: false,
+      disableSandbox: false,
+      destroy: true
+    });
+  }
+});</code></pre>
+                <h4>3.1.2 应用接入</h4>
+<pre><code class="language-html">&lt;!-- 基础模式 --&gt;
+&lt;micro-app 
+  name="vue3-app-appoint" 
+  url="http://localhost:8001" 
+  baseroute="/"&gt;
+&lt;/micro-app&gt;
+
+&lt;!-- iframe模式 - 解决兼容性问题 --&gt;
+&lt;micro-app 
+  name="vue3-app-appoint" 
+  url="http://localhost:8001" 
+  iframe
+  disable-memory-router="true"
+  disable-patch-request="true"&gt;
+&lt;/micro-app&gt;</code></pre>
+            </div>
+        </div>
+        
+        <!-- Slide 6: 项目架构设计 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>4. 项目架构设计</h2>
+                <h3>4.1 整体架构</h3>
+<pre><code class="language-text">WOnePC微前端架构
+├── 主应用 (Avalon)
+│   ├── 框架基础设施
+|   ├── 业务功能模块
+│   ├── 用户认证 & 权限
+│   ├── 全局状态管理
+│   └── 子应用容器
+└── 子应用 (Vue3)
+    ├── 业务功能模块
+    ├── 内部状态管理
+    └── 与主应用通信</code></pre>
+                <h3>4.2 目录结构</h3>
+<pre><code class="language-text">WOnePC (主应用)
+├── modules/appointCourse/
+│   ├── appointCourse.html
+│   └── appointCourse.js
+└── js/libs/micro-app/
+
+WOnePC-Vue (子应用)
+├── src/
+│   ├── components/
+│   │   ├── AppointCourse.vue
+│   │   └── helpDrawer.vue
+│   ├── assets/
+│   │   └── sub-element-theme.scss
+│   └── main.js
+└── vite.config.ts</code></pre>
+            </div>
+        </div>
+        
+        <!-- Slide 7: 样式隔离方案 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>5. 样式隔离方案</h2>
+                <h3>5.1 样式隔离策略</h3>
+                <ol>
+                    <li><strong>自动隔离</strong>：自动添加应用前缀，避免样式冲突</li>
+                    <li><strong>沙箱隔离</strong>：子应用样式无法影响主应用</li>
+                    <li><strong>自定义命名空间</strong>：为组件库添加自定义前缀</li>
+                </ol>
+                <h3>5.2 Element Plus命名空间配置</h3>
+                <h4>SCSS主题配置 `sub-element-theme.scss`</h4>
+<pre><code class="language-scss">@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
+  $namespace: 'sub'
+);
+@import 'element-plus/theme-chalk/src/index.scss';</code></pre>
+                <h4>Vue组件配置 `App.vue`</h4>
+<pre><code class="language-html">&lt;template&gt;
+  &lt;el-config-provider namespace="sub"&gt;
+    &lt;router-view /&gt;
+  &lt;/el-config-provider&gt;
+&lt;/template&gt;</code></pre>
+                <p>效果: `.el-button` → `.sub-button`</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: 路由方案设计 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>6. 路由方案设计</h2>
+                <h3>6.1 路由模式选择</h3>
+                <h4>6.1.1 Hash路由模式（推荐）</h4>
+<pre><code class="language-js">import { createRouter, createWebHashHistory } from 'vue-router';
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: [...]
+});</code></pre>
+                <ul>
+                    <li>✅ 不与主应用路由冲突</li>
+                    <li>✅ 无需特殊配置，支持iframe模式</li>
+                </ul>
+                <h3>6.2 iframe模式下的路由</h3>
+                <p>当使用iframe模式时，推荐关闭虚拟路由系统，让子应用路由完全独立。</p>
+<pre><code class="language-html">&lt;micro-app
+  name="vue3-app-appoint"
+  url="http://localhost:8001" 
+  iframe
+  disable-memory-router="true"&gt;
+&lt;/micro-app&gt;</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 9: 通信机制 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>7. 通信机制详解</h2>
+                <h3>7.1 通信方式概览</h3>
+                <table>
+                    <thead>
+                        <tr><th>通信方向</th><th>方法</th><th>应用场景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>主→子</td><td><code>setData</code> / <code>setGlobalData</code></td><td>传递配置、用户信息等</td></tr>
+                        <tr><td>子→主</td><td><code>dispatch</code></td><td>通知状态变化、用户操作等</td></tr>
+                        <tr><td>全局通信</td><td><code>GlobalData</code></td><td>跨应用数据共享</td></tr>
+                    </tbody>
+                </table>
+                <h3>7.2 主应用发送数据</h3>
+<pre><code class="language-js">window.microApp.setData('vue3-app-appoint', { campusList: [...] });</code></pre>
+                <h3>7.3 子应用接收数据</h3>
+<pre><code class="language-js">// onMounted
+window.microApp.addDataListener((data) => {
+  console.log('接收到主应用数据:', data);
+});
+// onUnmounted
+window.microApp.clearDataListener();</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 10: iframe模式应用 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>8. iframe模式应用</h2>
+                <h3>8.1 iframe模式优势</h3>
+                <ul>
+                    <li>🔒 <strong>完全隔离</strong>：样式、JS、DOM完全隔离</li>
+                    <li>🛡️ <strong>安全性高</strong>：沙箱级别的安全隔离</li>
+                    <li>🔧 <strong>兼容性好</strong>：解决复杂应用的兼容性问题</li>
+                    <li>🎯 <strong>稳定性强</strong>：不受主应用环境影响</li>
+                </ul>
+                <h3>8.2 原生 iframe vs micro-app iframe 模式</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>维度</th>
+                            <th>原生 iframe</th>
+                            <th>micro-app iframe 模式</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>使用方式</strong></td>
+                            <td>手动编写 <code>&lt;iframe src="xxx"&gt;</code></td>
+                            <td>使用 <code>&lt;micro-app iframe&gt;</code> 标签</td>
+                        </tr>
+                        <tr>
+                            <td><strong>通信机制</strong></td>
+                            <td>需要手动封装繁琐的 <code>postMessage</code></td>
+                            <td>内置 <code>dispatch</code>, <code>setData</code> 等API，无需关心底层</td>
+                        </tr>
+                        <tr>
+                            <td><strong>应用管理</strong></td>
+                            <td>完全失控，无法感知内部状态</td>
+                            <td>拥有统一的生命周期、keep-alive、预加载等机制</td>
+                        </tr>
+                        <tr>
+                            <td><strong>集成体验</strong></td>
+                            <td>与主应用割裂，像独立网页</td>
+                            <td>作为受控组件，能与主应用及其它子应用顺畅协作</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Slide 11: 开发与部署 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>9. 开发与部署</h2>
+                <h3>9.1 本地开发环境</h3>
+                <h4>子应用配置 `vite.config.ts`</h4>
+<pre><code class="language-typescript">export default defineConfig({
+  server: {
+    port: 8001,
+    cors: true, // 允许跨域
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
+  }
+});</code></pre>
+                <h4>主应用配置</h4>
+<pre><code class="language-html">&lt;micro-app 
+  name="vue3-app-appoint" 
+  url="http://localhost:8001"
+  iframe&gt;
+&lt;/micro-app&gt;</code></pre>
+                <h3>9.2 生产环境部署</h3>
+                <p>子应用独立构建和部署后，主应用更新<code>url</code>指向生产环境地址即可。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: 最佳实践 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>10. 最佳实践</h2>
+                <h3>10.1 开发规范</h3>
+                <ul>
+                    <li><strong>应用命名</strong>: kebab-case (<code>vue3-app-appoint</code>)</li>
+                    <li><strong>事件命名</strong>: camelCase (<code>showHelpDrawer</code>)</li>
+                    <li><strong>样式命名</strong>: BEM + 应用前缀 (<code>.v3-appoint__item</code>)</li>
+                </ul>
+                <h3>10.2 性能优化</h3>
+                <ul>
+                    <li>📦 **代码分割**: 按页面拆分chunk</li>
+                    <li>🔄 **缓存策略**: 合理设置缓存头</li>
+                    <li>🚀 **预加载**: <code>microApp.preFetch([...])</code></li>
+                </ul>
+                <h3>10.3 错误处理</h3>
+                <p>监听<code>error</code>事件进行降级处理，对通信失败进行<code>try...catch</code>。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: 常见问题与解决方案 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>11. 常见问题与解决方案</h2>
+                <p><strong>Q1: Element Plus样式冲突?</strong></p>
+                <p>A: 使用自定义命名空间<code>$namespace: 'sub'</code>。</p>
+                <p><strong>Q2: 子应用弹窗无法覆盖主应用?</strong></p>
+                <p>A: 通过通信机制，让主应用显示弹窗。</p>
+                <p><strong>Q3: 子应用路由冲突?</strong></p>
+                <p>A: 使用Hash路由，或为history模式配置<code>baseroute</code>。</p>
+                <p><strong>Q4: 通信数据丢失?</strong></p>
+                <p>A: 使用<code>autoTrigger=true</code>确保初次数据能被接收。</p>
+                <p><strong>Q5: 首屏加载慢?</strong></p>
+                <p>A: 采用预加载 + 懒加载策略。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: 总结 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>总结</h2>
+                <p>WOnePC微前端架构方案基于micro-app框架，实现了Avalon与Vue3的完美融合。通过完善的样式隔离、灵活的路由方案、可靠的通信机制和iframe模式支持，为团队提供了一个稳定、高效的微前端解决方案。</p>
+                <ul>
+                    <li>🎯 <strong>技术栈融合</strong>：Avalon + Vue3 无缝集成</li>
+                    <li>🔒 <strong>完善隔离</strong>：样式、路由、沙箱全方位隔离</li>
+                    <li>🚀 <strong>开发效率</strong>：团队并行开发，独立部署</li>
+                    <li>🛡️ <strong>稳定可靠</strong>：iframe模式提供最高级别隔离</li>
+                    <li>📈 <strong>渐进升级</strong>：支持版本切换，降低迁移风险</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 15: 参考资料 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>参考资料</h2>
+                <ul>
+                    <li><a href="https://juejin.cn/post/7472210592540065833" target="_blank" rel="noopener noreferrer">浅析微前端 micro-app 框架</a></li>
+                    <li><a href="https://juejin.cn/post/7273072756157481018" target="_blank" rel="noopener noreferrer">微前端micro-app踩坑记录</a></li>
+                    <li><a href="https://juejin.cn/post/7094163332495573023" target="_blank" rel="noopener noreferrer">万字长文: 如何使用micro-app实现微前端应用</a></li>
+                    <li><a href="https://juejin.cn/post/7248496133873745976" target="_blank" rel="noopener noreferrer">微前端（micro-app）使用手册</a></li>
+                    <li><a href="https://juejin.cn/post/7280786332711632954" target="_blank" rel="noopener noreferrer">浅入深出的微前端MicroApp | 京东云技术团队</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-button" id="prev-slide" title="上一页">&#10094;</button>
+        <span id="slide-counter">1 / 15</span>
+        <button class="nav-button" id="next-slide" title="下一页">&#10095;</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+            const slideCounter = document.getElementById('slide-counter');
+            const progressBar = document.getElementById('progress-bar');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function updateSlide() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === currentSlide);
+                });
+                slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === totalSlides - 1;
+                
+                const progressPercent = (currentSlide + 1) / totalSlides * 100;
+                progressBar.style.width = `${progressPercent}%`;
+
+                // Trigger prism highlighting for the current slide
+                Prism.highlightAllUnder(slides[currentSlide]);
+            }
+            
+            function setupCopyButtons() {
+                const codeBlocks = document.querySelectorAll('pre');
+                codeBlocks.forEach(block => {
+                    const button = document.createElement('button');
+                    button.className = 'copy-button';
+                    button.textContent = '复制';
+                    block.appendChild(button);
+                    
+                    button.addEventListener('click', () => {
+                        const code = block.querySelector('code').innerText;
+                        navigator.clipboard.writeText(code).then(() => {
+                            button.textContent = '已复制!';
+                            setTimeout(() => {
+                                button.textContent = '复制';
+                            }, 2000);
+                        }, () => {
+                            button.textContent = '失败';
+                        });
+                    });
+                });
+            }
+
+            nextButton.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    updateSlide();
+                }
+            });
+
+            prevButton.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlide();
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if(e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') return;
+                
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                    e.preventDefault();
+                    if (currentSlide < totalSlides - 1) {
+                        currentSlide++;
+                        updateSlide();
+                    }
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+                    e.preventDefault();
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        updateSlide();
+                    }
+                }
+            });
+
+            // Initial setup
+            updateSlide();
+            setupCopyButtons();
+        });
+    </script>
+</body>
+</html> 
