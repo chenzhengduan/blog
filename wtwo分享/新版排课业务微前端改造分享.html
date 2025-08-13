@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WonePC 微前端改造分享</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --secondary: #0891b2;
+      --accent: #7c3aed;
+      --success: #059669;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --bg: #ffffff;
+      --bg-light: #f8fafc;
+      --bg-card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .presentation {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      position: absolute;
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow-xl);
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .slide-header {
+      text-align: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+
+    .slide-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    .slide-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .content {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 14px 0 10px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin: 12px 0 8px 0;
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 12px 0 6px 0;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    ul {
+      margin: 10px 0;
+      padding-left: 18px;
+    }
+
+    li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .highlight {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(8, 145, 178, 0.05));
+      border-left: 4px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .code-block {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      margin: 8px 0;
+      overflow-x: auto;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 0.75rem;
+      line-height: 1.3;
+      white-space: pre;
+    }
+
+    .code-block code {
+      color: var(--text);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .card {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-light);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      background: var(--bg-light);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .table th,
+    .table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
+    .table th {
+      background: rgba(37, 99, 235, 0.05);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .table td {
+      color: var(--text-muted);
+    }
+
+    .navigation {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .nav-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .counter {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+      z-index: 1000;
+    }
+
+    .logo {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+
+    .emoji {
+      font-size: 1.2em;
+      margin-right: 8px;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide-in {
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .content-scroll {
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 8px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .content-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .content-scroll::-webkit-scrollbar-track {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+
+    .content-scroll::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .content-scroll::-webkit-scrollbar-thumb:hover {
+      background: var(--text-light);
+    }
+
+    .calendar-demo {
+      width: 100%;
+      height: 100px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-light);
+      margin-top: 10px;
+    }
+
+    .time-slot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
+      text-align: center;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .course {
+      position: absolute;
+      background: var(--primary-light);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      z-index: 1;
+    }
+
+    .course.java {
+      left: 0%;
+      width: 50%;
+      background: var(--primary-light);
+    }
+
+    .course.database {
+      left: 50%;
+      width: 50%;
+      background: var(--secondary);
+    }
+
+    .calendar-demo.original .course.java {
+      left: 0% !important;
+      width: 100% !important;
+    }
+
+    .calendar-demo.original .course.database {
+      left: 25% !important;
+      width: 50% !important;
+    }
+
+    .calendar-demo.improved .course.java {
+      left: 0% !important;
+      width: 50% !important;
+    }
+
+    .calendar-demo.improved .course.database {
+      left: 50% !important;
+      width: 50% !important;
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        width: 98vw;
+        height: 95vh;
+        padding: 20px;
+      }
+      
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.3rem; }
+      h3 { font-size: 1rem; }
+      
+      .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .navigation {
+        bottom: 16px;
+        right: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress"></div>
+  <div class="logo">WonePC · 微前端</div>
+  
+  <div class="presentation" id="presentation">
+    <!-- Slide 1: 标题页 -->
+    <div class="slide active" id="slide-1">
+      <div class="slide-header">
+        <h1>新版排课业务微前端改造分享</h1>
+        <p class="slide-subtitle">🎯 WonePC + wtwo 微前端架构实践，让前后端+测试了解改造背景、思路、对接逻辑、团队协作方式及阶段性成果</p>
+      </div>
+      <div class="content">
+        <div class="highlight">
+          <h3>🎤 开场白</h3>
+          <p>大家好！今天很高兴能和大家分享我们团队在新版排课业务微前端改造方面的一些探索和实践。这次改造涉及到 WonePC 老系统和 wtwo 新系统的对接，主要是想让大家了解我们为什么要做微前端改造，我们是怎么做的，以及在这个过程中遇到的一些问题和解决方案。</p>
+          <p>希望通过这次分享，能够让大家对微前端有一个更清晰的认识，也希望能够听到大家的宝贵意见和建议，共同完善这个方案。</p>
+        </div>
+        
+        <div class="highlight">
+          <h3>📋 分享大纲</h3>
+          <div class="grid-2">
+            <div>
+              <ul>
+                <li><strong>开场</strong> - 为什么我们要做微前端改造？</li>
+                <li><strong>微前端概览</strong> - 我们为什么选择了micro-app？ </li>
+                <li><strong>新旧架构对接</strong> - 老系统和新系统是怎么"牵手"的？ </li>
+                <li><strong>常见问题解决</strong> - 我们踩过的几个坑和解决方案 </li>
+              </ul>
+            </div>
+            <div>
+              <ul>
+                <li><strong>团队协作部署</strong> - 我们是怎么一起协作的？ </li>
+                <li><strong>核心功能实现</strong> - 几个有意思的功能是怎么做出来的？ </li>
+                <li><strong>总结与规划</strong> - 现在做到哪了？接下来想做什么？ </li>
+                <li><strong>Q&A互动</strong> - 大家有什么问题都可以问 </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: 开场 -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <h2>一、开场</h2>
+        <p class="slide-subtitle">为什么我们要做微前端改造？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="highlight">
+            <h3>🚀 WonePC 老项目背景</h3>
+            <p>十多年历史，Avalon 架构，技术栈陈旧，维护困难，开发效率低下。</p>
+          </div>
+          
+          <div class="highlight">
+            <h3>🎯 分享初衷</h3>
+            <ul>
+              <li><strong>分享探索过程</strong>：展示我们的阶段性成果，希望听到大家的意见和建议</li>
+              <li><strong>共同完善方案</strong>：通过团队讨论，持续优化微前端解决方案</li>
+              <li><strong>降低学习成本</strong>：让其他前端同事能够更好地上手开发</li>
+            </ul>
+          </div>
+          
+          <h3>💡 为什么要用微前端？</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>对比其他方案</h4>
+              <ul>
+                <li><strong>跳转方案</strong>：用户体验割裂，需要重新加载页面</li>
+                <li><strong>iframe方案</strong>：虽然简单，但存在样式体验、通信复杂等问题</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>微前端优势</h4>
+              <ul>
+                <li><strong>渐进式迁移</strong>：逐步替换旧功能模块，降低风险</li>
+                <li><strong>技术栈无关</strong>：主应用与子应用并行开发，互不影响</li>
+                <li><strong>独立部署</strong>：提升团队协作效率</li>
+              </ul>
+            </div>
+          </div>
+          
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 微前端概览 -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <h2>二、微前端概览</h2>
+        <p class="slide-subtitle">我们为什么选择了micro-app？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>🎯 微前端理念简介</h3>
+          <p>微前端是一种将单体前端应用分解为多个可独立开发、部署和运行的前端应用的架构模式。</p>
+          <div class="highlight">
+            <p><strong>核心理念</strong>：模块化、解耦、独立部署</p>
+          </div>
+          
+          <h3>⚡ 为什么选择 micro-app？</h3>
+          <div class="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>方案</th>
+                  <th>实现原理</th>
+                  <th>学习成本</th>
+                  <th>侵入性</th>
+                  <th>样式隔离</th>
+                  <th>适用场景</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>micro-app</strong></td>
+                  <td>Web Components<br><small>原生技术，创建可重用自定义元素</small></td>
+                  <td>低</td>
+                  <td>低</td>
+                  <td>完善</td>
+                  <td><strong>我们的场景</strong></td>
+                </tr>
+                <tr>
+                  <td>qiankun</td>
+                  <td>single-spa</td>
+                  <td>中</td>
+                  <td>中</td>
+                  <td>一般</td>
+                  <td>复杂应用</td>
+                </tr>
+                <tr>
+                  <td>single-spa</td>
+                  <td>路由劫持</td>
+                  <td>高</td>
+                  <td>高</td>
+                  <td>需配置</td>
+                  <td>大型项目</td>
+                </tr>
+                <tr>
+                  <td>Module Federation</td>
+                  <td>Webpack5</td>
+                  <td>中</td>
+                  <td>中</td>
+                  <td>需配置</td>
+                  <td>现代项目</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <h3>🧩 微前端嵌入方式</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>组件化嵌入</h4>
+              <p>微前端子应用就像一个个<strong>独立组件</strong>，可以无缝嵌入到主应用中。用户在使用时完全感觉不到这是两个不同的系统。</p>
+              <div class="code-block">
+                <code>
+&lt;!-- 就像使用普通组件一样 --&gt;
+&lt;micro-app name="wtwo-app" url="/wtwo"&gt;&lt;/micro-app&gt;
+                </code>
+              </div>
+            </div>
+            <div class="card">
+              <h4>用户体验优势</h4>
+              <ul>
+                <li><strong>无感知切换</strong>：用户感觉在使用同一个系统</li>
+                <li><strong>统一交互</strong>：保持一致的界面风格和操作习惯</li>
+                <li><strong>流畅体验</strong>：无需重新加载页面，响应更快</li>
+                <li><strong>数据共享</strong>：主应用和子应用可以共享用户状态</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: micro-app 优势 -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <h2>micro-app 核心优势</h2>
+        <p class="slide-subtitle">为什么它最适合我们的场景？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div class="card">
+              <h3>🎯 使用简单</h3>
+              <p>接入方式类似 iframe，学习成本低</p>
+            </div>
+            <div class="card">
+              <h3>⚡ 轻量级</h3>
+              <p>仅≈10kb (gzip)，零依赖</p>
+            </div>
+            <div class="card">
+              <h3>🛡️ 完善沙箱</h3>
+              <p>提供 JS 沙箱、样式隔离和元素隔离</p>
+            </div>
+            <div class="card">
+              <h3>🔧 技术兼容</h3>
+              <p>能很好地适配 Avalon 这样的老旧框架</p>
+            </div>
+          </div>
+          
+          <div class="highlight">
+            <h3>🏗️ 主-子应用结构</h3>
+            <div class="code-block">
+              <code>
+WOnePC微前端架构
+├── 主应用 (WonePC - Avalon)
+│   ├── 框架基础设施
+│   ├── 现有业务功能模块
+│   ├── 用户认证 & 权限
+│   └── 子应用容器 (加载 wtwo)
+└── 子应用 (wtwo - Vue3 + TypeScript)
+    ├── 业务功能模块 (排课、日历等)
+    ├── 内部状态管理 (Pinia)
+    └── 与主应用通信模块
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: 技术栈 -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <h2>子应用 wtwo 技术栈</h2>
+        <p class="slide-subtitle">现代化的技术选型</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-4">
+            <div class="card">
+              <h3>🔄 框架</h3>
+              <p>Vue 3.3+ (Composition API)</p>
+            </div>
+            <div class="card">
+              <h3>⚡ 构建工具</h3>
+              <p>Vite 4+</p>
+            </div>
+            <div class="card">
+              <h3>📝 语言</h3>
+              <p>TypeScript 4.9+</p>
+            </div>
+            <div class="card">
+              <h3>🗃️ 状态管理</h3>
+              <p>Pinia</p>
+            </div>
+            <div class="card">
+              <h3>🎨 UI 库</h3>
+              <p>Element Plus (自定义 wtwo- 命名空间)</p>
+            </div>
+            <div class="card">
+              <h3>🎯 样式</h3>
+              <p>SCSS + UnoCSS</p>
+            </div>
+            <div class="card">
+              <h3>🛣️ 路由</h3>
+              <p>Vue Router 4 (Hash 模式配合 micro-app 的 pure 模式)</p>
+            </div>
+            <div class="card">
+              <h3>🌐 HTTP 客户端</h3>
+              <p>基于 Fetch API 的自定义封装</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: 主应用改造 -->
+    <div class="slide" id="slide-6">
+      <div class="slide-header">
+        <h2>三、主应用 WonePC (Avalon) 的改造</h2>
+        <p class="slide-subtitle">如何让老系统支持微前端？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div>
+              <h3>🔧 引入并启动 micro-app</h3>
+              <div class="code-block">
+                <code>
+&lt;script src="js/libs/micro-app/index.umd.js"&gt;&lt;/script&gt;
+
+window.microApp.default.start({
+  shadowDOM: false,         // 关闭shadowDOM
+  disableScopecss: false,   // 开启样式隔离
+  destroy: true             // 卸载时销毁实例
+});
+                </code>
+              </div>
+            </div>
+            <div>
+              <h3>📦 嵌入子应用</h3>
+              <p>在需要展示新功能的页面使用 <code>&lt;micro-app&gt;</code> 标签嵌入 Vue 子应用。</p>
+              <div class="code-block">
+                <code>
+&lt;micro-app 
+  name="wtwo-app" 
+  url="http://localhost:8001"  
+  iframe&gt;
+&lt;/micro-app&gt;
+                </code>
+              </div>
+            </div>
+          </div>
+          
+          <div class="highlight">
+            <h4>标签属性说明</h4>
+            <div class="grid-2">
+              <div>
+                <ul>
+                  <li><strong>name</strong>：子应用的唯一标识</li>
+                  <li><strong>url</strong>：子应用的访问地址</li>
+                </ul>
+              </div>
+              <div>
+                <ul>
+                  <li><strong>iframe</strong>：开启 iframe 模式，实现强隔离</li>
+                  <li><strong>其他</strong>：更多功能属性详见文档</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: 子应用配置 -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <h2>子应用 wtwo (Vue3) 的配置</h2>
+        <p class="slide-subtitle">如何让新系统适配微前端环境？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>🌐 设置跨域</h3>
+          <div class="code-block">
+            <code>
+// vite.config.ts
+export default defineConfig({
+  server: {
+    cors: true, // 允许跨域
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
+  }
+});
+            </code>
+          </div>
+          
+          <h3>📁 设置 public-path</h3>
+          <div class="code-block">
+            <code>
+// src/main.ts
+if (window.__MICRO_APP_ENVIRONMENT__) {
+  __webpack_public_path__ = window.__MICRO_APP_PUBLIC_PATH__
+}
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: 通信机制 -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <h2>主子通信与状态共享</h2>
+        <p class="slide-subtitle">如何实现应用间的数据传递？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>📡 基础通信机制</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>主应用发送 → 子应用接收</h4>
+              <p>主应用向子应用传递数据（用户信息、校区列表等）</p>
+              <div class="code-block">
+                <code>
+// 主应用发送数据
+window.microApp.setData('wtwo-app', {
+  campusList: [...],
+  userInfo: {...},
+  SID: 'session_id_12345'
+});
+                </code>
+              </div>
+            </div>
+            <div class="card">
+              <h4>子应用接收 ← 主应用发送</h4>
+              <p>子应用监听并接收主应用传递的数据</p>
+              <div class="code-block">
+                <code>
+// 子应用接收数据
+window.microApp.addDataListener((data) => {
+  useUserStore().setSID(data.SID);
+  useOrganizationStore().setCampusList(data.campusList);
+});
+                </code>
+              </div>
+            </div>
+            <div class="card">
+              <h4>子应用发送 → 主应用接收</h4>
+              <p>子应用向主应用发送事件（更新导航、触发操作等）</p>
+              <div class="code-block">
+                <code>
+// 子应用发送事件
+window.microApp.dispatch({ 
+  type: 'updateBreadcrumb', 
+  payload: '排课管理/日历视图' 
+});
+                </code>
+              </div>
+            </div>
+            <div class="card">
+              <h4>主应用接收 ← 子应用发送</h4>
+              <p>主应用监听并处理子应用发送的事件</p>
+              <div class="code-block">
+                <code>
+// 主应用接收事件
+const microAppElement = document.querySelector('micro-app[name="wtwo-app"]');
+microAppElement.addEventListener('datachange', (e) => {
+  const { type, payload } = e.detail.data;
+  if (type === 'updateBreadcrumb') {
+    updateBreadcrumbPath(payload);
+  }
+});
+                </code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: 常见问题 -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <h2>四、常见问题与解决方案</h2>
+        <p class="slide-subtitle">我们踩过的几个坑和解决方案</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div class="card">
+              <h4>🎨 样式冲突</h4>
+              <p><strong>问题</strong>：主应用 WonePC 重写了 ElementUI 的样式，而子应用 wtwo 使用了新版的 Element Plus。默认的样式隔离会导致子应用的弹窗等组件样式错乱。</p>
+              <p><strong>解决</strong>：自定义命名空间。我们为子应用的 Element Plus 组件设置了 wtwo- 的命名空间（如 .wtwo-button），并对 Element Plus 的基础样式（如 el-overlay）做了特殊处理，不进行隔离，保证其在主应用中能正常显示。</p>
+            </div>
+            <div class="card">
+              <h4>📦 资源加载重复</h4>
+              <p><strong>问题</strong>：iframe 模式下，子应用默认会加载主应用的 index.html，导致不必要的资源重复加载。</p>
+              <p><strong>解决</strong>：指定空白 HTML。我们为子应用指定一个只包含必要脚本的 empty.html，避免加载主应用多余的资源。</p>
+            </div>
+            <div class="card">
+              <h4>🔄 页面路由跳转</h4>
+              <p><strong>问题</strong>：子应用 wtwo 有自己的路由（Vue Router），但主应用 Wone 没有。在嵌入页时子应用的路由出现在了主应用地址栏，导致面刷新时，URL 中的子应用路由会导致主应用解析失败。</p>
+              <p><strong>解决</strong>：使用 micro-app 的 pure 路由模式。pure模式让子应用独立于浏览器路由系统进行渲染，不修改浏览器地址，也不增加路由堆栈，子应用更像是一个组件。这样既保持了子应用的路由功能，又不会影响主应用的URL。</p>
+            </div>
+            <div class="card">
+              <h4>🔧 开发环境代理</h4>
+              <p><strong>问题</strong>：本地开发时，主应用需要能访问到子应用的服务。</p>
+              <p><strong>解决</strong>：配置 Proxy。在 vite.config.ts 中配置代理，将对 /wtwo 的请求转发到子应用的开发服务器。线上环境部署到同一个域名下，接口请求天然支持，无需额外配置。</p>
+            </div>
+            <div class="card">
+              <h4>📱 Element Plus 弹窗层级</h4>
+              <p><strong>问题</strong>：Element Plus 的弹窗组件（如 Dialog、Drawer）的 z-index 可能被主应用的某些元素覆盖。</p>
+              <p><strong>解决</strong>：调整层级。通过 CSS 变量或者在弹窗组件上设置更高的 z-index，确保子应用弹窗显示在最顶层。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: 团队协作 -->
+    <div class="slide" id="slide-10">
+      <div class="slide-header">
+        <h2>五、团队协作与部署方式</h2>
+        <p class="slide-subtitle">我们是怎么一起协作的？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>🧩 协作与部署模式</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>📁 独立仓库开发</h4>
+              <p>wtwo 子应用在独立的 Git 仓库中开发，与主应用完全解耦，便于团队并行开发和版本管理。</p>
+            </div>
+            <div class="card">
+              <h4>🏗️ 独立构建部署</h4>
+              <p>子应用独立构建，通过 CI/CD 将产物部署到服务器的 /wtwo 目录下。</p>
+            </div>
+            <div class="card">
+              <h4>🔗 主应用引用</h4>
+              <p>主应用通过 <code>&lt;micro-app&gt;</code> 标签引用部署好的子应用，实现无感知更新。</p>
+            </div>
+            <div class="card">
+              <h4>🔧 开发联调</h4>
+              <p>本地开发时通过 vite.config.ts 的 server.proxy 实现跨域联调，线上环境同域名天然支持。</p>
+            </div>
+            <div class="card">
+              <h4>🌐 环境切换</h4>
+              <p>开发、测试、生产环境通过不同的 url 配置实现无缝切换，无需修改主应用代码。</p>
+            </div>
+            <div class="card">
+              <h4>📋 统一规范</h4>
+              <ul>
+                <li><strong>接口协议</strong>：与后端定义统一的接口规范</li>
+                <li><strong>登录态</strong>：登录由主应用统一处理，同域名天然支持</li>
+                <li><strong>事件通信</strong>：定义统一的事件名和数据结构</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="highlight">
+            <h3>📈 协作流程</h3>
+            <ul>
+              <li><strong>需求评审</strong>：新功能开发前，前后端测试一起评审技术方案</li>
+              <li><strong>接口设计</strong>：统一接口规范，避免新老接口差异过大</li>
+              <li><strong>联调测试</strong>：重点关注跨应用交互和通信场景</li>
+              <li><strong>上线部署</strong>：子应用独立部署，主应用无感知更新</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: 日历视图排课 -->
+    <div class="slide" id="slide-11">
+      <div class="slide-header">
+        <h2>六、日历视图排课</h2>
+        <p class="slide-subtitle">如何解决时间冲突的经典问题？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div>
+              <h3>🎯 问题描述</h3>
+              <p>需要一个直观的日历界面来安排课程，但遇到了<strong>时间冲突</strong>问题。</p>
+              <div class="highlight">
+                <p>例如：Java编程(9:00-11:00)与数据库设计(9:30-10:30)时间重叠，该怎么显示？</p>
+              </div>
+              <div class="code-block">
+                <code>
+    // 核心算法
+    function calculateLayout(courses) {
+      const conflicts = findConflicts(courses);
+      const maxColumns = Math.max(...conflicts.map(g => g.length));
+      
+      courses.forEach(course => {
+        course.column = findAvailableColumn(course, conflicts);
+        course.width = 100 / maxColumns;
+        course.left = course.column * course.width;
+      });
+    }
+                </code>
+              </div>
+            </div>
+            <div>
+              <h3>🎯 效果演示</h3>
+              <div class="grid-2">
+                <div>
+                  <h4>重叠效果</h4>
+                  <div class="calendar-demo original">
+                    <div class="time-slot">
+                      <div class="course java">Java编程<br>9:00-11:00</div>
+                      <div class="course database">数据库设计<br>9:30-10:30</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4>分列效果</h4>
+                  <div class="calendar-demo improved">
+                    <div class="time-slot">
+                      <div class="course java">Java编程<br>9:00-11:00</div>
+                      <div class="course database">数据库设计<br>9:30-10:30</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="highlight">
+                <h4>核心思路</h4>
+                <ul>
+                  <li><strong>多列表格</strong>：每天区域分成多列</li>
+                  <li><strong>冲突解决</strong>：重叠课程分列显示</li>
+                  <li><strong>自动计算</strong>：系统自动分配列位置</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+        
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: 智能布局算法 -->
+    <div class="slide" id="slide-12">
+      <div class="slide-header">
+        <h2>智能布局算法</h2>
+        <p class="slide-subtitle">四步解决复杂布局问题</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div class="card">
+              <h3>🔍 第一步：找冲突</h3>
+              <div class="code-block">
+                <code>
+重叠判断公式：
+A的开始时间 &lt; B的结束时间 且 
+A的结束时间 &gt; B的开始时间
+
+例如：Java编程(9:00-11:00) vs 数据库设计(9:30-10:30)
+判断：9:00 &lt; 10:30 ✓ 且 11:00 &gt; 9:30 ✓ → 有重叠
+                </code>
+              </div>
+            </div>
+            <div class="card">
+              <h3>📊 第二步：算列数</h3>
+              <p>找出同时进行的最多课程数，决定需要几列</p>
+            </div>
+            <div class="card">
+              <h3>📍 第三步：分位置</h3>
+              <p>按开始时间顺序，为每门课分配一个可用的列</p>
+            </div>
+            <div class="card">
+              <h3>🎨 第四步：算样式</h3>
+              <p>根据列位置计算每门课的宽度和位置，绝对定位</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 13: 表格排课 -->
+    <div class="slide" id="slide-13">
+      <div class="slide-header">
+        <h2>表格排课</h2>
+        <p class="slide-subtitle">Excel 风格的批量排课界面</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>🔍 组件选型探索</h3>
+          <div class="highlight">
+            <p><strong>调研过程</strong>：当时找了很多开源表格组件，基于vtable开发了核心功能demo，但体验不够好</p>
+            <p><strong>最终选择</strong>：使用 vue-easytable 组件</p>
+            <p><strong>原因</strong>：功能强大，支持编辑、复制、下拉填充等复杂功能</p>
+          </div>
+          
+          <h3>⚡ Excel 风格的表格界面</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>可编辑单元格</h4>
+              <p>双击任意单元格就能进入编辑模式</p>
+            </div>
+            <div class="card">
+              <h4>智能选择器</h4>
+              <p>根据字段类型弹出对应的选择器</p>
+            </div>
+            <div class="card">
+              <h4>实时预览</h4>
+              <p>选择后立即在表格中显示，所见即所得</p>
+            </div>
+            <div class="card">
+              <h4>批量操作</h4>
+              <p>支持拖拽填充、智能复制、批量修改</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 14: 组件封装 -->
+    <div class="slide" id="slide-14">
+      <div class="slide-header">
+        <h2>组件封装与目录结构</h2>
+        <p class="slide-subtitle">如何组织和管理组件？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>📁 组件目录结构</h3>
+          <div class="code-block">
+            <code>
+src/components/
+├── business/          # 业务组件
+│   ├── ai/           # AI相关组件
+│   ├── calendar/     # 日历排课组件
+│   └── select/       # 业务选择器组件
+├── common/           # 通用组件
+│   ├── base-select/  # 基础选择器
+│   ├── base-table/   # 表格排课-基础表格
+│   └── input-tag/    # 标签输入组件
+└── popup/            # 弹窗组件
+    ├── chooseClass/  # 班级选择弹窗
+    ├── chooseCourse/ # 课程选择弹窗
+    └── chooseStudent/# 学员选择弹窗
+            </code>
+          </div>
+          
+          <h3>🎯 组件分类</h3>
+          <div class="grid-3">
+            <div class="card">
+              <h4>业务组件</h4>
+              <p>针对具体业务场景的专用组件</p>
+            </div>
+            <div class="card">
+              <h4>通用组件</h4>
+              <p>可在多个业务场景中复用的基础组件</p>
+            </div>
+            <div class="card">
+              <h4>弹窗组件</h4>
+              <p>各种选择器弹窗，统一交互体验</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 15: 总结与规划 -->
+    <div class="slide" id="slide-15">
+      <div class="slide-header">
+        <h2>七、总结与后续规划</h2>
+        <p class="slide-subtitle">现在做到哪了？接下来想做什么？</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>📊 当前进度</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>✅ 日历视图</h4>
+              <p>核心功能已完成并通过 Demo 验证</p>
+            </div>
+            <div class="card">
+              <h4>🔄 排课列表</h4>
+              <p>完成了约 50% 的功能</p>
+            </div>
+            <div class="card">
+              <h4>🚧 表格排课</h4>
+              <p>已进入正式开发阶段</p>
+            </div>
+            <div class="card">
+              <h4>🚧 AI 排课</h4>
+              <p>已进入正式开发阶段</p>
+            </div>
+          </div>
+          
+          <h3>🔮 后续计划</h3>
+          <div class="highlight">
+            <ul>
+              <li><strong>性能优化</strong>：虚拟滚动、懒加载路由、组件缓存、预加载子应用</li>
+              <li><strong>开发体验</strong>：类型安全、代码规范</li>
+              <li><strong>Sentry日志</strong>：规范化上报前端日志</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 16: 团队配合 -->
+    <div class="slide" id="slide-16">
+      <div class="slide-header">
+        <h2>希望大家配合的点</h2>
+        <p class="slide-subtitle">共同推进项目发展</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div class="card">
+              <h3>🔧 后端配合</h3>
+              <p>因为涉及到新老接口，接口结构尽量保持统一，便于前端封装和维护。</p>
+            </div>
+            <div class="card">
+              <h3>🧪 测试配合</h3>
+              <p>到时候重点关注页面加载路径、跨应用跳转逻辑以及主子应用通信的场景。</p>
+            </div>
+            <div class="card">
+              <h3>📋 产品配合</h3>
+              <p>新功能需求优先考虑在子应用中实现，充分利用现代化技术栈的优势。</p>
+            </div>
+            <div class="card">
+              <h3>🎨 设计配合</h3>
+              <p>UI设计时考虑微前端架构特点，保持主应用和子应用的视觉一致性。</p>
+            </div>
+          </div>
+          
+          <div class="highlight">
+            <h3>📈 协作流程</h3>
+            <ul>
+              <li><strong>需求评审</strong>：新功能开发前，前后端测试一起评审技术方案</li>
+              <li><strong>接口设计</strong>：统一接口规范，避免新老接口差异过大</li>
+              <li><strong>联调测试</strong>：重点关注跨应用交互和通信场景</li>
+              <li><strong>上线部署</strong>：子应用独立部署，主应用无感知更新</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 17: Q&A -->
+    <div class="slide" id="slide-17">
+      <div class="slide-header">
+        <h2>八、Q&A 环节</h2>
+        <p class="slide-subtitle">大家有什么问题都可以问</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <h3>🔧 技术问题</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>Q: 子应用如何处理用户权限？</h4>
+              <p>A: 权限由主应用统一管理，通过通信机制传递给子应用。子应用根据权限控制页面和功能的显示。</p>
+            </div>
+            <div class="card">
+              <h4>Q: 如果子应用出现故障，会影响主应用吗？</h4>
+              <p>A: 不会。iframe 模式提供了强隔离，子应用的 JS 错误不会影响主应用。</p>
+            </div>
+          </div>
+          
+          <h3>📈 业务问题</h3>
+          <div class="grid-2">
+            <div class="card">
+              <h4>Q: 新功能开发周期如何？</h4>
+              <p>A: 由于技术栈现代化和组件复用，开发效率比原来项目开发提升约 30%。</p>
+            </div>
+            <div class="card">
+              <h4>Q: 用户是否感知到微前端的存在？</h4>
+              <p>A: 理想情况下用户无感知。我们通过样式统一、交互一致性保证用户体验的连贯性。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 18: 最后的话 -->
+    <div class="slide" id="slide-18">
+      <div class="slide-header">
+        <h2>🙏 最后的话</h2>
+        <p class="slide-subtitle">感谢大家的支持和理解！</p>
+      </div>
+      <div class="content">
+        <div class="content-scroll">
+          <div class="grid-2">
+            <div class="card">
+              <h3>🤝 团队协作</h3>
+              <p>这次微前端改造是我们团队的一次新尝试，感谢大家的支持和配合。</p>
+            </div>
+            <div class="card">
+              <h3>🔄 持续改进</h3>
+              <p>我们会持续关注大家的反馈，不断优化和完善这套解决方案。</p>
+            </div>
+            <div class="card">
+              <h3>💡 开放态度</h3>
+              <p>实现方案可能还有不够完善的地方，欢迎大家提出宝贵意见。</p>
+            </div>
+            <div class="card">
+              <h3>🚀 共同成长</h3>
+              <p>希望这个微前端架构能成为大家共同维护和改进的成果。</p>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <h2 style="color: var(--secondary);">谢谢大家！</h2>
+            <p style="color: var(--text-muted); font-size: 1.2rem; margin-top: 16px;">有任何问题都可以继续讨论</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation">
+    <button class="nav-btn" id="prev">◀ 上一页</button>
+    <span class="counter" id="counter">1 / 18</span>
+    <button class="nav-btn" id="next">下一页 ▶</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+
+    // 获取URL参数中的页码
+    function getSlideFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slideParam = urlParams.get('slide');
+      if (slideParam) {
+        const slideIndex = parseInt(slideParam) - 1; // URL中页码从1开始，数组索引从0开始
+        if (slideIndex >= 0 && slideIndex < totalSlides) {
+          return slideIndex;
+        }
+      }
+      return 0; // 默认第一页
+    }
+
+    // 更新URL参数
+    function updateURL(slideIndex) {
+      const url = new URL(window.location);
+      url.searchParams.set('slide', slideIndex + 1); // 页码从1开始显示
+      window.history.replaceState({}, '', url);
+    }
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+        // 重置滚动位置
+        if (i === index) {
+          const contentScroll = slide.querySelector('.content-scroll');
+          if (contentScroll) {
+            contentScroll.scrollTop = 0;
+          }
+        }
+      });
+      
+      counter.textContent = `${index + 1} / ${totalSlides}`;
+      progress.style.width = `${((index + 1) / totalSlides) * 100}%`;
+      
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === totalSlides - 1;
+      
+      // 更新URL
+      updateURL(index);
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        showSlide(currentSlide);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        showSlide(currentSlide);
+      }
+    }
+
+    // 事件监听
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+
+    // 键盘导航
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      
+      switch(e.key) {
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          currentSlide = 0;
+          showSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          currentSlide = totalSlides - 1;
+          showSlide(totalSlides - 1);
+          break;
+      }
+    });
+
+    // 初始化：从URL参数恢复页码
+    currentSlide = getSlideFromURL();
+    showSlide(currentSlide);
+  </script>
+</body>
+</html> 
