@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentry 前端监控分享</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin-bottom: 1rem;
+        }
+
+        p, li {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .content {
+            max-width: 1000px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .problem-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #e74c3c;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .solution-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #27ae60;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        li:before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .center-content {
+            text-align: center;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .version-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .version-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .version-card h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .best-practice {
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid #667eea;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="slide-counter" id="slideCounter">1 / 15</div>
+
+        <!-- Slide 1: 标题页 -->
+        <div class="slide active">
+            <div class="content center-content">
+                <h1>🚀 Sentry 前端监控</h1>
+                <p class="subtitle">让错误无处遁形，让性能一目了然</p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🔍</div>
+                        <h3>智能错误捕获</h3>
+                        <p>自动捕获和聚合前端异常</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h3>性能监控</h3>
+                        <p>实时监控页面和接口性能</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔔</div>
+                        <h3>实时告警</h3>
+                        <p>第一时间发现和解决问题</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: 痛点回顾 -->
+        <div class="slide">
+            <div class="content">
+                <h2>💔 传统排查方式的痛点</h2>
+                <div class="two-column">
+                    <div>
+                        <div class="problem-card">
+                            <h3>🔍 问题发现滞后</h3>
+                            <p>用户反馈后才知道出错，错失最佳修复时机</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>📍 定位困难</h3>
+                            <p>缺乏完整的错误上下文，难以复现问题</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>⏰ 排查耗时</h3>
+                            <p>需要手动查看日志、添加调试代码</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="problem-card">
+                            <h3>🌊 信息孤岛</h3>
+                            <p>前后端错误信息分散，缺乏统一视图</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>📈 性能盲区</h3>
+                            <p>无法量化页面性能，优化缺乏数据支撑</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>🔄 重复劳动</h3>
+                            <p>相同问题重复排查，效率低下</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Sentry 解决方案 -->
+        <div class="slide">
+            <div class="content">
+                <h2>✨ Sentry 带来的改变</h2>
+                <div class="two-column">
+                    <div>
+                        <div class="solution-card">
+                            <h3>🚨 主动发现</h3>
+                            <p>实时监控，问题发生即刻告警</p>
+                        </div>
+                        <div class="solution-card">
+                            <h3>🎯 精准定位</h3>
+                            <p>完整的错误堆栈和用户上下文</p>
+                        </div>
+                        <div class="solution-card">
+                            <h3>⚡ 快速排查</h3>
+                            <p>一站式错误分析，大幅提升效率</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="solution-card">
+                            <h3>🔗 统一视图</h3>
+                            <p>前后端错误关联，全链路追踪</p>
+                        </div>
+                        <div class="solution-card">
+                            <h3>📊 性能透明</h3>
+                            <p>详细的性能指标和趋势分析</p>
+                        </div>
+                        <div class="solution-card">
+                            <h3>🤖 智能聚合</h3>
+                            <p>相同错误自动聚合，避免重复处理</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: 核心功能 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🎯 Sentry 核心功能</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🐛</div>
+                        <h3>错误捕获</h3>
+                        <ul>
+                            <li>自动捕获 JS 错误</li>
+                            <li>Promise 异常处理</li>
+                            <li>网络请求失败</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h3>性能监控</h3>
+                        <ul>
+                            <li>页面加载性能</li>
+                            <li>接口调用性能</li>
+                            <li>用户体验指标</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">👤</div>
+                        <h3>用户上下文</h3>
+                        <ul>
+                            <li>用户信息和行为</li>
+                            <li>设备和浏览器信息</li>
+                            <li>操作路径追踪</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔔</div>
+                        <h3>告警通知</h3>
+                        <ul>
+                            <li>实时错误告警</li>
+                            <li>多种通知方式</li>
+                            <li>自定义告警规则</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: 基础配置 -->
+        <div class="slide">
+            <div class="content">
+                <h2>⚙️ 基础配置</h2>
+                <div class="demo-section">
+                    <h3>初始化配置</h3>
+                    <div class="code-block">import * as Sentry from "@sentry/browser";
+import { BrowserTracing } from "@sentry/tracing";
+
+// 实际项目配置示例
+Sentry.init({
+  dsn: "https://abc123@o123456.ingest.sentry.io/123456",
+  environment: process.env.NODE_ENV || "development",
+  release: `my-shopping-app@${process.env.APP_VERSION}`,
+  
+  // 性能监控采样率 (生产环境降低以控制成本)
+  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  
+  // 错误采样率
+  sampleRate: 1.0,
+  
+  // 忽略常见的无意义错误
+  ignoreErrors: [
+    'ResizeObserver loop limit exceeded',
+    'Script error.',
+    /Loading chunk \d+ failed/,
+    'Network request failed'
+  ],
+  
+  // 数据脱敏处理
+  beforeSend: (event) => {
+    // 移除敏感用户信息
+    if (event.user) {
+      delete event.user.email;
+      delete event.user.ip_address;
+    }
+    
+    // 过滤包含敏感信息的URL
+    if (event.request?.url?.includes('token')) {
+      event.request.url = '[Filtered]';
+    }
+    
+    return event;
+  },
+  
+  integrations: [
+    new BrowserTracing({
+      // 设置路由变化追踪
+      routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+        React.useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      ),
+    }),
+  ],
+});</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: 上下文设置 -->
+        <div class="slide">
+            <div class="content">
+                <h2>📝 上下文信息设置</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>用户信息</h3>
+                        <div class="code-block">// 用户登录后设置用户信息
+function handleUserLogin(userInfo) {
+  Sentry.setUser({
+    id: userInfo.userId,
+    username: userInfo.username,
+    role: userInfo.role,
+    department: userInfo.department,
+    // 注意：不要设置敏感信息如email、手机号
+  });
+}
+                        </div>
+                        
+                        <h3>标签信息</h3>
+                        <div class="code-block">// 页面级别标签设置
+function setPageContext(pageName, module) {
+  Sentry.setTags({
+    page: pageName,           // 当前页面
+    module: module,           // 业务模块
+    version: '2.1.0',         // 功能版本
+    userType: 'premium'       // 用户类型
+  });
+}
+
+// 使用示例
+setPageContext('OrderListPage', 'order');
+setPageContext('PaymentPage', 'payment');
+                        </div>
+                    </div>
+                    <div>
+                        <h3>额外信息</h3>
+                        <div class="code-block">// 业务上下文信息设置
+function setBusinessContext(orderInfo) {
+  Sentry.setExtras({
+    orderId: orderInfo.id,
+    orderAmount: orderInfo.amount,
+    paymentMethod: orderInfo.paymentMethod,
+    productCount: orderInfo.items.length,
+    couponUsed: orderInfo.couponCode || 'none',
+    deliveryAddress: orderInfo.city, // 只记录城市，保护隐私
+    timestamp: new Date().toISOString()
+  });
+}
+
+// 在关键业务操作前调用
+setBusinessContext(currentOrder);
+                        </div>
+                        
+                        <h3>手动捕获</h3>
+                        <div class="code-block">// 手动捕获异常示例
+function processPayment(paymentData) {
+  try {
+    const result = await paymentAPI.createOrder(paymentData);
+    return result;
+  } catch (error) {
+    // 为错误添加业务上下文
+    Sentry.withScope(scope => {
+      scope.setTag('operation', 'payment');
+      scope.setLevel('error');
+      scope.setContext('paymentData', {
+        amount: paymentData.amount,
+        method: paymentData.method,
+        // 不记录敏感信息如卡号
+      });
+      Sentry.captureException(error);
+    });
+    throw error;
+  }
+}
+
+// 记录业务警告
+function logBusinessWarning(message, context) {
+  Sentry.withScope(scope => {
+    scope.setLevel('warning');
+    scope.setContext('business', context);
+    Sentry.captureMessage(message);
+  });
+}
+
+// 使用示例
+logBusinessWarning('库存不足警告', {
+  productId: 'P123',
+  requestedQty: 5,
+  availableQty: 2
+});
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: 实际案例 - 接口异常 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🔍 实际案例：接口异常排查</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>❌ 传统方式</h3>
+                        <div class="problem-card">
+                            <ul>
+                                <li>用户反馈支付失败</li>
+                                <li>查看 Network 面板</li>
+                                <li>检查服务器日志</li>
+                                <li>手动复现问题</li>
+                                <li>耗时：2-4 小时</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="code-block">// 传统调试方式 - 问题重重
+// 1. 只能在开发者工具中看到
+console.log('支付参数:', {
+  orderId: 'ORD123',
+  amount: 299.99,
+  method: 'alipay'
+});
+
+// 2. 用户环境无法获取日志
+fetch('/api/payment', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(paymentData)
+})
+.then(res => {
+  console.log('响应状态:', res.status);
+  if (!res.ok) {
+    // 3. 错误信息不完整
+    console.error('支付接口失败');
+  }
+  return res.json();
+})
+.catch(err => {
+  // 4. 缺少用户上下文
+  console.error('网络错误:', err.message);
+  alert('支付失败，请重试'); // 用户体验差
+});
+                        </div>
+                    </div>
+                    <div>
+                        <h3>✅ Sentry 方式</h3>
+                        <div class="solution-card">
+                            <ul>
+                                <li>实时错误告警</li>
+                                <li>完整请求参数</li>
+                                <li>用户操作路径</li>
+                                <li>设备和环境信息</li>
+                                <li>耗时：10-30 分钟</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="code-block">// Sentry 智能监控 - 全面覆盖
+// 1. 全局拦截器自动捕获
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    Sentry.withScope(scope => {
+      // 2. 丰富的错误上下文
+      scope.setTag('api_type', 'payment');
+      scope.setTag('error_type', error.response?.status || 'network');
+      scope.setLevel('error');
+      
+      // 3. 完整的请求信息
+      scope.setContext('request_details', {
+        url: error.config.url,
+        method: error.config.method,
+        headers: error.config.headers,
+        timeout: error.config.timeout,
+        // 脱敏后的数据
+        dataSize: JSON.stringify(error.config.data).length
+      });
+      
+      // 4. 响应信息
+      if (error.response) {
+        scope.setContext('response_details', {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data
+        });
+      }
+      
+      // 5. 用户操作路径
+      scope.addBreadcrumb({
+        message: '支付接口调用失败',
+        category: 'api',
+        level: 'error',
+        data: {
+          orderId: error.config.data?.orderId,
+          amount: error.config.data?.amount
+        }
+      });
+      
+      Sentry.captureException(error);
+    });
+    
+    // 6. 用户友好的错误处理
+    showUserFriendlyError(error);
+    return Promise.reject(error);
+  }
+);
+
+// 7. 智能错误提示
+function showUserFriendlyError(error) {
+  const status = error.response?.status;
+  let message = '支付遇到问题，请稍后重试';
+  
+  if (status === 400) message = '支付信息有误，请检查后重试';
+  if (status === 500) message = '服务暂时不可用，请稍后重试';
+  
+  // 同时记录用户看到的错误信息
+  Sentry.addBreadcrumb({
+    message: `用户看到错误提示: ${message}`,
+    level: 'info'
+  });
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: 实际案例 - 性能问题 -->
+        <div class="slide">
+            <div class="content">
+                <h2>📊 实际案例：性能问题分析</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>❌ 传统性能分析</h3>
+                        <div class="problem-card">
+                            <p><strong>问题：</strong>订单列表页面加载很慢</p>
+                            <p><strong>排查方式：</strong>手动测试 + 开发者工具</p>
+                        </div>
+                        
+                        <div class="code-block">// 传统性能分析 - 局限性明显
+// 1. 只能看到总体时间，无法定位瓶颈
+console.time('商品列表页面加载');
+// ... 复杂的页面逻辑
+console.timeEnd('商品列表页面加载'); // 输出: 商品列表页面加载: 2847.123ms
+
+// 2. 手动埋点，容易遗漏
+const loadStart = performance.now();
+fetch('/api/products?page=1&size=20')
+  .then(res => res.json())
+  .then(data => {
+    const loadEnd = performance.now();
+    console.log('接口耗时:', loadEnd - loadStart); // 只有开发环境能看到
+    
+    // 3. 渲染性能无法量化
+    renderProductList(data.products);
+  });
+
+// 4. 无法关联用户行为和性能
+// 用户点击"加载更多"时的性能如何？无从得知
+                        </div>
+                        
+                        <h3>传统方式问题</h3>
+                        <ul>
+                            <li>只能在开发环境测试</li>
+                            <li>无法获取真实用户数据</li>
+                            <li>缺乏历史趋势对比</li>
+                            <li>排查耗时 2-4 小时</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>✅ Sentry 性能监控</h3>
+                        <div class="solution-card">
+                            <p><strong>发现：</strong>自动监控，实时告警</p>
+                            <p><strong>分析：</strong>完整性能链路追踪</p>
+                        </div>
+                        
+                        <div class="code-block">// Sentry 性能监控 - 全方位洞察
+import { BrowserTracing } from '@sentry/tracing';
+
+Sentry.init({
+  dsn: 'https://your-dsn@sentry.io/project-id',
+  environment: 'production',
+  integrations: [
+    new BrowserTracing({
+      // 1. 自动监控所有HTTP请求
+      tracingOrigins: [
+        'localhost',
+        'api.yoursite.com',
+        /^https:\/\/api\.yoursite\.com\//
+      ],
+      
+      // 2. 自动监控路由切换性能
+      routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+        React.useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      ),
+      
+      // 3. 监控用户交互性能
+      startTransactionOnLocationChange: true,
+      startTransactionOnPageLoad: true
+    })
+  ],
+  
+  // 4. 智能采样策略
+  tracesSampleRate: 0.1, // 10%的事务被采样
+  
+  // 5. 性能阈值配置
+  beforeSend(event) {
+    if (event.type === 'transaction') {
+      const duration = event.timestamp - event.start_timestamp;
+      if (duration < 1000) return null; // 忽略1秒以下的快速请求
+    }
+    return event;
+  }
+});
+
+// 6. 发现的性能数据
+// 页面性能指标 (真实用户数据)
+LCP: 4.2s (慢) - 影响 65% 用户
+FID: 180ms (需要改进) - 移动端更严重
+CLS: 0.15 (需要改进) - 图片加载导致
+
+// 接口性能 (按地区/设备分析)
+GET /api/orders: 2.8s (平均)
+  - 移动端: 3.5s
+  - PC端: 2.1s
+  - 海外用户: 4.2s
+                        </div>
+                        
+                        <h3>Sentry 优势</h3>
+                        <ul>
+                            <li>真实用户性能数据</li>
+                            <li>自动分析性能瓶颈</li>
+                            <li>按设备/地区细分</li>
+                            <li>定位耗时 10-30 分钟</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <h3>📈 优化效果对比</h3>
+                    <div class="two-column">
+                        <div>
+                            <h4>优化前 (Sentry 发现的问题)</h4>
+                            <div class="code-block">LCP: 4.2s (慢) - 65% 用户受影响
+FID: 180ms (需要改进)
+CLS: 0.15 (需要改进)
+
+接口性能:
+GET /api/orders: 2.8s
+GET /api/user: 1.2s
+
+用户体验:
+跳出率: 35%
+转化率: 2.1%
+                            </div>
+                        </div>
+                        <div>
+                            <h4>优化后 (持续监控验证)</h4>
+                            <div class="code-block">LCP: 1.8s (良好) ⬇️ 57%
+FID: 45ms (良好) ⬇️ 75%
+CLS: 0.05 (良好) ⬇️ 67%
+
+接口性能:
+GET /api/orders: 0.8s ⬇️ 71%
+GET /api/user: 0.4s ⬇️ 67%
+
+用户体验:
+跳出率: 22% ⬇️ 37%
+转化率: 3.2% ⬆️ 52%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: 版本升级 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🔄 版本升级指南</h2>
+                <div class="version-comparison">
+                    <div class="version-card">
+                        <h4>v6 → v7 升级</h4>
+                        <p><strong>主要变更：</strong></p>
+                        <ul>
+                            <li>包名变更：@sentry/browser</li>
+                            <li>初始化方式改变</li>
+                            <li>API 重构</li>
+                        </ul>
+                        <div class="code-block">// v6 → v7 升级详细指南
+
+// === 第一步：依赖升级 ===
+// package.json 变更
+{
+  "dependencies": {
+    // 旧版本
+    "@sentry/browser": "^6.19.7",
+    "@sentry/tracing": "^6.19.7"
+    
+    // 新版本
+    "@sentry/browser": "^7.0.0",
+    "@sentry/tracing": "^7.0.0"
+  }
+}
+
+// === 第二步：导入方式变更 ===
+// ❌ v6 旧写法
+import * as Sentry from '@sentry/browser';
+import { Integrations } from '@sentry/tracing';
+
+Sentry.init({
+  dsn: 'https://your-dsn@sentry.io/project-id',
+  integrations: [
+    new Integrations.BrowserTracing({
+      tracingOrigins: ['localhost', 'api.example.com']
+    })
+  ],
+  tracesSampleRate: 1.0,
+  beforeSend(event) {
+    // v6 只有 event 参数
+    if (event.exception) {
+      console.log('捕获到异常:', event.exception);
+    }
+    return event;
+  }
+});
+
+// ✅ v7 新写法
+import { init, captureException, addBreadcrumb } from '@sentry/browser';
+import { BrowserTracing } from '@sentry/tracing';
+
+init({
+  dsn: 'https://your-dsn@sentry.io/project-id',
+  integrations: [
+    // 注意：不再需要 Integrations 命名空间
+    new BrowserTracing({
+      tracingOrigins: ['localhost', 'api.example.com'],
+      // v7 新增配置项
+      startTransactionOnLocationChange: true,
+      startTransactionOnPageLoad: true
+    })
+  ],
+  tracesSampleRate: 0.1, // 生产环境建议降低采样率
+  
+  // v7 新增 hint 参数
+  beforeSend(event, hint) {
+    // hint 包含原始异常信息
+    if (hint.originalException) {
+      console.log('原始异常:', hint.originalException);
+    }
+    
+    // v7 改进的事件过滤
+    if (event.exception) {
+      const error = hint.originalException;
+      // 过滤掉网络错误
+      if (error && error.message?.includes('Network Error')) {
+        return null;
+      }
+    }
+    
+    return event;
+  },
+  
+  // v7 新增配置项
+  environment: process.env.NODE_ENV,
+  release: process.env.REACT_APP_VERSION,
+  
+  // 改进的错误过滤
+  ignoreErrors: [
+    'ResizeObserver loop limit exceeded',
+    'Script error.',
+    'Non-Error promise rejection captured'
+  ]
+});
+                        </div>
+                    </div>
+                    
+                    <div class="version-card">
+                        <h4>v7 → v8 升级</h4>
+                        <p><strong>主要变更：</strong></p>
+                        <ul>
+                            <li>性能监控优化</li>
+                            <li>Bundle 体积减小</li>
+                            <li>TypeScript 支持增强</li>
+                        </ul>
+                        <div class="code-block">// v7 → v8 升级详细指南
+
+// === 核心变更：集成方式重构 ===
+
+// ❌ v7 旧写法
+import { init } from '@sentry/browser';
+import { BrowserTracing } from '@sentry/tracing';
+
+init({
+  dsn: 'https://your-dsn@sentry.io/project-id',
+  integrations: [
+    new BrowserTracing({
+      tracingOrigins: ['localhost', 'api.example.com'],
+      routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+        React.useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      )
+    })
+  ],
+  tracesSampleRate: 0.1
+});
+
+// ✅ v8 新写法
+import { 
+  init, 
+  browserTracingIntegration,
+  replayIntegration,
+  feedbackIntegration 
+} from '@sentry/browser';
+
+init({
+  dsn: 'https://your-dsn@sentry.io/project-id',
+  integrations: [
+    // 新的函数式集成
+    browserTracingIntegration({
+      // 保持原有配置
+      tracingOrigins: ['localhost', 'api.example.com'],
+      
+      // v8 新增功能
+      enableInp: true, // 启用 INP 指标
+      enableLongTask: true, // 监控长任务
+      
+      // React Router 集成简化
+      router: {
+        name: 'react-router-v6',
+        instrumentNavigation: true,
+        instrumentPageLoad: true
+      }
+    }),
+    
+    // v8 新增：会话重放
+    replayIntegration({
+      maskAllText: false,
+      blockAllMedia: false,
+      sessionSampleRate: 0.1,
+      errorSampleRate: 1.0
+    }),
+    
+    // v8 新增：用户反馈
+    feedbackIntegration({
+      colorScheme: 'auto',
+      showBranding: false
+    })
+  ],
+  
+  // v8 性能监控增强
+  tracesSampleRate: 0.1,
+  
+  // v8 新增：会话重放采样
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+  
+  // v8 改进的错误边界
+  beforeSend(event, hint) {
+    // v8 增强的 hint 信息
+    if (hint.mechanism?.type === 'instrument') {
+      // 自动捕获的错误
+      event.tags = { ...event.tags, auto_captured: true };
+    }
+    
+    return event;
+  },
+  
+  // v8 新增：自定义指标
+  beforeSendTransaction(event) {
+    // 过滤掉过短的事务
+    if (event.timestamp - event.start_timestamp < 100) {
+      return null;
+    }
+    return event;
+  }
+});
+
+// === v8 新功能使用示例 ===
+
+// 1. 手动触发用户反馈
+import { showReportDialog } from '@sentry/browser';
+
+function handleUserFeedback() {
+  showReportDialog({
+    title: '遇到问题了？',
+    subtitle: '告诉我们发生了什么',
+    labelName: '姓名',
+    labelEmail: '邮箱',
+    labelComments: '问题描述'
+  });
+}
+
+// 2. 会话重放控制
+import { getReplay } from '@sentry/browser';
+
+// 手动开始录制
+getReplay()?.start();
+
+// 手动停止录制
+getReplay()?.stop();
+
+// 3. 自定义性能指标
+import { metrics } from '@sentry/browser';
+
+// 记录自定义指标
+metrics.increment('button.click', 1, {
+  tags: { button_type: 'submit' }
+});
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: 最佳实践 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🏆 最佳实践</h2>
+                <div class="best-practice">
+                    <h3>🔒 数据安全</h3>
+                    <div class="code-block">
+beforeSend: (event) => {
+  // 移除敏感信息
+  if (event.user) {
+    delete event.user.email;
+    delete event.user.ip_address;
+  }
+  
+  // 过滤敏感 URL
+  if (event.request?.url?.includes('token')) {
+    event.request.url = '[Filtered]';
+  }
+  
+  return event;
+}
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div>
+                        <h3>💰 成本控制</h3>
+                        <ul>
+                            <li>合理设置采样率</li>
+                            <li>过滤无意义错误</li>
+                            <li>设置数据保留期</li>
+                            <li>监控配额使用</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>👥 团队协作</h3>
+                        <ul>
+                            <li>统一错误分类标准</li>
+                            <li>建立处理流程</li>
+                            <li>定期回顾和优化</li>
+                            <li>知识库建设</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: 平台演示 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🖥️ Sentry 平台实战演示</h2>
+                <div class="demo-section">
+                    <h3>演示内容</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">🔍</div>
+                            <h4>错误查询</h4>
+                            <p>演示如何快速查找和筛选错误</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <h4>性能分析</h4>
+                            <p>查看页面和接口性能指标</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔔</div>
+                            <h4>告警配置</h4>
+                            <p>设置错误告警规则和通知</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📈</div>
+                            <h4>趋势分析</h4>
+                            <p>分析错误趋势和版本影响</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <h3>🔍 常用查询语法</h3>
+                    <div class="code-block">
+// 环境筛选
+environment:production
+
+// 版本筛选
+release:"my-app@1.2.0"
+
+// 用户筛选
+user.id:"12345"
+
+// URL 筛选
+url:"*/checkout/*"
+
+// 组合查询
+environment:production AND release:"my-app@1.2.0"
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: 查询技巧 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🔍 Sentry 查询技巧</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>基础筛选</h3>
+                        <div class="code-block">
+// 时间范围
+is:unresolved
+
+// 错误级别
+level:error
+level:warning
+
+// 浏览器筛选
+browser.name:Chrome
+browser.version:"90.*"
+
+// 操作系统
+os.name:Windows
+os.version:"10"
+                        </div>
+                        
+                        <h3>高级查询</h3>
+                        <div class="code-block">
+// 排除查询
+!environment:development
+
+// 通配符
+message:"*timeout*"
+
+// 数值比较
+transaction.duration:>1000
+
+// 存在性检查
+has:user.email
+                        </div>
+                    </div>
+                    <div>
+                        <h3>业务场景查询</h3>
+                        <div class="code-block">
+// 支付相关错误
+tags.module:payment AND level:error
+
+// 移动端问题
+device.family:Mobile AND is:unresolved
+
+// 新版本问题
+release:"my-app@2.0.0" 
+AND event.timestamp:>2024-01-01
+
+// 高频错误
+event.count:>100
+                        </div>
+                        
+                        <h3>性能查询</h3>
+                        <div class="code-block">
+// 慢接口
+transaction:"/api/orders" 
+AND transaction.duration:>2000
+
+// 页面性能
+transaction.op:pageload 
+AND measurements.lcp:>2500
+
+// 用户体验
+measurements.cls:>0.1
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: 团队规范 -->
+        <div class="slide">
+            <div class="content">
+                <h2>📋 团队使用规范</h2>
+                <div class="two-column">
+                    <div>
+                        <h3>🏷️ 标签规范</h3>
+                        <div class="best-practice">
+                            <ul>
+                                <li><span class="highlight">module</span>: 业务模块 (order, payment, user)</li>
+                                <li><span class="highlight">feature</span>: 功能特性 (checkout, login)</li>
+                                <li><span class="highlight">page</span>: 页面标识 (OrderPage, HomePage)</li>
+                                <li><span class="highlight">api</span>: 接口标识 (getUserInfo, createOrder)</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>🔄 处理流程</h3>
+                        <div class="solution-card">
+                            <ol>
+                                <li>错误分配给相关开发者</li>
+                                <li>24小时内响应和评估</li>
+                                <li>根据优先级制定修复计划</li>
+                                <li>修复后验证和关闭</li>
+                                <li>定期回顾和总结</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>⚠️ 告警策略</h3>
+                        <div class="problem-card">
+                            <ul>
+                                <li><strong>紧急：</strong>支付、登录等核心功能</li>
+                                <li><strong>重要：</strong>主要业务流程异常</li>
+                                <li><strong>一般：</strong>非核心功能问题</li>
+                                <li><strong>忽略：</strong>第三方脚本、网络超时</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>📊 监控指标</h3>
+                        <div class="feature-item">
+                            <ul>
+                                <li>错误率 < 1%</li>
+                                <li>平均响应时间 < 24h</li>
+                                <li>解决率 > 95%</li>
+                                <li>用户满意度 > 90%</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: 行动计划 -->
+        <div class="slide">
+            <div class="content">
+                <h2>🎯 行动计划</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">📅</div>
+                        <h3>第一周</h3>
+                        <ul>
+                            <li>完成 Sentry 项目创建</li>
+                            <li>在测试环境集成配置</li>
+                            <li>验证基础功能</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🚀</div>
+                        <h3>第二周</h3>
+                        <ul>
+                            <li>生产环境部署</li>
+                            <li>配置告警规则</li>
+                            <li>团队培训和演示</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📈</div>
+                        <h3>第三周</h3>
+                        <ul>
+                            <li>监控数据分析</li>
+                            <li>优化配置参数</li>
+                            <li>建立处理流程</li>
+                        </ul>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <h3>持续改进</h3>
+                        <ul>
+                            <li>定期回顾效果</li>
+                            <li>优化告警策略</li>
+                            <li>扩展监控范围</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <h3>📚 学习资源</h3>
+                    <div class="two-column">
+                        <div>
+                            <ul>
+                                <li>🔗 <a href="https://docs.sentry.io/">Sentry 官方文档</a></li>
+                                <li>📖 团队内部配置指南</li>
+                                <li>🎥 平台使用演示视频</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li>📋 查询语法速查表</li>
+                                <li>🔧 最佳实践文档</li>
+                                <li>💬 技术交流群</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: 总结 -->
+        <div class="slide">
+            <div class="content center-content">
+                <h1>🎉 总结</h1>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h3>效率提升</h3>
+                        <p>错误排查时间从小时级降到分钟级</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h3>质量保障</h3>
+                        <p>主动发现问题，提升用户体验</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h3>数据驱动</h3>
+                        <p>基于真实数据进行性能优化</p>
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <h2>🚀 让我们一起拥抱更智能的前端监控！</h2>
+                    <p class="subtitle">有问题随时交流，共同提升开发效率</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">⬅ 上一页</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">下一页 ➡</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Update slide counter
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Update navigation buttons
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 0 && newSlide < totalSlides) {
+                currentSlide = newSlide;
+                updateSlide();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'Home') {
+                currentSlide = 0;
+                updateSlide();
+            } else if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                updateSlide();
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    changeSlide(1); // Swipe left - next slide
+                } else {
+                    changeSlide(-1); // Swipe right - previous slide
+                }
+            }
+        }
+
+        // Initialize
+        updateSlide();
+
+        // Auto-advance slides (optional, uncomment to enable)
+        // setInterval(() => {
+        //     if (currentSlide < totalSlides - 1) {
+        //         changeSlide(1);
+        //     }
+        // }, 10000); // 10 seconds per slide
+    </script>
+</body>
+</html>
