@@ -222,7 +222,7 @@
     <div class="container">
         <div class="header">
             <h1>🐟 多鱼类存活率数据生成器</h1>
-            <p>支持青鱼、草鱼、团头鲂、花䱻等多种鱼类，一键生成存活率Excel数据（16个鱼塘，2024年数据）</p>
+                         <p>支持青鱼、草鱼、团头鲂、花䱻等多种鱼类，一键生成存活率Excel数据（9个鱼塘，2024年6月-2025年6月数据，每周投放和检查）</p>
         </div>
         <div class="controls">
             <div class="input-group">
@@ -237,6 +237,7 @@
             <div class="input-group">
                 <label for="dataCount">数据条数：</label>
                 <input type="number" id="dataCount" value="500" min="1" max="10000">
+                <small style="color: #666; font-size: 12px;">建议500条（覆盖13个月，每周投放和检查）</small>
             </div>
             <div class="input-group">
                 <label for="fileName">文件名：</label>
@@ -275,12 +276,12 @@
     <script>
         // 配置多鱼类信息
         const fishConfig = {
-            qingyu: {
-                name: '青鱼',
-                fileName: '青鱼存活率数据',
-                sheetName: '青鱼存活率数据',
-                desc: [
-                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                         qingyu: {
+                 name: '青鱼',
+                 fileName: '青鱼存活率数据',
+                 sheetName: '青鱼存活率数据',
+                 desc: [
+                     ['养殖池编号', 'QY01-QY09格式（9个鱼塘，可重复）'],
                     ['投放时间', '2024年内的随机日期'],
                     ['检测时间', '投放时间（每天检测）'],
                     ['投放数量（尾）', '3000-8000尾随机数'],
@@ -297,12 +298,12 @@
                 ],
                 headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             },
-            caoyu: {
-                name: '草鱼',
-                fileName: '草鱼存活率数据',
-                sheetName: '草鱼存活率数据',
-                desc: [
-                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                         caoyu: {
+                 name: '草鱼',
+                 fileName: '草鱼存活率数据',
+                 sheetName: '草鱼存活率数据',
+                 desc: [
+                     ['养殖池编号', 'QY01-QY09格式（9个鱼塘，可重复）'],
                     ['投放时间', '2024年内的随机日期'],
                     ['检测时间', '投放时间（每天检测）'],
                     ['投放数量（尾）', '3000-8000尾随机数'],
@@ -319,12 +320,12 @@
                 ],
                 headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             },
-            tuantoufang: {
-                name: '团头鲂',
-                fileName: '团头鲂存活率数据',
-                sheetName: '团头鲂存活率数据',
-                desc: [
-                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                         tuantoufang: {
+                 name: '团头鲂',
+                 fileName: '团头鲂存活率数据',
+                 sheetName: '团头鲂存活率数据',
+                 desc: [
+                     ['养殖池编号', 'QY01-QY09格式（9个鱼塘，可重复）'],
                     ['投放时间', '2024年内的随机日期'],
                     ['检测时间', '投放时间+0~10天'],
                     ['投放数量（尾）', '3000-8000尾随机数'],
@@ -341,12 +342,12 @@
                 ],
                 headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             },
-            huazhao: {
-                name: '花䱻',
-                fileName: '花䱻存活率数据',
-                sheetName: '花䱻存活率数据',
-                desc: [
-                    ['养殖池编号', 'QY01-QY16格式（16个鱼塘，可重复）'],
+                         huazhao: {
+                 name: '花䱻',
+                 fileName: '花䱻存活率数据',
+                 sheetName: '花䱻存活率数据',
+                 desc: [
+                     ['养殖池编号', 'QY01-QY09格式（9个鱼塘，可重复）'],
                     ['投放时间', '2024年内的随机日期'],
                     ['检测时间', '投放时间+0~10天'],
                     ['投放数量（尾）', '3000-8000尾随机数'],
@@ -373,49 +374,26 @@
                 this.死亡原因列表 = ['pH值异常', '疾病', '操作损伤', '天敌', '水质问题', '饲料问题'];
                 this.负责人列表 = ['EMP001', 'EMP002', 'EMP003', 'EMP004', 'EMP005'];
                 
-                // 为16个养殖池生成固定的基础信息
-                this.养殖池信息 = {};
-                for (let i = 1; i <= 16; i++) {
-                    const poolId = `QY${i.toString().padStart(2, '0')}`;
-                    this.养殖池信息[poolId] = {
-                        '投放时间': this.生成投放时间(),
-                        '投放数量': this.生成投放数量(),
-                        '养殖周期': Math.floor(Math.random() * (150 - 90 + 1)) + 90,
-                        '负责人': this.负责人列表[Math.floor(Math.random() * this.负责人列表.length)]
-                    };
-                }
+                                 // 为9个养殖池生成固定的基础信息
+                 this.养殖池信息 = {};
+                 for (let i = 1; i <= 9; i++) {
+                     const poolId = `QY${i.toString().padStart(2, '0')}`;
+                     this.养殖池信息[poolId] = {
+                         '投放时间': this.生成投放时间(),
+                         '投放数量': this.生成投放数量(),
+                         '养殖周期': Math.floor(Math.random() * (150 - 90 + 1)) + 90,
+                         '负责人': this.负责人列表[Math.floor(Math.random() * this.负责人列表.length)]
+                     };
+                 }
             }
-            生成养殖池编号(index) {
-                const poolNum = (index % 16) + 1;
-                return `QY${poolNum.toString().padStart(2, '0')}`;
-            }
+                         生成养殖池编号(index) {
+                 const poolNum = (index % 9) + 1;
+                 return `QY${poolNum.toString().padStart(2, '0')}`;
+             }
             生成投放时间() {
-                // 模拟实际的投放时间分布（春季和秋季是主要投放期）
-                const 投放期概率 = Math.random();
-                let startDate, endDate;
-                
-                if (投放期概率 < 0.4) {
-                    // 春季投放期：3-5月
-                    startDate = new Date('2024-03-01');
-                    endDate = new Date('2024-05-31');
-                } else if (投放期概率 < 0.7) {
-                    // 秋季投放期：9-11月
-                    startDate = new Date('2024-09-01');
-                    endDate = new Date('2024-11-30');
-                } else {
-                    // 其他时间：1-2月，6-8月，12月
-                    const 其他期概率 = Math.random();
-                    if (其他期概率 < 0.5) {
-                        startDate = new Date('2024-01-01');
-                        endDate = new Date('2024-02-29');
-                    } else if (其他期概率 < 0.8) {
-                        startDate = new Date('2024-06-01');
-                        endDate = new Date('2024-08-31');
-                    } else {
-                        startDate = new Date('2024-12-01');
-                        endDate = new Date('2024-12-31');
-                    }
-                }
+                // 投放时间范围：2024年6月到2025年6月
+                const startDate = new Date('2024-06-01');
+                const endDate = new Date('2025-06-30');
                 
                 const daysBetween = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
                 const randomDays = Math.floor(Math.random() * daysBetween);
@@ -423,24 +401,36 @@
                 return randomDate.toISOString().split('T')[0];
             }
             生成投放数量() {
-                // 根据养殖池大小生成合理的投放数量
+                // 根据养殖池大小生成合理的投放数量（整百取数）
                 const 池子大小 = Math.random();
+                let minCount, maxCount;
+                
                 if (池子大小 < 0.3) {
                     // 小池子：3000-5000尾
-                    return Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000;
+                    minCount = 3000;
+                    maxCount = 5000;
                 } else if (池子大小 < 0.7) {
                     // 中池子：5000-7000尾
-                    return Math.floor(Math.random() * (7000 - 5000 + 1)) + 5000;
+                    minCount = 5000;
+                    maxCount = 7000;
                 } else {
                     // 大池子：7000-9000尾
-                    return Math.floor(Math.random() * (9000 - 7000 + 1)) + 7000;
+                    minCount = 7000;
+                    maxCount = 9000;
                 }
+                
+                // 生成整百的随机数
+                const 随机数 = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+                // 四舍五入到整百
+                return Math.round(随机数 / 100) * 100;
             }
             生成基础存活率() {
                 return Math.random() * (0.98 - 0.90) + 0.90; // 提高基础存活率下限到90%
             }
             生成存活数量(投放数量, 基础存活率) {
-                return Math.floor(投放数量 * 基础存活率);
+                // 存活数量也整百取数，更符合实际记录
+                const 存活数量 = Math.floor(投放数量 * 基础存活率);
+                return Math.round(存活数量 / 100) * 100;
             }
             生成环境参数() {
                 // 根据季节调整水温（夏季偏高，冬季偏低）
@@ -551,54 +541,62 @@
                     '综合存活率（%）': Math.round(综合存活率 * 10) / 10
                 };
             }
-            生成数据集(数据条数) {
-                const 数据列表 = [];
-                
-                // 计算需要多少天（每天16个鱼池）
-                const 天数 = Math.ceil(数据条数 / 16);
-                
-                // 生成检测时间序列（从2024-01-01开始，每天递增）
-                const 检测时间列表 = [];
-                const startDate = new Date('2024-01-01');
-                for (let i = 0; i < 天数; i++) {
-                    const 检测日期 = new Date(startDate);
-                    检测日期.setDate(startDate.getDate() + i);
-                    检测时间列表.push(检测日期.toISOString().split('T')[0]);
-                }
-                
-                // 生成数据
-                for (let i = 0; i < 数据条数; i++) {
-                    const 鱼池索引 = i % 16; // 0-15，对应QY01-QY16
-                    const 天数索引 = Math.floor(i / 16); // 第几天
-                    const 检测时间 = 检测时间列表[天数索引];
-                    
-                    // 投放时间 = 检测时间 - 随机天数(5-30天)
-                    const 投放天数偏移 = Math.floor(Math.random() * (30 - 5 + 1)) + 5;
-                    const 投放日期 = new Date(检测时间);
-                    投放日期.setDate(投放日期.getDate() - 投放天数偏移);
-                    const 投放时间 = 投放日期.toISOString().split('T')[0];
-                    
-                    数据列表.push(this.生成单条数据(鱼池索引, 投放时间, 检测时间));
-                }
-                
-                // 按优先级排序：1检测时间正序 > 2同一天内鱼池轮流 > 3投放时间正序
-                数据列表.sort((a, b) => {
-                    // 1. 检测时间正序
-                    if (a['检测时间'] !== b['检测时间']) {
-                        return a['检测时间'].localeCompare(b['检测时间']);
-                    }
-                    
-                    // 2. 同一天内鱼池轮流（QY01-QY16）
-                    const 鱼池A = parseInt(a['养殖池编号'].substring(2));
-                    const 鱼池B = parseInt(b['养殖池编号'].substring(2));
-                    if (鱼池A !== 鱼池B) return 鱼池A - 鱼池B;
-                    
-                    // 3. 投放时间正序
-                    return a['投放时间'].localeCompare(b['投放时间']);
-                });
-                
-                return 数据列表;
-            }
+                         生成数据集(数据条数) {
+                 const 数据列表 = [];
+                 
+                 // 计算需要多少周（每周9个鱼池）
+                 const 周数 = Math.ceil(数据条数 / 9);
+                 
+                 // 生成每周的检测时间（从2024-06-01开始，每7天递增）
+                 const 每周检测时间 = [];
+                 const startDate = new Date('2024-06-01');
+                 
+                 for (let week = 0; week < 周数; week++) {
+                     const 检测日期 = new Date(startDate);
+                     检测日期.setDate(startDate.getDate() + (week * 7));
+                     每周检测时间.push(检测日期.toISOString().split('T')[0]);
+                 }
+                 
+                 // 生成数据：每周9个鱼塘，每个鱼塘每周只能投放一次
+                 for (let week = 0; week < 周数; week++) {
+                     const 检测时间 = 每周检测时间[week];
+                     
+                     // 本周的投放时间范围：检测时间往前推7-14天
+                     const 投放天数偏移 = Math.floor(Math.random() * (14 - 7 + 1)) + 7;
+                     const 投放日期 = new Date(检测时间);
+                     投放日期.setDate(投放日期.getDate() - 投放天数偏移);
+                     const 投放时间 = 投放日期.toISOString().split('T')[0];
+                     
+                     // 本周投放9个鱼塘
+                     for (let poolIndex = 0; poolIndex < 9; poolIndex++) {
+                         const 鱼池编号 = `QY${(poolIndex + 1).toString().padStart(2, '0')}`;
+                         
+                         // 生成单条数据
+                         const 单条数据 = this.生成单条数据(poolIndex, 投放时间, 检测时间);
+                         单条数据['养殖池编号'] = 鱼池编号;
+                         
+                         数据列表.push(单条数据);
+                     }
+                 }
+                 
+                 // 按优先级排序：1检测时间正序 > 2同一天内鱼池轮流 > 3投放时间正序
+                 数据列表.sort((a, b) => {
+                     // 1. 检测时间正序
+                     if (a['检测时间'] !== b['检测时间']) {
+                         return a['检测时间'].localeCompare(b['检测时间']);
+                     }
+                     
+                     // 2. 同一天内鱼池轮流（QY01-QY09）
+                     const 鱼池A = parseInt(a['养殖池编号'].substring(2));
+                     const 鱼池B = parseInt(b['养殖池编号'].substring(2));
+                     if (鱼池A !== 鱼池B) return 鱼池A - 鱼池B;
+                     
+                     // 3. 投放时间正序
+                     return a['投放时间'].localeCompare(b['投放时间']);
+                 });
+                 
+                 return 数据列表;
+             }
         }
 
         function onFishTypeChange() {
