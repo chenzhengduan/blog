@@ -231,13 +231,25 @@
                     <option value="qingyu">青鱼</option>
                     <option value="caoyu">草鱼</option>
                     <option value="tuantoufang">团头鲂</option>
-                    <option value="huazhao">花䱻</option>
+                    <option value="zhonghuabie">中华鳖</option>
+                    <option value="guangdaociba">光倒刺鲃</option>
+                    <option value="guangchunyu">光唇鱼</option>
+                    <option value="bailian">白鲢</option>
+                    <option value="qiaozuihongbo">翘嘴红鲌</option>
+                    <option value="chiyanxun">赤眼鳟</option>
+                    <option value="jiyu">鲫鱼</option>
+                    <option value="yongyu">鳙鱼</option>
+                    <option value="guiyu">鳜鱼</option>
                 </select>
             </div>
             <div class="input-group">
                 <label for="dataCount">数据条数：</label>
                 <input type="number" id="dataCount" value="500" min="1" max="10000">
                 <small style="color: #666; font-size: 12px;">建议500条（覆盖13个月，每周投放和检查）</small>
+            </div>
+            <div class="input-group">
+                <label for="poolPrefix">编号前缀：</label>
+                <input type="text" id="poolPrefix" value="QY" maxlength="6" placeholder="如 QY/CY/BL...">
             </div>
             <div class="input-group">
                 <label for="fileName">文件名：</label>
@@ -296,7 +308,7 @@
                     ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
                     ['综合存活率（%）', '基础存活率 × 环境修正因子']
                 ],
-                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+                headers: ['养殖池编号','鱼类','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             },
                          caoyu: {
                  name: '草鱼',
@@ -318,7 +330,7 @@
                     ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
                     ['综合存活率（%）', '基础存活率 × 环境修正因子']
                 ],
-                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+                headers: ['养殖池编号','鱼类','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             },
                          tuantoufang: {
                  name: '团头鲂',
@@ -340,7 +352,7 @@
                     ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
                     ['综合存活率（%）', '基础存活率 × 环境修正因子']
                 ],
-                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+                headers: ['养殖池编号','鱼类','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             },
                          huazhao: {
                  name: '花䱻',
@@ -362,22 +374,35 @@
                     ['基础存活率（%）', '(存活数量/投放数量) × 100%'],
                     ['综合存活率（%）', '基础存活率 × 环境修正因子']
                 ],
-                headers: ['养殖池编号','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
+                headers: ['养殖池编号','鱼类','投放时间','检测时间','投放数量（尾）','存活数量（尾）','死亡原因','养殖周期（天）','负责人','水温（℃）','溶氧（mg/L）','pH','氨氮（mg/L）','基础存活率（%）','综合存活率（%）']
             }
         };
+        
+        // 扩展支持的鱼种（与现有结构一致）
+        fishConfig['zhonghuabie'] = { name: '中华鳖', fileName: '中华鳖存活率数据', sheetName: '中华鳖存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['guangdaociba'] = { name: '光倒刺鲃', fileName: '光倒刺鲃存活率数据', sheetName: '光倒刺鲃存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['guangchunyu'] = { name: '光唇鱼', fileName: '光唇鱼存活率数据', sheetName: '光唇鱼存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['bailian'] = { name: '白鲢', fileName: '白鲢存活率数据', sheetName: '白鲢存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['qiaozuihongbo'] = { name: '翘嘴红鲌', fileName: '翘嘴红鲌存活率数据', sheetName: '翘嘴红鲌存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['chiyanxun'] = { name: '赤眼鳟', fileName: '赤眼鳟存活率数据', sheetName: '赤眼鳟存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['jiyu'] = { name: '鲫鱼', fileName: '鲫鱼存活率数据', sheetName: '鲫鱼存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['yongyu'] = { name: '鳙鱼', fileName: '鳙鱼存活率数据', sheetName: '鳙鱼存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
+        fishConfig['guiyu'] = { name: '鳜鱼', fileName: '鳜鱼存活率数据', sheetName: '鳜鱼存活率数据', desc: fishConfig.qingyu.desc, headers: fishConfig.qingyu.headers };
 
         // 公共数据生成器
         class 存活率数据生成器 {
-            constructor() {
+            constructor(poolPrefix, fishName) {
                 this.环境最优值 = { '溶氧': 6.0, '水温': 24.0, 'pH': 7.0, '氨氮': 0.1 };
                 this.环境权重 = { '溶氧': 0.35, '水温': 0.30, 'pH': 0.20, '氨氮': 0.15 };
                 this.死亡原因列表 = ['pH值异常', '疾病', '操作损伤', '天敌', '水质问题', '饲料问题'];
                 this.负责人列表 = ['EMP001', 'EMP002', 'EMP003', 'EMP004', 'EMP005'];
+                this.poolPrefix = (poolPrefix && typeof poolPrefix === 'string' ? poolPrefix.trim().toUpperCase() : 'QY') || 'QY';
+                this.fishName = fishName || '青鱼';
                 
                                  // 为9个养殖池生成固定的基础信息
                  this.养殖池信息 = {};
                  for (let i = 1; i <= 9; i++) {
-                     const poolId = `QY${i.toString().padStart(2, '0')}`;
+                     const poolId = `${this.poolPrefix}${i.toString().padStart(2, '0')}`;
                      this.养殖池信息[poolId] = {
                          '投放时间': this.生成投放时间(),
                          '投放数量': this.生成投放数量(),
@@ -388,7 +413,7 @@
             }
                          生成养殖池编号(index) {
                  const poolNum = (index % 9) + 1;
-                 return `QY${poolNum.toString().padStart(2, '0')}`;
+                 return `${this.poolPrefix}${poolNum.toString().padStart(2, '0')}`;
              }
             生成投放时间() {
                 // 投放时间范围：2024年6月到2025年6月
@@ -526,6 +551,7 @@
                 const 负责人 = this.负责人列表[负责人索引];
                 return {
                     '养殖池编号': 养殖池编号,
+                    '鱼类': this.fishName,
                     '投放时间': 投放时间,
                     '检测时间': 检测时间,
                     '投放数量（尾）': 投放数量,
@@ -569,7 +595,7 @@
                      
                      // 本周投放9个鱼塘
                      for (let poolIndex = 0; poolIndex < 9; poolIndex++) {
-                         const 鱼池编号 = `QY${(poolIndex + 1).toString().padStart(2, '0')}`;
+                         const 鱼池编号 = `${this.poolPrefix}${(poolIndex + 1).toString().padStart(2, '0')}`;
                          
                          // 生成单条数据
                          const 单条数据 = this.生成单条数据(poolIndex, 投放时间, 检测时间);
@@ -676,6 +702,7 @@
             const config = fishConfig[fishType];
             const dataCount = parseInt(document.getElementById('dataCount').value);
             const fileName = document.getElementById('fileName').value || config.fileName;
+            const poolPrefix = document.getElementById('poolPrefix').value;
             if (dataCount < 1 || dataCount > 10000) {
                 alert('请输入1-10000之间的数据条数');
                 return;
@@ -697,11 +724,20 @@
             setTimeout(() => {
                 try {
                     updateProgress(95, '正在处理数据...');
-                    const 生成器 = new 存活率数据生成器();
+                    const prefixInput = document.getElementById('poolPrefix')?.value || '';
+                    const fishName = (fishConfig[fishType] && fishConfig[fishType].name) ? fishConfig[fishType].name : '青鱼';
+                    const 生成器 = new 存活率数据生成器(prefixInput, fishName);
                     const data = 生成器.生成数据集(dataCount);
                     updateProgress(98, '正在生成Excel文件...');
                     const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.json_to_sheet(data);
+                    const orderedRows = data.map(row => {
+                        const o = {};
+                        for (const h of config.headers) {
+                            o[h] = (row[h] !== undefined && row[h] !== null) ? row[h] : '';
+                        }
+                        return o;
+                    });
+                    const ws = XLSX.utils.json_to_sheet(orderedRows, { header: config.headers });
                     ws['!cols'] = config.headers.map(() => ({ wch: 12 }));
                     XLSX.utils.book_append_sheet(wb, ws, config.sheetName);
                     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
