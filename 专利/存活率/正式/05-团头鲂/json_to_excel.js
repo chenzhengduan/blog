@@ -1,7 +1,7 @@
 /*
-将 gdcb_survival_data.json 转换为 Excel
-- 输入：当前目录 gdcb_survival_data.json（数组JSON，对象key为中文字段名）
-- 输出：当前目录 gdcb_survival_data.xlsx
+将 qy_survival_data.json 转换为 Excel
+- 输入：当前目录 qy_survival_data.json（数组JSON，对象key为中文字段名）
+- 输出：当前目录 qy_survival_data.xlsx
 */
 
 const fs = require('fs');
@@ -9,9 +9,9 @@ const path = require('path');
 const xlsx = require('xlsx');
 
 function main() {
-  const jsonPath = path.resolve('./gdcb_survival_data.json');
+  const jsonPath = path.resolve('./ttt_survival_data.json');
   if (!fs.existsSync(jsonPath)) {
-    console.error('未找到 gdcb_survival_data.json，请先运行生成脚本');
+    console.error('未找到 ttt_survival_data.json，请先运行生成脚本');
     process.exit(1);
   }
   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
@@ -22,7 +22,7 @@ function main() {
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.json_to_sheet(data);
   xlsx.utils.book_append_sheet(wb, ws, '存活率');
-  const out = path.resolve('./gdcb_survival_data.xlsx');
+  const out = path.resolve('./ttt_survival_data.xlsx');
   xlsx.writeFile(wb, out);
   console.log(`已生成 Excel -> ${out}`);
 }
