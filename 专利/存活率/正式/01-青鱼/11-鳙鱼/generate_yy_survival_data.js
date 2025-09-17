@@ -1,5 +1,5 @@
 /*
-生成“青鱼养殖存活率综合环境分析数据”的示例数据
+生成"鳙鱼养殖存活率综合环境分析数据"的示例数据
 - 严格遵循算法：
   基础存活率 = (存活数量 / 投放数量) * 100
   环境修正因子 = 1 - (0.35*|溶氧-6.0| + 0.30*|水温-24.0| + 0.20*|pH-7.0| + 0.15*|氨氮-0.1|)
@@ -9,17 +9,17 @@
   * 投放数量以100为单位
   * 投放时间：2024-06 至 2025-07，每周每个鱼塘一条记录
   * 检测时间为投放时间后一周
-- 输出：当前目录生成 qy_survival_data.json，数组JSON，key为中文字段名
+- 输出：当前目录生成 yy_survival_data.json，数组JSON，key为中文字段名
 */
 
 const fs = require('fs');
-const code='QY';
-const FISH_TYPE = '青鱼';
+const code='YY';
+const FISH_TYPE = '鳙鱼';
 
 // 配置参数
-const START_DATE = new Date('2024-06-01');
+const START_DATE = new Date('2024-06-15');
 const END_DATE = new Date('2025-07-31');
-// 生成上限（可按需调整），满足“500+且<600”
+// 生成上限（可按需调整），满足"500+且<600"
 const MAX_RECORDS = 580;
 const POND_IDS = [code+'01', code+'02', code+'03', code+'04', code+'05', code+'06', code+'07', code+'08', code+'09'];
 const MANAGERS = ['EMP001', 'EMP002', 'EMP003', 'EMP004', 'EMP005'];
@@ -172,7 +172,6 @@ function generateRecord(pondId, stockDate) {
 
   // 最终保障：若综合存活率仍<90，微调为边界值90.0（仅在极端情况下）
   if (record['综合存活率（%）'] < 90) {
-    // 将环境进一步靠近最优，提升因子
     record['溶氧（mg/L）'] = OPT.do;
     record['水温（℃）'] = OPT.temp;
     record['pH'] = OPT.ph;
@@ -180,7 +179,6 @@ function generateRecord(pondId, stockDate) {
     record['环境修正因子'] = 1;
     record['综合存活率（%）'] = round2(record['基础存活率（%）'] * record['环境修正因子']);
     if (record['综合存活率（%）'] < 90) {
-      // 增加存活数量到满足90%
       record['存活数量（尾）'] = Math.ceil(record['投放数量（尾）'] * 0.90);
       record['基础存活率（%）'] = round2((record['存活数量（尾）'] / record['投放数量（尾）']) * 100);
       record['综合存活率（%）'] = round2(record['基础存活率（%）'] * record['环境修正因子']);
@@ -200,7 +198,7 @@ function main() {
     }
     if (stop) break;
   }
-  const outPath = './qy_survival_data.json';
+  const outPath = './yy_survival_data.json';
   fs.writeFileSync(outPath, JSON.stringify(all, null, 2), 'utf-8');
   console.log(`已生成 ${all.length} 条记录（上限：${MAX_RECORDS}） -> ${outPath}`);
 }

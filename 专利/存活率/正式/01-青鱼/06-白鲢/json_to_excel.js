@@ -7,12 +7,11 @@
 const fs = require('fs');
 const path = require('path');
 const xlsx = require('xlsx');
-const yu='qy';
-const yuName='青鱼';
+
 function main() {
-  const jsonPath = path.resolve('./'+yu+'_survival_data.json');
+  const jsonPath = path.resolve('./bl_survival_data.json');
   if (!fs.existsSync(jsonPath)) {
-    console.error('未找到 '+yuName+'存活率检测数据包.json，请先运行生成脚本');
+    console.error('未找到 qy_survival_data.json，请先运行生成脚本');
     process.exit(1);
   }
   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
@@ -22,8 +21,8 @@ function main() {
   }
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.json_to_sheet(data);
-  xlsx.utils.book_append_sheet(wb, ws, yuName+'存活率');
-  const out = path.resolve('./养殖'+yuName+'存活率检测数据包.xlsx');
+  xlsx.utils.book_append_sheet(wb, ws, '白鲢存活率');
+  const out = path.resolve('./养殖白鲢存活率检测数据包.xlsx');
   xlsx.writeFile(wb, out);
   console.log(`已生成 Excel -> ${out}`);
 }
