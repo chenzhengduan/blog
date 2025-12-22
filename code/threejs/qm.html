@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加载HDR环境贴图 - 带动画效果</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #info { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            color: #333; 
+            background-color: rgba(255,255,255,0.8); 
+            padding: 10px; 
+            border-radius: 5px; 
+            pointer-events: none; 
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">点击横木可以旋转，控制部件的升降</div>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        //======================================================== 1. 库导入
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        //======================================================== 2. 优化配置：获取设备像素比，适配高清屏幕
+        const pixelRatio = window.devicePixelRatio || 1;
+
+        //======================================================== 3. 核心组件初始化（场景 + 相机 + 渲染器）
+        // 场景
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB); // 天空蓝色背景
+
+        // 相机
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(-2.5, 8, -15); // 相机位置：从水井正前方（左侧）观察，向左移动
+
+        // 渲染器（开启抗锯齿 + 适配高清屏）
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true, // 抗锯齿，减少边缘锯齿感
+            powerPreference: 'high-performance' // 优先使用高性能显卡，提升渲染效率
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(pixelRatio); // 适配高清屏幕，解决画面模糊问题
+        // 为HDR设置渲染参数
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.3;
+        renderer.shadowMap.enabled = true; // 启用阴影
+        document.body.appendChild(renderer.domElement);
+
+        //======================================================== 4. 交互相关变量
+        let hengmu = null; // GLTF中的横木（名称：hengmu或mut）
+        let zhuti = null; // GLTF中的主体部件（名称：zhuti或shuij.003）
+        let zhuti2 = null; // 第二个主体部件
+        let shuijHandle = null; // 水晶提手
+        let waterSurface = null; // 水面部件（不随桶移动）
+        let tongBucket = null; // 桶体部件
+        let rope = null; // 动态创建的绳子
+        let ropeState = 'up'; // up:收起, down:放下
+        let isAnimating = false;
+        let modelLoaded = false; // 模型加载完成标志
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        // 保存部件的初始Y坐标（用于动画恢复原位）
+        let originalY = null;
+        let originalY2 = null;
+        let originalHandleY = null;
+        let originalBucketY = null;
+
+        //======================================================== 5. 纹理加载
+        // 创建纹理加载器
+        const textureLoader = new THREE.TextureLoader();
+
+        // 加载水晶纹理 - 使用images目录下的图片
+        const crystalTexture = textureLoader.load('./images/s3.jpg', () => {
+            console.log('水晶纹理加载成功');
+        }, undefined, (error) => {
+            console.error('水晶纹理加载失败:', error);
+        });
+        // 设置纹理参数
+        crystalTexture.encoding = THREE.sRGBEncoding;
+        
+        // 加载绳子纹理（使用images目录下的rope3.jpg）
+        const ropeTexture = textureLoader.load('./images/rope3.jpg', () => {
+            console.log('绳子纹理加载成功');
+        }, undefined, (error) => {
+            console.error('绳子纹理加载失败:', error);
+        });
+        // 设置绳子纹理参数
+        if (ropeTexture) {
+            ropeTexture.encoding = THREE.sRGBEncoding;
+            ropeTexture.wrapS = THREE.RepeatWrapping;
+            ropeTexture.wrapT = THREE.RepeatWrapping;
+            ropeTexture.repeat.set(50, 1);
+        }
+
+        //======================================================== 6. 加载GLTF模型
+        const gltfLoader = new GLTFLoader();
+        gltfLoader.load('./shuijin.gltf', (gltf) => {
+            const model = gltf.scene;
+            // 调整模型位置和缩放
+            model.position.set(0, 0, 0);
+            // 控制模型尺寸，scale值越大模型越大，默认是1
+            model.scale.set(0.6, 0.6, 0.6); // 将模型放大到原来的0.6倍
+            let caopingMesh = null;
+            let caopingTexture = null;
+            
+            // 遍历模型的所有子对象，查找网格材质并设置贴图
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    console.log('找到网格对象:', child.name);
+                    // 查找名为"caoping"的部件
+                    if (child.name === 'caoping') {
+                        caopingMesh = child;
+                        // 保存草地纹理
+                        if (child.material.map) {
+                            caopingTexture = child.material.map;
+                        }
+                        // 隐藏原部件
+                        child.visible = false;
+                    }
+                    // 查找水晶部件并应用水晶纹理
+                    if (child.name === 'shuij' || child.name === 'shuij.001' || child.name === 'shuij001') {
+                        console.log('找到水晶部件:', child.name);
+                        console.log('当前材质类型:', child.material.type);
+                        
+                        // 直接应用纹理，不检查是否已有map
+                        child.material.map = crystalTexture;
+                        
+                        // 确保材质更新
+                        child.material.needsUpdate = true;
+                        console.log('水晶纹理已应用');
+                        
+                        // 标记为水面，不随桶移动
+                        waterSurface = child;
+                    }
+                    // 查找提手部件 - shui 或 shuij
+                    if (child.name === 'shui') {
+                        console.log('找到提手部件:', child.name);
+                        shuijHandle = child;
+                    }
+                    // 查找桶体部件
+                    if (child.name === 'tong' || child.name === 'tong.001' || child.name === 'Cube' || child.name.includes('bucket')) {
+                        console.log('找到桶体部件:', child.name);
+                        tongBucket = child;
+                    }
+                    // 查找hengmu（横木）部件
+                    if (child.name === 'hengmu' || child.name === 'mut') {
+                        console.log('找到横木部件:', child.name);
+                        hengmu = child;
+                        hengmu.userData.clickable = true;
+                    }
+                    // 查找zhuti（主体）部件 - 修正名称匹配
+                    // 排除水面部件（shuij系列），只移动桶体相关部件
+                    if ((child.name === 'zhuti' || child.name === 'zhuti_1' || child.name === 'zhuti_2' || child.name === 'shuij.003') 
+                        && child.name !== 'shuij' && child.name !== 'shuij.001' && child.name !== 'shuij001') {
+                        console.log('找到主体部件（可移动）:', child.name);
+                        // 优先使用 zhuti_1，如果已经有了就不覆盖
+                        if (!zhuti || child.name === 'zhuti_1') {
+                            zhuti = child;
+                        }
+                        // 保存 zhuti_2 用于一起移动
+                        if (child.name === 'zhuti_2') {
+                            zhuti2 = child;
+                        }
+                    }
+
+                    // 确保材质有合适的粗糙度和金属度
+                    if (child.material.type === 'MeshStandardMaterial' || child.material.type === 'MeshPhysicalMaterial') {
+                        child.material.roughness = 0.5;
+                        child.material.metalness = 0.0;
+                    }
+                }
+            });
+             
+            // 使用caoping的纹理创建地面
+            if (caopingTexture) {
+                const groundGeometry = new THREE.PlaneGeometry(20, 20);
+                const groundMaterial = new THREE.MeshStandardMaterial({
+                    map: caopingTexture,
+                    roughness: 0.9,
+                    metalness: 0.5
+                });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2; // 旋转使其水平
+                ground.position.y = -0.5; // 略微低于模型底部，避免闪烁
+                scene.add(ground);
+            }
+
+            // 创建初始绳子
+            if (hengmu && zhuti) {
+                console.log('开始创建连接hengmu和zhuti的绳子');
+                console.log('横木位置:', hengmu.position);
+                console.log('主体位置:', zhuti.position);
+                
+                // 保存初始位置
+                originalY = zhuti.position.y;
+                if (zhuti2) originalY2 = zhuti2.position.y;
+                if (shuijHandle) originalHandleY = shuijHandle.position.y;
+                if (tongBucket) originalBucketY = tongBucket.position.y;
+                
+                rope = createRope();
+                scene.add(rope);
+                console.log('绳子创建成功！可以点击横木进行交互');
+            } else {
+                console.warn('未找到hengmu或zhuti部件，使用默认绳子');
+                console.warn('hengmu:', hengmu, 'zhuti:', zhuti);
+                rope = createDefaultRope();
+                scene.add(rope);
+            }
+
+            scene.add(model);
+            console.log('模型加载完成，场景对象数量:', scene.children.length);
+            modelLoaded = true; // 标记模型加载完成
+        }, undefined, (error) => {
+            console.error('加载模型时出错:', error);
+        });
+
+        //======================================================== 7. 创建绳子函数（参考rope.html的螺旋绕圈算法）
+        function createRope(yOffset = 0) {
+            const ropeMaterial = new THREE.MeshStandardMaterial({
+                map: ropeTexture,
+                color: 0x8B4513, // 备用棕色
+                roughness: 0.98,
+                metalness: 0.0
+            });
+
+            if (!hengmu || !zhuti) {
+                return createDefaultRope();
+            }
+
+            // 获取横木和主体的世界坐标位置
+            const hengmuWorldPos = new THREE.Vector3();
+            hengmu.getWorldPosition(hengmuWorldPos);
+            
+            // 使用提手位置（如果存在），否则使用主体位置
+            let targetWorldPos = new THREE.Vector3();
+            if (shuijHandle) {
+                shuijHandle.getWorldPosition(targetWorldPos);
+            } else {
+                zhuti.getWorldPosition(targetWorldPos);
+            }
+            
+            // 计算目标当前的Y坐标（加上偏移量）
+            const targetY = targetWorldPos.y + yOffset;
+            
+            const beamRadius = 0.35; // 横木半径
+            const points = [];
+
+            // 横木参数 - 绳子从横木左端开始，沿着横木螺旋绕圈到中间位置
+            const beamStartX = hengmuWorldPos.x + 1; // 从横木左端附近开始
+            const beamEndX = hengmuWorldPos.x + 3; // 绕圈结束在靠近中间的位置
+            const wrapLength = beamEndX - beamStartX; // 绕圈覆盖的横木长度
+
+            // 螺旋绕圈：沿着横木的长度方向螺旋前进，围绕横木的X轴绕圈
+            const revolutions = 4; // 绕4圈
+            const revolvePoints = 64; // 每圈64个点，更平滑
+            let endpoint; // 绕完的最后一个点的坐标
+
+            // 螺旋绕圈算法：同时沿X轴移动和围绕X轴旋转
+            for (let i = 0; i <= revolutions * revolvePoints; i++) {
+                // 计算当前的旋转角度（围绕X轴） - 从π/2开始，让绕圈结束在下方
+                const angle = (i / revolvePoints) * Math.PI * 2 + Math.PI / 2;
+                
+                // 计算沿X轴的进度位置（从左端到中间）
+                const progress = i / (revolutions * revolvePoints); // 0到1的进度
+                const x = beamStartX + progress * wrapLength;
+                
+                // 在Y-Z平面上围绕X轴旋转，确保绳子绕在横木外侧
+                const y = Math.cos(angle) * beamRadius + hengmuWorldPos.y;
+                const z = Math.sin(angle) * beamRadius + hengmuWorldPos.z;
+                
+                points.push(new THREE.Vector3(x, y, z));
+                endpoint = [x, y, z];
+            }
+
+            // 从绕圈结束点下垂到目标部件（提手位置）
+            // 获取提手的实际世界X和Z坐标，让绳子垂直下降到桶的位置
+            const handleX = targetWorldPos.x;
+            const handleZ = targetWorldPos.z;
+            console.log(endpoint[0], targetY + 0.5, endpoint[2],'123213')
+            // 添加过渡点，从绕圈结束点逐渐移动到桶的X,Z位置
+            points.push(new THREE.Vector3(endpoint[0], targetY + 3, endpoint[2]));
+            // 在提手上绕圈打结（参考rope.html的打结算法）
+            // 绳子在提把上打了个结，这部分在伸缩时保持相对位置关系不变
+            points.push(new THREE.Vector3(handleX - 0.1, targetY + 3.25, handleZ - 0.05));
+            points.push(new THREE.Vector3(handleX - 0.15, targetY +3.3, handleZ - 0.1));
+            points.push(new THREE.Vector3(handleX - 0.18, targetY + 3.35, handleZ - 0.12));
+            points.push(new THREE.Vector3(handleX - 0.2, targetY + 3.38, handleZ - 0.13));
+            points.push(new THREE.Vector3(handleX - 0.22, targetY + 3.4, handleZ - 0.15));
+            points.push(new THREE.Vector3(handleX - 0.2, targetY + 3.42, handleZ - 0.14));
+            points.push(new THREE.Vector3(handleX - 0.18, targetY + 3.44, handleZ - 0.13));
+            points.push(new THREE.Vector3(handleX - 0.15, targetY + 3.45, handleZ - 0.11));
+            points.push(new THREE.Vector3(handleX - 0.12, targetY + 3.46, handleZ - 0.1));
+            points.push(new THREE.Vector3(handleX - 0.1, targetY + 3.45, handleZ - 0.08));
+            points.push(new THREE.Vector3(handleX - 0.08, targetY + 3.43, handleZ - 0.07));
+            points.push(new THREE.Vector3(handleX - 0.06, targetY + 3.4, handleZ - 0.05));
+            points.push(new THREE.Vector3(handleX - 0.05, targetY + 3.37, handleZ - 0.04));
+            points.push(new THREE.Vector3(handleX - 0.04, targetY + 3.33, handleZ - 0.05));
+            points.push(new THREE.Vector3(handleX - 0.03, targetY + 3.3, handleZ - 0.06));
+            points.push(new THREE.Vector3(handleX - 0.02, targetY +3.27, handleZ - 0.07));
+            points.push(new THREE.Vector3(handleX - 0.01, targetY +3.25, handleZ - 0.08));
+
+            // 创建绳子几何体 - 增加分段数使其更平滑
+            const curve = new THREE.CatmullRomCurve3(points);
+            const ropeGeometry = new THREE.TubeGeometry(curve, 150, 0.03, 8, false);
+            const ropeMesh = new THREE.Mesh(ropeGeometry, ropeMaterial);
+            ropeMesh.castShadow = true;
+            return ropeMesh;
+        }
+
+        // 创建默认绳子（当找不到部件时）
+        function createDefaultRope() {
+            const ropeMaterial = new THREE.MeshStandardMaterial({
+                color: 0x8B4513,
+                roughness: 0.9,
+                metalness: 0.2
+            });
+
+            const points = [];
+            points.push(new THREE.Vector3(0, 1.5, 0));
+            points.push(new THREE.Vector3(0, 0.5, 0));
+
+            const curve = new THREE.CatmullRomCurve3(points);
+            const ropeGeometry = new THREE.TubeGeometry(curve, 50, 0.02, 8, false);
+            return new THREE.Mesh(ropeGeometry, ropeMaterial);
+        }
+
+        //======================================================== 8. 鼠标点击事件（改进版）
+        window.addEventListener('click', (event) => {
+            if (!modelLoaded) {
+                console.log('模型尚未加载完成');
+                return;
+            }
+            
+            if (isAnimating) {
+                console.log('动画进行中，忽略点击');
+                return;
+            }
+            
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            
+            console.log('点击检测 - hengmu存在:', !!hengmu, 'zhuti存在:', !!zhuti);
+            
+            // 检查是否点击了横木 - 检测整个场景中的所有对象
+            const allIntersects = raycaster.intersectObjects(scene.children, true);
+            console.log('场景中所有点击对象:', allIntersects.length);
+            
+            // 查找是否点击了横木
+            for (let intersect of allIntersects) {
+                console.log('点击到的对象:', intersect.object.name);
+                if (intersect.object === hengmu || intersect.object.name === 'hengmu' || intersect.object.name === 'mut') {
+                    console.log('✅ 点击了横木！触发动画');
+                    toggleRope();
+                    return;
+                }
+            }
+            
+            console.log('未点击到横木');
+        });
+
+        //======================================================== 9. 收放绳动画（优化版 - 移动所有相关部件）
+        function toggleRope() {
+            if (!zhuti) {
+                console.error('主体部件不存在，无法执行动画');
+                return;
+            }
+            
+            console.log('开始动画 - 当前状态:', ropeState);
+            isAnimating = true;
+            const targetYOffset = ropeState === 'up' ? -1.5 : 0; // 下降1.5单位
+            const duration = 2000; // 2秒动画
+            const startTime = Date.now();
+            const startYOffset = ropeState === 'up' ? 0 : -1.5;
+            
+            // 使用保存的初始位置，而不是当前位置
+            console.log('使用原始Y坐标 - zhuti:', originalY, 'zhuti2:', originalY2, 'handle:', originalHandleY, 'bucket:', originalBucketY);
+            console.log('目标偏移:', targetYOffset);
+
+            // 动画函数
+            function animateRope() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = easeInOutQuad(progress);
+                const currentYOffset = startYOffset + (targetYOffset - startYOffset) * easeProgress;
+
+                // 基于原始位置更新所有部件的位置（水面除外）
+                zhuti.position.y = originalY + currentYOffset;
+                if (zhuti2) {
+                    zhuti2.position.y = originalY2 + currentYOffset;
+                }
+                if (shuijHandle) {
+                    shuijHandle.position.y = originalHandleY + currentYOffset;
+                }
+                if (tongBucket) {
+                    tongBucket.position.y = originalBucketY + currentYOffset;
+                }
+                // 水面保持不动，不更新 waterSurface 的位置
+
+                // 更新绳子
+                if (rope) scene.remove(rope);
+                rope = createRope(currentYOffset);
+                scene.add(rope);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateRope);
+                } else {
+                    isAnimating = false;
+                    ropeState = ropeState === 'up' ? 'down' : 'up';
+                    console.log('动画完成 - 新状态:', ropeState);
+                }
+            }
+
+            animateRope();
+        }
+
+        // 缓动函数
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        //======================================================== 10. 添加光源
+        // 环境光 - 增强环境光以提高整体亮度
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+        scene.add(ambientLight);
+
+        // 平行光 - 模拟太阳光，调整角度和颜色
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight.position.set(5, 15, 7);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        // 添加点光源
+        const pointLight = new THREE.PointLight(0xffffff, 0.8, 20);
+        pointLight.position.set(0, 3, 3);
+        scene.add(pointLight);
+
+        // 添加背面补光，避免模型背部过暗
+        const backLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        backLight.position.set(-5, 5, -5);
+        scene.add(backLight);
+        // 半球光 - 增强场景的层次感
+        const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x32CD32, 0.8);
+        scene.add(hemisphereLight);
+
+        //======================================================== 11. 控制器配置
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; // 启用阻尼效果
+        controls.dampingFactor = 0.05; // 阻尼因子
+        controls.enableZoom = true; // 启用缩放
+        controls.enablePan = true; // 启用平移
+        controls.minDistance = 1; // 最小缩放距离
+        controls.maxDistance = 20; // 最大缩放距离
+        controls.target.set(0, 0.5, 0); // 设置相机焦点对准水井上半部分
+        controls.update(); // 更新控制器以应用新的目标点
+
+        //======================================================== 12. 窗口大小调整处理
+        window.addEventListener('resize', () => {
+            // 更新相机宽高比
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            // 更新渲染器尺寸
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        //======================================================== 13. 动画循环
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 更新控制器
+            controls.update();
+
+            // 渲染场景
+            renderer.render(scene, camera);
+        }
+
+        // 启动动画循环
+        animate();
+    </script>
+</body>
+
+</html>

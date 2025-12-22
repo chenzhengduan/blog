@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绳吊桶交互效果</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">点击横木可以旋转，控制桶的升降</div>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../three.js-master/build/three.module.js",
+                "three/addons/": "../three.js-master/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // 场景设置
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB);
+
+        // 添加坐标轴辅助器，可视化Y=0位置
+        // 注释掉坐标辅助线
+        // const axesHelper = new THREE.AxesHelper(10);
+        // scene.add(axesHelper);
+
+        // 移除参考小球
+        // 添加参考小球，放在原点(0,0,0)处，帮助确认Y=0位置
+        // const sphereGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+        // const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        // const originSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        // originSphere.position.set(0, 0, 0);
+        // scene.add(originSphere);
+
+        // 相机设置
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 5, 8);
+        camera.lookAt(0, 4, 0);
+
+        // 渲染器设置
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // 控制器设置
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 5;
+        controls.maxDistance = 25;
+
+        // 添加灯光
+        // 环境光
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+
+        // 方向光
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        directionalLight.position.set(5, 10, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+
+        // 点光源
+        const pointLight = new THREE.PointLight(0xffffff, 0.5);
+        pointLight.position.set(-5, 5, -5);
+        scene.add(pointLight);
+
+        // 创建地面
+        const groundGeometry = new THREE.PlaneGeometry(30, 30);
+        const groundMaterial = new THREE.MeshStandardMaterial({
+            side: THREE.DoubleSide,
+            // 初始空材质，后续会添加草地贴图
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.set(0, 0, 0); // 显式设置地面位置在Y=0        
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // 创建水池 - 在桶下落位置挖一个洞
+        // 水池外框（坑的边缘）
+        const poolRadius = 2.0; // 扩大水池半径
+        const poolDepth = 1.0; // 增加水池深度，让桶口能被淹没
+        
+        // 水池内部（水）
+        const waterGeometry = new THREE.CylinderGeometry(poolRadius, poolRadius, poolDepth, 32);
+        const waterMaterial = new THREE.MeshStandardMaterial({
+            color: 0x4682B4, // 钢蓝色
+            // roughness: 0.1,
+            // metalness: 0.3,
+            opacity: 0.8,
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+        const water = new THREE.Mesh(waterGeometry, waterMaterial);
+        water.position.set(0, -poolDepth/2+0.01, 0); // 一半在地面下
+        water.receiveShadow = true;
+        scene.add(water);
+
+        // 水池边缘（可选，增强视觉效果）
+        const poolEdgeGeometry = new THREE.RingGeometry(poolRadius, poolRadius + 0.3, 32);
+        const poolEdgeMaterial = new THREE.MeshStandardMaterial({
+            // color: 0xdeb887, // 木头色边缘
+            roughness: 0.9
+        });
+        const poolEdge = new THREE.Mesh(poolEdgeGeometry, poolEdgeMaterial);
+        poolEdge.rotation.x = -Math.PI / 2;
+        poolEdge.position.set(0, 0.01, 0);
+        poolEdge.receiveShadow = true;
+        scene.add(poolEdge);
+
+        // 创建支架
+        const supportGeometry = new THREE.BoxGeometry(0.3, 5, 0.3); // 高度减半为5
+        
+        // 加载木纹贴图、水池边贴图、水面贴图和草地贴图
+        const textureLoader = new THREE.TextureLoader();
+        const woodTexture = textureLoader.load('images/wood2.webp');
+        const poolEdgeTexture = textureLoader.load('images/st1.jpg');
+        const poolWaterTexture = textureLoader.load('images/s2.webp'); // 水池水面贴图
+        const bucketWaterTexture = textureLoader.load('images/s1.webp'); // 水桶中水面贴图
+        const grassTexture = textureLoader.load('images/cd1.webp'); // 草地贴图
+        
+        // 设置水池水面贴图重复和偏移
+        poolWaterTexture.wrapS = THREE.RepeatWrapping;
+        poolWaterTexture.wrapT = THREE.RepeatWrapping;
+        poolWaterTexture.repeat.set(2, 2); // 重复2次以适应水池大小
+        
+        // 设置水桶中水面贴图重复和偏移
+        bucketWaterTexture.wrapS = THREE.RepeatWrapping;
+        bucketWaterTexture.wrapT = THREE.RepeatWrapping;
+        bucketWaterTexture.repeat.set(1, 1); // 不重复，适应水桶大小
+        
+        // 应用水池水面贴图
+        waterMaterial.map = poolWaterTexture;
+        
+        // 设置草地贴图重复和偏移
+        grassTexture.wrapS = THREE.RepeatWrapping;
+        grassTexture.wrapT = THREE.RepeatWrapping;
+        grassTexture.repeat.set(3, 3); // 重复3次以适应地面大小
+        
+        // 应用草地贴图到地面
+        groundMaterial.map = grassTexture;
+        groundMaterial.roughness = 0.8; // 保持适当的粗糙度
+        groundMaterial.metalness = 0; // 草地没有金属感
+        
+        // 设置水池边贴图重复和偏移
+        poolEdgeTexture.wrapS = THREE.RepeatWrapping;
+        poolEdgeTexture.wrapT = THREE.RepeatWrapping;
+        poolEdgeTexture.repeat.set(2, 2); // 重复2次以适应水池边缘大小
+        
+        // 更新水池边材质
+        poolEdgeMaterial.map = poolEdgeTexture;
+        
+        // 设置贴图重复和偏移
+        woodTexture.wrapS = THREE.RepeatWrapping;
+        woodTexture.wrapT = THREE.RepeatWrapping;
+        woodTexture.repeat.set(0.5, 5); // X方向重复0.5次，Y方向重复5次，适应柱子高度
+        
+        const supportMaterial = new THREE.MeshStandardMaterial({
+            map: woodTexture, // 应用木纹贴图
+            // roughness: 0.8, // 调整粗糙度以匹配木纹
+            // metalness: 0.1
+        });
+
+        const leftSupport = new THREE.Mesh(supportGeometry, supportMaterial);
+        leftSupport.position.set(-3, 2.5, 0); // 支架底部在Y=0，顶部在Y=5
+        leftSupport.castShadow = true;
+        leftSupport.receiveShadow = true;
+        scene.add(leftSupport);
+
+        const rightSupport = new THREE.Mesh(supportGeometry, supportMaterial);
+        rightSupport.position.set(3, 2.5, 0); // 支架底部在Y=0，顶部在Y=5
+        rightSupport.castShadow = true;
+        rightSupport.receiveShadow = true;
+        scene.add(rightSupport);
+
+        // 创建横木（可以旋转的部分）
+        const beamGeometry = new THREE.CylinderGeometry(0.2, 0.2, 8, 16);
+        
+        // 为横木加载木纹贴图
+        const beamTexture = textureLoader.load('images/wood.webp');
+        beamTexture.wrapS = THREE.RepeatWrapping;
+        beamTexture.wrapT = THREE.RepeatWrapping;
+        beamTexture.repeat.set(2,2); // X方向重复20次，适应横木长度
+        
+        const beamMaterial = new THREE.MeshStandardMaterial({
+            // color: 0xdeb887, // 木头色边缘
+            map: beamTexture, // 应用木纹贴图
+            roughness: 0.8,
+            metalness: 0.1
+        });
+        const beam = new THREE.Mesh(beamGeometry, beamMaterial);
+        beam.position.set(0, 5, 0); // 横木在支架顶部，Y=5（高度减半）
+        beam.rotation.z = Math.PI / 2; // 旋转90度使其水平放置
+        beam.castShadow = true;
+        beam.receiveShadow = true;
+        scene.add(beam);
+
+        // 绳子属性 - 麻绳材质，使用rope1.png贴图
+        const ropeTexture = textureLoader.load('images/rope1.png');
+        // 设置绳子贴图的重复和偏移
+        ropeTexture.wrapS = THREE.RepeatWrapping;
+        ropeTexture.wrapT = THREE.RepeatWrapping;
+        ropeTexture.repeat.set(50, 1); // X方向不重复，Y方向重复20次，适应绳子长度
+        
+        const ropeMaterial = new THREE.MeshStandardMaterial({
+            map: ropeTexture, // 使用绳子贴图
+            // color: 0xD2B48C, // 浅棕色麻绳底色
+            roughness: 0.98, // 麻绳高粗糙度
+            metalness: 0.0 // 麻绳无金属感
+        });
+
+        // 收放绳状态管理
+        let ropeState = 'up'; // up: 收起状态, down: 放下状态
+        let isAnimating = false; // 动画状态标记
+
+        // 创建绳子 - 从横木上绕几圈后拴住桶提把
+        function createRope(bucketYOffset = 0) {
+            // 横木参数
+            const beamPosition = new THREE.Vector3(0, 5, 0);
+            const beamRadius = 0.3; // 增大横木半径，让绕圈效果更明显
+
+            // 桶提手世界坐标计算：桶组位置 + 提手在组内的局部坐标
+            // 基础位置为2.3，bucketYOffset是额外的偏移量用于动画
+            const bucketGroupY = 2.3 + bucketYOffset;
+            const handleLocalY = 2;
+            const handleY = bucketGroupY + handleLocalY; // 正确的提手世界坐标
+            const handleRadius = 0.9; // 提手的半径
+
+            // 创建曲线控制点
+            const points = [];
+
+            // 横木参数 - 调整绕圈结束位置到更靠近桶的位置
+            const beamStartX = -3; // 横木左端附近
+            const beamEndX = 0.5; // 绕圈结束的位置（大幅减小长度，更靠近桶）
+            const wrapLength = beamEndX - beamStartX; // 绕圈覆盖的横木长度（更短，更靠近桶）
+
+            // 开始绕圈：沿着横木的长度方向螺旋前进，围绕横木的X轴绕圈
+            const revolutions = 4; // 保持3.5圈
+            const revolvePoints = 64; // 增加每圈的点数到40，提高绕圈密度和平滑度
+            let endpoint; // 绕完的最后一个点的坐标
+
+            // 螺旋绕圈算法：同时沿X轴移动和围绕X轴旋转
+            for (let i = 0; i <= revolutions * revolvePoints; i++) {
+                // 计算当前的旋转角度（围绕X轴） - 增加角度偏移，让绕圈结束在横木下方
+                const angle = (i / revolvePoints) * Math.PI * 2 + Math.PI / 2; // 从π/2开始，让绕圈结束在下方
+
+                // 计算沿X轴的进度位置（从左端到中间）
+                const progress = i / (revolutions * revolvePoints); // 0到1的进度
+                const x = beamStartX + progress * wrapLength;
+
+                // 在Y-Z平面上围绕X轴旋转，确保绳子绕在横木外侧
+                // 使用sin(angle)和cos(angle)来计算Y和Z方向的位置
+                // 这样绳子会螺旋状绕在横木上，从左端到中间，结束在横木下方
+                const y = Math.cos(angle) * beamRadius + beamPosition.y;
+                const z = Math.sin(angle) * beamRadius;
+
+                points.push(new THREE.Vector3(x, y, z));
+
+                endpoint = [x, y, z];
+            }
+
+            // 绕完圈后，直接从绕圈结束点下垂到桶提把
+            // 最后一个绕圈点的位置就是下垂的起点
+            // const lastWrapPoint = points[points.length - 1];
+
+            // 绳子下垂，并且勾住了桶提把
+            // 这里作为跟随桶上下的起点，Y坐标与桶提把高度相关联
+            points.push(new THREE.Vector3(endpoint[0] - 0.2, handleY, endpoint[2] - 0.3));//这里做为跟随桶上下的起点。
+
+            // 下面的程序是绳子在提把上打了个结，这部分程序在绳子伸长和缩短时，都不能变。
+            // 保持相对位置关系不变，但Y坐标跟随桶提把运动
+            // 增加更多控制点使结的弯曲更圆滑
+            points.push(new THREE.Vector3(endpoint[0] - 0.35, handleY + 0.05, endpoint[2] - 0.25));
+            points.push(new THREE.Vector3(endpoint[0] - 0.4, handleY + 0.1, endpoint[2] - 0.3));
+            points.push(new THREE.Vector3(endpoint[0] - 0.45, handleY + 0.15, endpoint[2] - 0.35));
+            points.push(new THREE.Vector3(endpoint[0] - 0.48, handleY + 0.18, endpoint[2] - 0.38));
+            points.push(new THREE.Vector3(endpoint[0] - 0.5, handleY + 0.2, endpoint[2] - 0.4));
+            points.push(new THREE.Vector3(endpoint[0] - 0.48, handleY + 0.22, endpoint[2] - 0.39));
+            points.push(new THREE.Vector3(endpoint[0] - 0.45, handleY + 0.25, endpoint[2] - 0.38));
+            points.push(new THREE.Vector3(endpoint[0] - 0.42, handleY + 0.27, endpoint[2] - 0.36));
+            points.push(new THREE.Vector3(endpoint[0] - 0.4, handleY + 0.3, endpoint[2] - 0.35));
+            points.push(new THREE.Vector3(endpoint[0] - 0.37, handleY + 0.29, endpoint[2] - 0.32));
+            points.push(new THREE.Vector3(endpoint[0] - 0.35, handleY + 0.28, endpoint[2] - 0.3));
+            points.push(new THREE.Vector3(endpoint[0] - 0.32, handleY + 0.26, endpoint[2] - 0.27));
+            points.push(new THREE.Vector3(endpoint[0] - 0.3, handleY + 0.25, endpoint[2] - 0.25));
+            points.push(new THREE.Vector3(endpoint[0] - 0.27, handleY + 0.2, endpoint[2] - 0.26));
+            points.push(new THREE.Vector3(endpoint[0] - 0.25, handleY + 0.15, endpoint[2] - 0.28));
+            points.push(new THREE.Vector3(endpoint[0] - 0.22, handleY + 0.1, endpoint[2] - 0.3));
+            points.push(new THREE.Vector3(endpoint[0] - 0.2, handleY + 0.05, endpoint[2] - 0.32));
+
+
+            // 创建曲线
+            const curve = new THREE.CatmullRomCurve3(points);
+
+            // 创建绳子几何体 - 大幅增加分段数，让绳子更顺滑
+            const ropeGeometry = new THREE.TubeGeometry(curve, 200, 0.05, 8, false);
+            const rope = new THREE.Mesh(ropeGeometry, ropeMaterial);
+
+            return rope;
+        }
+
+        let rope = createRope();
+        rope.castShadow = true;
+        scene.add(rope);
+
+        // 为横木添加点击事件
+        beam.userData.originalColor = beamMaterial.color.getHex();
+        beam.userData.clickable = true;
+
+        // 设置射线检测器
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // 鼠标点击事件处理
+        function onMouseClick(event) {
+            if (isAnimating) return; // 如果正在动画中，不响应点击
+
+            // 计算鼠标在标准化设备坐标中的位置
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // 更新射线
+            raycaster.setFromCamera(mouse, camera);
+
+            // 检测点击的物体
+            const intersects = raycaster.intersectObject(beam);
+
+            if (intersects.length > 0) {
+                // 点击了横木，触发收放绳动画
+                toggleRope();
+            }
+        }
+
+        // 收放绳切换函数
+        function toggleRope() {
+            isAnimating = true;
+
+            const isLifting = ropeState === 'down'; // 判断是否正在提起桶
+            const targetYOffset = ropeState === 'up' ? -3.8 : 0; // 进一步调整入水深度，让桶更多部分浸入水中
+            const duration = 2000; // 动画持续时间（毫秒）
+            const startTime = Date.now();
+            const startYOffset = ropeState === 'up' ? 0 : -3.8;
+
+            // 根据动画方向决定水的可见性
+            const waterInside = bucketGroup.getObjectByName('waterInside');
+            if (waterInside) {
+                waterInside.visible = isLifting; // 提起时显示水，放下时隐藏水
+            }
+
+            // 动画函数
+            function animateRope() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = easeInOutQuad(progress); // 使用缓动函数
+
+                const currentYOffset = startYOffset + (targetYOffset - startYOffset) * easeProgress;
+
+                // 更新桶的位置
+                bucketGroup.position.y = 2.2 + currentYOffset;
+
+                // 更新绳子
+                scene.remove(rope);
+                rope = createRope(currentYOffset);
+                rope.castShadow = true;
+                scene.add(rope);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateRope);
+                } else {
+                    // 动画结束
+                    isAnimating = false;
+                    ropeState = ropeState === 'up' ? 'down' : 'up';
+                }
+            }
+
+            // 开始动画
+            animateRope();
+        }
+
+        // 缓动函数
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        // 添加鼠标点击事件监听器
+        window.addEventListener('click', onMouseClick);
+
+        // 创建桶
+        const bucketGroup = new THREE.Group();
+
+        // 加载桶贴图
+        const bucketTexture = textureLoader.load('images/wood.webp');
+        const handleTexture = textureLoader.load('images/js1.jpg');
+        
+        // 设置桶贴图重复
+        bucketTexture.wrapS = THREE.RepeatWrapping;
+        bucketTexture.wrapT = THREE.RepeatWrapping;
+        bucketTexture.repeat.set(2, 2); // 适当重复桶贴图
+        
+        // 设置提把贴图重复
+        handleTexture.wrapS = THREE.RepeatWrapping;
+        handleTexture.wrapT = THREE.RepeatWrapping;
+        handleTexture.repeat.set(2, 2); // 提把贴图不重复
+        
+        // 桶身 - 中间挖空效果
+        const bucketMaterial = new THREE.MeshStandardMaterial({
+            map: bucketTexture, // 使用桶贴图
+            // color: 0xefefef, // 银色不锈钢底色
+            // roughness: 0.4, // 亚光效果
+            // metalness: 0.9, // 高金属度
+            side: THREE.DoubleSide
+        });
+
+        // 定义桶身轮廓点（更像真实的木桶形状）
+        const points = [];
+        const height = 1.5;
+
+        // 木桶轮廓点 - 更自然的木桶形状
+        points.push(new THREE.Vector2(0.6, 0));      // 底部内边缘
+        points.push(new THREE.Vector2(0.8, 0));      // 底部外边缘
+        points.push(new THREE.Vector2(1.0, 1.3));     // 顶部外边缘（稍微扩展）
+        points.push(new THREE.Vector2(0.95, 1.5));    // 顶部内边缘
+        points.push(new THREE.Vector2(0.8, 1.5));     // 顶部内边缘（连接桶口）
+        points.push(new THREE.Vector2(0.7, 0));        // 底部内边缘
+
+        // 创建回转体几何体
+        const bucketGeometry = new THREE.LatheGeometry(points, 64);
+        const bucketBody = new THREE.Mesh(bucketGeometry, bucketMaterial);
+        bucketBody.castShadow = true;
+        bucketBody.receiveShadow = true;
+
+        // 桶底 - 使用桶贴图
+        const bucketBottomGeometry = new THREE.CircleGeometry(0.62, 16);
+        const bucketBottom = new THREE.Mesh(bucketBottomGeometry, bucketMaterial);
+        bucketBottom.position.set(0, 0, 0);
+        bucketBottom.rotation.x = Math.PI / 2;
+        bucketBottom.castShadow = true;
+        bucketBottom.receiveShadow = true;
+
+        // 桶内的水 - 当水桶从水里提出来时显示（使用圆平面模拟水面）
+        const waterInsideGeometry = new THREE.CircleGeometry(0.8, 32); // 与桶口大小一致
+        const waterInsideMaterial = new THREE.MeshStandardMaterial({
+            map: bucketWaterTexture, // 使用水桶中水面贴图
+            color: 0x4682B4, // 钢蓝色，与外部水池一致
+            roughness: 0.05,
+            metalness: 0.2,
+            opacity: 0.9,
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+        const waterInside = new THREE.Mesh(waterInsideGeometry, waterInsideMaterial);
+        waterInside.position.set(0, 1.25, 0); // 放置在低于桶口一点的位置
+        waterInside.rotation.x = -Math.PI / 2; // 旋转使其水平
+        waterInside.visible = false; // 初始隐藏，当桶从水里提起来时显示
+        waterInside.receiveShadow = true;
+        waterInside.name = 'waterInside'; // 添加名称以便后续访问
+
+        // 桶提手 - 更真实的形状，使用提把贴图
+        const handleGeometry = new THREE.TorusGeometry(0.9, 0.05, 8, 24, Math.PI);
+        const handleMaterial = new THREE.MeshStandardMaterial({
+            map: handleTexture, // 使用提把贴图
+            // color: 0xefefef, // 银色不锈钢底色
+            roughness: 0.4, // 亚光效果
+            // metalness: 0.9, // 高金属度
+            side: THREE.DoubleSide
+        });
+        const handle = new THREE.Mesh(handleGeometry, handleMaterial);
+        handle.position.set(0, 1.35, 0);  // 调整到桶的顶部，更明显
+        handle.castShadow = true;
+        handle.receiveShadow = true;
+
+        bucketGroup.add(bucketBody, bucketBottom, handle, waterInside);
+        // 将桶提把定位在横木下方 (Y=2.5)
+        bucketGroup.position.set(0, 2.3, 0);
+        bucketGroup.castShadow = true;
+        bucketGroup.receiveShadow = true;
+        scene.add(bucketGroup);
+
+        // 移除点击交互，不再需要运动程序
+
+        // 窗口大小调整
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 添加调试信息，显示地面位置
+        console.log('地面位置:', ground.position);
+        console.log('地面旋转:', ground.rotation);
+        console.log('支架底部位置:', leftSupport.position.y - leftSupport.geometry.parameters.height / 2);
+
+        // 动画循环
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 更新控制器
+            controls.update();
+
+            // 渲染场景
+            renderer.render(scene, camera);
+        }
+
+        // 开始动画
+        animate();
+    </script>
+</body>
+
+</html>
