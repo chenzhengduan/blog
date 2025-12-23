@@ -48,7 +48,7 @@
         // 场景
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x87CEEB); // 天空蓝色背景
-
+        scene.add( new THREE.AxesHelper( 20 ) );
         // 相机
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(-2.5, 8, -15); // 相机位置：从水井正前方（左侧）观察，向左移动
@@ -300,26 +300,30 @@
             const handleZ = targetWorldPos.z;
             console.log(endpoint[0], targetY + 0.5, endpoint[2],'123213')
             // 添加过渡点，从绕圈结束点逐渐移动到桶的X,Z位置
-            points.push(new THREE.Vector3(endpoint[0], targetY + 3, endpoint[2]));
+            points.push(new THREE.Vector3(endpoint[0], targetY + 3.1, endpoint[2]));
+            
+            // 继续垂下到提手附近
+            points.push(new THREE.Vector3(handleX, targetY + 3, handleZ));
+            
             // 在提手上绕圈打结（参考rope.html的打结算法）
             // 绳子在提把上打了个结，这部分在伸缩时保持相对位置关系不变
-            points.push(new THREE.Vector3(handleX - 0.1, targetY + 3.25, handleZ - 0.05));
-            points.push(new THREE.Vector3(handleX - 0.15, targetY +3.3, handleZ - 0.1));
-            points.push(new THREE.Vector3(handleX - 0.18, targetY + 3.35, handleZ - 0.12));
-            points.push(new THREE.Vector3(handleX - 0.2, targetY + 3.38, handleZ - 0.13));
-            points.push(new THREE.Vector3(handleX - 0.22, targetY + 3.4, handleZ - 0.15));
-            points.push(new THREE.Vector3(handleX - 0.2, targetY + 3.42, handleZ - 0.14));
-            points.push(new THREE.Vector3(handleX - 0.18, targetY + 3.44, handleZ - 0.13));
-            points.push(new THREE.Vector3(handleX - 0.15, targetY + 3.45, handleZ - 0.11));
-            points.push(new THREE.Vector3(handleX - 0.12, targetY + 3.46, handleZ - 0.1));
-            points.push(new THREE.Vector3(handleX - 0.1, targetY + 3.45, handleZ - 0.08));
-            points.push(new THREE.Vector3(handleX - 0.08, targetY + 3.43, handleZ - 0.07));
-            points.push(new THREE.Vector3(handleX - 0.06, targetY + 3.4, handleZ - 0.05));
-            points.push(new THREE.Vector3(handleX - 0.05, targetY + 3.37, handleZ - 0.04));
-            points.push(new THREE.Vector3(handleX - 0.04, targetY + 3.33, handleZ - 0.05));
-            points.push(new THREE.Vector3(handleX - 0.03, targetY + 3.3, handleZ - 0.06));
-            points.push(new THREE.Vector3(handleX - 0.02, targetY +3.27, handleZ - 0.07));
-            points.push(new THREE.Vector3(handleX - 0.01, targetY +3.25, handleZ - 0.08));
+            points.push(new THREE.Vector3(handleX - 0.1, targetY + 3.35, handleZ - 0.05));
+            points.push(new THREE.Vector3(handleX - 0.15, targetY + 3.4, handleZ - 0.1));
+            points.push(new THREE.Vector3(handleX - 0.18, targetY + 3.45, handleZ - 0.12));
+            points.push(new THREE.Vector3(handleX - 0.2, targetY + 3.48, handleZ - 0.13));
+            points.push(new THREE.Vector3(handleX - 0.22, targetY + 3.5, handleZ - 0.15));
+            points.push(new THREE.Vector3(handleX - 0.2, targetY + 3.52, handleZ - 0.14));
+            points.push(new THREE.Vector3(handleX - 0.18, targetY + 3.54, handleZ - 0.13));
+            points.push(new THREE.Vector3(handleX - 0.15, targetY + 3.55, handleZ - 0.11));
+            points.push(new THREE.Vector3(handleX - 0.12, targetY + 3.56, handleZ - 0.1));
+            points.push(new THREE.Vector3(handleX - 0.1, targetY + 3.55, handleZ - 0.08));
+            points.push(new THREE.Vector3(handleX - 0.08, targetY + 3.53, handleZ - 0.07));
+            points.push(new THREE.Vector3(handleX - 0.06, targetY + 3.5, handleZ - 0.05));
+            points.push(new THREE.Vector3(handleX - 0.05, targetY + 3.47, handleZ - 0.04));
+            points.push(new THREE.Vector3(handleX - 0.04, targetY + 3.43, handleZ - 0.05));
+            points.push(new THREE.Vector3(handleX - 0.03, targetY + 3.4, handleZ - 0.06));
+            points.push(new THREE.Vector3(handleX - 0.02, targetY + 3.37, handleZ - 0.07));
+            points.push(new THREE.Vector3(handleX - 0.01, targetY + 3.35, handleZ - 0.08));
 
             // 创建绳子几何体 - 增加分段数使其更平滑
             const curve = new THREE.CatmullRomCurve3(points);
