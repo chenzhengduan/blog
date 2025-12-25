@@ -1,0 +1,124 @@
+//wtwo-dialog 样式
+.wtwo-app-body{
+    .wtwo-dialog{
+        --wtwo-dialog-padding-primary:0;
+        border-radius: 6px;
+        
+        .wtwo-dialog__header{
+            background: #2878e8;
+            border-radius: 6px 6px 0 0;
+            padding: 10px 30px 10px 20px;
+            .wtwo-dialog__title{
+                color: #fff;
+                font-size: 16px;
+                line-height: 22px;
+            }
+            .wtwo-dialog__headerbtn .wtwo-dialog__close{
+                color: #fff;
+                font-size: 18px;
+            }
+            .wtwo-dialog__headerbtn{
+                width: 18px;
+                height: 18px;
+                right: 20px;
+                top:12px;
+            }
+        }
+        .modal-filter{
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            .filter-item{
+                margin-bottom: 10px;
+                margin-right: 10px;
+            }
+            &.multi-conditional{
+                margin-bottom: 6px;
+            }
+            .advanced-filter-wrap{
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .search-input-wrap{
+                position: relative;
+                .search-input{
+                    .wtwo-input__inner{
+                        height: 32px;
+                        line-height: 32px;
+                        border-radius: 4px;
+                        padding-left: 36px;
+                    }
+                }
+                .search-icon{
+                    font-size: 16px;
+                    position: absolute;
+                    left: 10px;
+                    top: 7px;
+                    z-index: 1;
+                    color: #909399;
+                }
+            }
+        }
+        //table弹框的padding不一致
+        .box-wrapper-table,.box-wrapper {
+            position: relative;
+            height: 100%;
+            border-radius: 4px;
+            padding: 16px 0;
+            background-color: #fff;
+            &.width-head{
+                padding: 0 0 16px;
+            }
+            .fixed-table-box{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                .table-wrap{
+                    flex: 1 1 auto;
+                    overflow: hidden;
+                }
+            }
+            
+        }
+        //分栏的弹框样式
+        .box-wrapper-cover {
+            .box-wrapper-cover-item {
+                border-radius: 4px;
+                margin-top: 12px;
+                background-color: #fff;
+                &:first-child {
+                    margin-top: 0;
+                }
+                .cover-title {
+                    color: #666;
+                    font-size: 14px;
+                    border-bottom: 1px solid #F0F1F9;
+                    padding: 14px;
+                    .fe-icon {
+                        color: #A9ADC9;
+                        width: 14px;
+                        height: 14px;
+                        margin-right: 10px;
+                        vertical-align: top;
+                    }
+                }
+                .cover-content {
+                    padding: 20px;
+                }
+            }
+        }
+        .wtwo-dialog__footer{
+            padding: 10px 20px;
+            background: #F5F7FA;
+            border-radius: 0 0 6px 6px;
+        }
+        .wtwo-table {
+            border-top: 1px solid #EBEEF5;
+        }
+        .pageination-wrapper {
+            text-align: right;
+            margin-top: 7px;
+        }
+    }
+}

@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+1. 我重写了ElementUI组件库的样式命名，由原来的el-xxx改为了wtwo-xxx。在生成样式代码时一定要注意，生成el-xx样式代码时要用wtwo-xx
+2. 不要随意执行删除文件这种操作

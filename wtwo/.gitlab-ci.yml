@@ -1,0 +1,95 @@
+#image: node:10  1
+
+image: docker:stable
+
+stages:
+  - build_dev
+  - deploy_dev
+  - build_prod
+  - deploy_prod
+  - deploy_predemo
+cache:
+  paths:
+    - node_modules/
+
+variables:
+  PRE_DEMO: 'D:\WOneBuilds_wtwo'
+
+# 开发环境 
+build_dev:
+  stage: build_dev
+
+  image: localcsharbor.xiaogj.com:9443/xgj/node:18.14.2
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/
+  tags:
+    - html
+  only:
+    - hotfix_20251218_compareDeleteCourse
+    - dev
+  script:
+    - npm config set registry http://registry.npm.taobao.org
+    - npm cache clean --force
+    #- npm install -g @pnpm/exe
+    - npm install -g pnpm
+    - pnpm set registry http://registry.npm.taobao.org
+    - pnpm add @types/lodash -D
+    - pnpm install
+    - pnpm run build
+
+deploy_dev:
+  stage: deploy_dev
+  tags:
+    - w1_html_ssx
+  #when: manual
+  only:
+    - hotfix_20251218_compareDeleteCourse
+    - dev
+
+  script:
+    - '$predemo = $($env:PRE_DEMO) + "\" + $($env:CI_COMMIT_REF_NAME) + "-" + $($env:CI_COMMIT_SHA) + "\" '
+    - '(robocopy dist $($predemo) /s  /nc /ns /ndl /np /fp /xd )'
+    - '(robocopy $($predemo) \\local008.xiaogj.com\WebSite_CD\beta01.xiaogj.com\wtwo  /s /nc /ns /ndl /np /fp)'
+    # - '(robocopy $($predemo) \\local008.xiaogj.com\WebSite_CD\test.xiaogj.com\wtwo  /s /nc /ns /ndl /np /fp)'
+    # - '(robocopy $($predemo) \\local008.xiaogj.com\WebSite_CD\stage.xiaogj.com\wtwo  /s /nc /ns /ndl /np /fp)'
+
+
+# 生产环境
+build_prod:
+  stage: build_prod
+
+  image: localcsharbor.xiaogj.com:9443/xgj/node:18.14.2
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/
+  tags:
+    - html
+  when: manual
+  only:
+    - v10.7.8
+    - master
+    - hotfix_20251211_compare
+  script:
+    - npm config set registry http://registry.npm.taobao.org
+    - npm install -g pnpm
+    - pnpm set registry http://registry.npm.taobao.org
+    - pnpm add @types/lodash -D
+    - pnpm install
+    - pnpm run build
+    
+deploy_predemo:
+  stage: deploy_predemo
+  tags:
+    - w1_html_ssx
+  when: manual
+  only:
+    - master
+    - hotfix_20251211_compare
+    - v10.7.8
+  script:
+    - '$predemo = $($env:PRE_DEMO) + "\" + $($env:CI_COMMIT_REF_NAME) + "-" + $($env:CI_COMMIT_SHA) + "\" + "wtwo" + "\" '
+    - '(robocopy dist $($predemo) /s  /nc /ns /ndl /np /fp /xd )'
+    - '(robocopy $($predemo) \\local053.xiaogj.com\WebSite_CICD\predemo.xiaogj.com\wtwo  /s /nc /ns /ndl /np /fp)'

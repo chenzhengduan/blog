@@ -1,0 +1,810 @@
+* {box-sizing: border-box;}
+*:before,*:after {box-sizing: border-box;}
+html {
+	width: 100%;
+	height: 100%;
+}
+.wtwo-app-body{
+	position: relative;
+	width: 100%;
+    height: 100%;
+    font-family: "PingFangSC-Regular";
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    font-size: 14px;
+    color:#333;
+    line-height: 1;
+    word-wrap: break-word;
+}
+html,
+body,
+div,
+object,
+iframe,
+applet,
+object,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+address,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+progress {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+th,
+td {
+    vertical-align: middle;
+}
+li {
+    list-style: none
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section,
+summary {
+    display: block
+}
+
+audio,
+canvas,
+progress,
+video {
+    display: inline-block
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+[hidden],
+template {
+    display: none
+}
+
+a {
+    background-color: transparent;
+    text-decoration: none
+}
+
+a:active,
+a:hover,
+a:visited {
+    outline: 0;
+    color: inherit;
+}
+
+abbr[title] {
+    border-bottom: 1px dotted
+}
+
+b,
+strong {
+    font-weight: bold
+}
+
+dfn {
+    font-style: italic
+}
+
+h1 {
+    font-size: 2em;
+    margin: .67em 0
+}
+
+mark {
+    background: #ff0;
+    color: #000
+}
+
+small {
+    font-size: 80%
+}
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sup {
+    top: -0.5em
+}
+
+sub {
+    bottom: -0.25em
+}
+
+img {
+    border: 0
+}
+figure {
+    margin: 1em 40px
+}
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0
+}
+
+pre {
+    overflow: auto
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, monospace;
+    font-size: 1em
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    outline: none;
+}
+
+button {
+    overflow: visible;
+    border: 0;
+}
+
+button,
+select {
+    text-transform: none
+}
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    cursor: pointer
+}
+
+button[disabled],
+html input[disabled] {
+    cursor: default
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0
+}
+
+input {
+    line-height: normal
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    height: auto
+}
+
+input[type="search"] {
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box
+}
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+
+fieldset {
+    border: 1px solid silver;
+    margin: 0 2px;
+    padding: .35em .625em .75em
+}
+
+legend {
+    border: 0;
+    padding: 0
+}
+
+textarea {
+    overflow: auto
+}
+
+optgroup {
+    font-weight: bold
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+td,
+th {
+    padding: 0
+}
+:focus {
+    outline:none;
+}
+
+:root {
+    --wtwo-font-weight-primary:400;
+    --wtwo-color-primary:#2878e8;
+    --wtwo-color-primary-dark-2:#2060BA;
+    --wtwo-color-primary-light-3:#68A0EF;
+    --wtwo-color-primary-light-5:#93BBF4;
+    --wtwo-color-primary-light-7:#BED6F8;
+    --wtwo-color-primary-light-8:#D4E4FA;
+    --wtwo-color-primary-light-9:#E9F1FD;
+    --wtwo-color-success:#00B42A;
+    --wtwo-color-success-dark-2:#009022;
+    --wtwo-color-success-light-3:#4CCA6A;
+    --wtwo-color-success-light-5:#80D995;
+    --wtwo-color-success-light-7:#B2E8BF;
+    --wtwo-color-success-light-8:#CCF0D4;
+    --wtwo-color-success-light-9:#E5F7EA;
+    --wtwo-color-warning:#FF7D00;
+    --wtwo-color-warning-dark-2:#CC6400;
+    --wtwo-color-warning-light-3:#FFA44C;
+    --wtwo-color-warning-light-5:#FFBE80;
+    --wtwo-color-warning-light-7:#FFD8B2;
+    --wtwo-color-warning-light-8:#FFE5CC;
+    --wtwo-color-warning-light-9:#FFF2E5;
+    --wtwo-color-danger:#F53F3F;
+    --wtwo-color-danger-dark-2:#C43232;
+    --wtwo-color-danger-light-3:#F87979;
+    --wtwo-color-danger-light-5:#FA9F9F;
+    --wtwo-color-danger-light-7:#FCC5C5;
+    --wtwo-color-danger-light-8:#FDD9D9;
+    --wtwo-color-danger-light-9:#FEECEC;
+}
+.wtwo-app-body{
+    
+/* 弹框中滚动条样式重写 */
+/*滚动条样式重置*/
+.modal-body::-webkit-scrollbar { 
+    width: 6px; 
+    height: 6px;
+  } 
+  /*定义滚动条轨道 内阴影+圆角*/ 
+  .modal-body::-webkit-scrollbar-track { 
+     background-color: inherit; 
+  }  
+  .modal-body:hover::-webkit-scrollbar-thumb { 
+    border-radius: 6px; 
+    background-color: #C6CCD7; 
+  }
+  /*定义滑块 内阴影+圆角*/ 
+  .modal-body::-webkit-scrollbar-thumb { 
+    background-color: inherit; 
+  }
+/*滚动条样式重置*/
+.scroll-box::-webkit-scrollbar { 
+  width: 6px; 
+  height: 6px;
+} 
+/*定义滚动条轨道 内阴影+圆角*/ 
+.scroll-box::-webkit-scrollbar-track { 
+   background-color: inherit; 
+}  
+.scroll-box:hover::-webkit-scrollbar-thumb { 
+  border-radius: 6px; 
+  background-color: #C6CCD7; 
+}
+/*定义滑块 内阴影+圆角*/ 
+.scroll-box::-webkit-scrollbar-thumb { 
+  background-color: inherit; 
+}
+
+/*elementui input前后插槽间距*/
+.wtwo-input-group__append, .wtwo-input-group__prepend{
+	padding: 0 12px;
+}
+.wtwo-input-group__append .wtwo-button, .wtwo-input-group__prepend .wtwo-button{
+	padding: 9px 12px;
+}
+.wtwo-input-group__append div.wtwo-select .wtwo-input--suffix .wtwo-input__inner{
+	padding-left:12px;
+	padding-right: 25px;
+}
+.wtwo-input-group__append .wtwo-button, .wtwo-input-group__append .wtwo-select, .wtwo-input-group__prepend .wtwo-button, .wtwo-input-group__prepend .wtwo-select{
+	margin:-10px -12px;
+}
+
+.wtwo-input-group__append button.wtwo-button:hover{
+    background: rgba(40,120,232,0.1)!important;
+    color: #2878e8;
+}
+
+/* elementui wtwo-table 表头颜色等 */
+
+.wtwo-table th.wtwo-table__cell,
+.wtwo-table .wtwo-table__header-wrapper tr th.wtwo-table-fixed-column--left,
+.wtwo-table .wtwo-table__header-wrapper tr th.wtwo-table-fixed-column--right{
+	background-color: #F5F7FA;
+	color: #909399;
+    font-weight: 400;
+}
+.wtwo-table th.wtwo-table__cell {
+    --wtwo-table-header-bg-color: #F5F7FA;
+}
+.wtwo-table .cell{
+    /* line-height: 22px!important; */
+    padding: 0 6px!important;
+}
+
+/* .wtwo-table::before {
+	height: 0;
+}
+.wtwo-table tr:last-child td {
+	border-bottom: none;
+} */
+.wtwo-table .wtwo-table__cell{
+    padding: 8px 0;
+}
+.wtwo-table tfoot{
+    font-size: 12px;
+    .wtwo-table__cell{
+        padding:2px 0!important;
+        color:#999;
+    }
+}
+/* 遮罩gif */
+/* .wtwo-icon-loading {
+	font-size: 30px;
+} */
+
+/* 表格下红点位置的重置 */
+
+.wtwo-table .wtwo-checkbox,.wtwo-table .wtwo-switch{
+    height: auto;
+    vertical-align: middle;
+    min-height: 23px;
+}
+
+/* card卡片样式重置 */
+.wtwo-card {
+	border-radius: 0;
+	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.06);
+}
+.wtwo-card.is-always-shadow {
+	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.06);
+}
+
+input::placeholder{
+  opacity: 1 !important;
+}
+
+.wtwo-button [class*=" wtwo-icon-"], .wtwo-button [class^=wtwo-icon-]{
+	vertical-align: top;
+}
+.wtwo-badge__content{
+	border: none;	
+}
+
+/*card组件重置*/
+.wtwo-card__header {
+	font-size: 16px;
+    color: #333;
+}
+
+/* elementui wtwo-tabs增加左间距 */
+.wtwo-tabs .wtwo-tabs__header {
+	margin-bottom: 0;
+}
+.wtwo-tabs .wtwo-tabs__nav-wrap {
+	padding-left: 20px;
+}
+/* 选项卡底线重置 */
+.wtwo-tabs__nav-wrap::after {
+	height: 1px;
+}
+.wtwo-tabs__active-bar{
+    height: 3px;
+    border-radius: 4px 4px 0 0;
+}
+
+.wtwo-tabs__item{
+    border-radius: 8px;
+    margin: 2px 0;
+    height: 36px;
+    line-height: 36px;
+    font-weight: 400;
+}
+.wtwo-tabs__item.is-active {
+    font-weight: 600;
+}
+
+
+/* 单选框按钮组大小，停用按钮样式重置 */
+.wtwo-radio-button--mini .wtwo-radio-button__inner {
+	padding: 5px;
+}
+.wtwo-radio-button:first-child .wtwo-radio-button__inner {
+	border-radius: 4px 0 0 4px;
+}
+.wtwo-radio-button:last-child .wtwo-radio-button__inner {
+	border-radius: 0 4px 4px 0;
+}
+
+.wtwo-radio-button[type=danger] .wtwo-radio-button__orig-radio:checked+.wtwo-radio-button__inner {
+    background-color: #A7AFB8;
+    color: #fff;
+    border-color: #A7AFB8;
+    box-shadow: -1px 0 0 0 #A7AFB8;
+}
+
+/* 复选框组样式重置 */
+.wtwo-checkbox-group .wtwo-checkbox {
+    margin-right: 16px;
+}
+
+.wtwo-table--enable-row-hover .wtwo-table__body tr:hover>td{
+    background: #F3F9FE;
+}
+.fe-pagination{
+    font-size: 14px;
+}
+.pagination-each-lists{
+    border-radius: 4px;
+}
+.fe-pagination .pagination-next-page span:nth-child(2).pagination-input input {
+    border: 1px solid #2878e8;
+}
+.fe-pagination .pagination-current-page .pagination-current-active{
+    color: #2878e8;
+}
+.pagination-each-lists ul li.active{
+    background: #2878e8;
+}
+.wtwo-alert--warning.is-light{
+    background-color: #FFFBE6;
+    color: #FAAD14;
+}
+.wtwo-alert--warning.is-light .wtwo-alert__content{
+    color: #606266;
+}
+.wtwo-alert__title{
+    font-size: 12px;
+}
+.wtwo-input.is-active .wtwo-input__inner, .wtwo-input__inner:focus,input:focus{
+    border-color: #2878e8;
+}
+
+.wtwo-drawer{
+    border-radius: 12px 0 0 12px;
+    max-width: 100%;
+}
+.wtwo-drawer__body {
+    padding: 0;
+}
+.wtwo-drawer__header{
+    color: #303133;
+    font-weight: 600;
+    border-bottom: 1px solid #E4E7ED;
+    margin-bottom: 0;
+    padding: 8px 16px!important;
+}
+.wtwo-drawer__title{
+    font-size: 14px!important;
+}
+.wtwo-drawer__footer{
+    padding-bottom: 10px!important;
+    border-top: 1px solid #E4E7ED;
+}
+.wtwo-drawer__close-btn{
+    border-radius: 4px;
+    padding: 5px 5px;
+}
+.wtwo-drawer__close-btn:hover{
+    background: rgba(0,0,0,0.06);
+}
+
+.wtwo-menu{
+    border-right: 0;
+    background: transparent;
+}
+.wtwo-menu.wtwo-menu--popup{
+    background: #fff;
+}
+.wtwo-menu-item, .wtwo-submenu__title,.wtwo-submenu .wtwo-menu-item{
+    height: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+}
+.wtwo-submenu__title .menu-icon,.wtwo-menu-item .menu-icon{
+    color: #303133;
+}
+.wtwo-menu-item.is-active .menu-icon{
+    fill: #2878e8;
+}
+.wtwo-menu-item.is-active,.wtwo-menu-item:focus, .wtwo-menu-item:hover,.wtwo-submenu__title:hover{
+    background: rgba(0,0,0,0.05);
+}
+.wtwo-notification__icon{
+    font-size: 22px;
+}
+.wtwo-notification__title{
+    line-height: 22px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.wtwo-table--border, .wtwo-table--group{
+    border: none!important;
+}
+.wtwo-table--border .wtwo-table__cell, .wtwo-table__body-wrapper .wtwo-table--border.is-scrolling-left~.wtwo-table__fixed{
+    border-right: 2px solid transparent!important;
+}
+.wtwo-table--border thead .wtwo-table__cell:hover{
+    border-right: 2px solid #DCDFE6!important;
+}
+.wtwo-table--border::before,
+.wtwo-table--border::after,
+.wtwo-table__border-left-patch{
+    width: 0!important;
+}
+.wtwo-table .wtwo-table-column--selection .cell {
+    padding-left: 10px!important;
+    padding-right: 4px!important;
+}
+.wtwo-table__column-resize-proxy{
+    border-left: 2px solid #DCDFE6!important;
+}
+
+#driver-highlighted-element-stage{
+    background: transparent!important;
+}
+
+.fe-msgbox .grab{
+    height: 30px;
+}
+.wtwo-dropdown-menu{
+    padding: 4px;
+}
+.wtwo-dropdown-menu__item{
+    line-height: 30px;
+    border-radius: 4px;
+}
+.wtwo-dropdown-menu__item, .wtwo-menu-item{
+    padding: 0 12px;
+}
+.wtwo-dropdown-menu__item:focus, .wtwo-dropdown-menu__item:not(.is-disabled):hover{
+    background: rgba(0,0,0,0.04);
+    color: #606266;
+}
+
+.wtwo-tag--small{
+    border-radius: 2px;
+}
+.wtwo-tag--plain {
+    min-width: 40px;
+    height: 20px;
+}
+.wtwo-tag--plain.wtwo-tag--primary {
+    border-color: #95c2ff;
+    color: #95c2ff;
+}
+.wtwo-tag--plain.wtwo-tag--success {
+    border-color: #b6e49f;
+    color: #b6e49f;
+}
+
+.wtwo-checkbox__input.is-checked+.wtwo-checkbox__label,.wtwo-radio__input.is-checked+.wtwo-radio__label{
+    color: #606266;
+}
+.wtwo-checkbox__input.is-disabled + span.wtwo-checkbox__label,
+.wtwo-radio__input.is-disabled + span.wtwo-radio__label{
+    color: var(--wtwo-disabled-text-color);
+    cursor: not-allowed;
+}
+
+.wtwo-pagination__jump{
+    margin-left: 6px!important;
+}
+
+.wtwo-dialog__body{
+    padding: 0 20px;
+}
+
+
+.wtwo-link.wtwo-link--primary:hover,.wtwo-link.wtwo-link--primary:active,.wtwo-link.wtwo-link--primary:visited {
+    color: var(--wtwo-color-primary);
+}
+
+.wtwo-select-dropdown .wtwo-select-dropdown__header{
+    display: flex;
+    align-items: center;
+} 
+.wtwo-select-dropdown .wtwo-select-dropdown__header .wtwo-checkbox{
+    height: auto;
+    padding: 2px 0;
+}
+
+.wtwo-table__empty-text {
+    line-height: normal;
+}
+.wtwo-empty__description {
+    margin-top: 8px;
+}
+
+#hl-sdk-wrap {
+    right: 20px !important;
+    top: 50px !important;
+    bottom: auto !important;
+    z-index: 3 !important;
+}
+/* 入口 */
+#hl-iconbox {
+    display: none;
+}
+
+body.has-dashboard-icon {
+    .hl-index-module-de132 {
+        right: 140px !important;
+    }
+}
+
+.drag-icon-column .cell{
+    padding: 0!important;
+    padding-left: 2px;
+}
+
+/* 清除富文本编辑器的边距 */
+.w-e-text-container .w-e-scroll html,
+.w-e-text-container .w-e-scroll body,
+.w-e-text-container .w-e-scroll div,
+.w-e-text-container .w-e-scroll object,
+.w-e-text-container .w-e-scroll iframe,
+.w-e-text-container .w-e-scroll applet,
+.w-e-text-container .w-e-scroll object,
+.w-e-text-container .w-e-scroll h1,
+.w-e-text-container .w-e-scroll h2,
+.w-e-text-container .w-e-scroll h3,
+.w-e-text-container .w-e-scroll h4,
+.w-e-text-container .w-e-scroll h5,
+.w-e-text-container .w-e-scroll h6,
+.w-e-text-container .w-e-scroll p,
+.w-e-text-container .w-e-scroll blockquote,
+.w-e-text-container .w-e-scroll pre,
+.w-e-text-container .w-e-scroll address,
+.w-e-text-container .w-e-scroll dl,
+.w-e-text-container .w-e-scroll dt,
+.w-e-text-container .w-e-scroll dd,
+.w-e-text-container .w-e-scroll ol,
+.w-e-text-container .w-e-scroll ul,
+.w-e-text-container .w-e-scroll li,
+.w-e-text-container .w-e-scroll table,
+.w-e-text-container .w-e-scroll caption,
+.w-e-text-container .w-e-scroll tbody,
+.w-e-text-container .w-e-scroll tfoot,
+.w-e-text-container .w-e-scroll thead,
+.w-e-text-container .w-e-scroll tr,
+.w-e-text-container .w-e-scroll th,
+.w-e-text-container .w-e-scroll td,
+.w-e-text-container .w-e-scroll article,
+.w-e-text-container .w-e-scroll aside,
+.w-e-text-container .w-e-scroll canvas,
+.w-e-text-container .w-e-scroll details,
+.w-e-text-container .w-e-scroll embed,
+.w-e-text-container .w-e-scroll figure,
+.w-e-text-container .w-e-scroll figcaption,
+.w-e-text-container .w-e-scroll footer,
+.w-e-text-container .w-e-scroll header,
+.w-e-text-container .w-e-scroll menu,
+.w-e-text-container .w-e-scroll nav,
+.w-e-text-container .w-e-scroll output,
+.w-e-text-container .w-e-scroll ruby,
+.w-e-text-container .w-e-scroll section,
+.w-e-text-container .w-e-scroll summary,
+.w-e-text-container .w-e-scroll time,
+.w-e-text-container .w-e-scroll mark,
+.w-e-text-container .w-e-scroll audio,
+.w-e-text-container .w-e-scroll video,
+.w-e-text-container .w-e-scroll progress{
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+}
+
+.w-e-full-screen-container{
+    z-index: 5999;
+}
+.w-e-text-placeholder{
+    top: 0!important;
+}
+
+.w-e-modal button{
+    line-height: normal!important;
+}
+
+.wtwo-dropdown-menu{
+    .wtwo-divider--horizontal{
+        border-color: var(--el-border-color-lighter)!important;
+        margin: 6px 0!important;
+    }
+}
+.wtwo-select__prefix{
+    align-self:auto!important;
+}
+.wtwo-empty__description{
+    margin-top: 16px;
+}
+.wtwo-picker-panel__icon-btn{
+    margin-top: 0!important;
+}
+.wtwo-picker-panel__content{
+    margin-top: 0 !important;
+}
+input[type=text] {
+    padding-left: 0 !important;
+}
+.wtwo-time-panel__btn{
+    font-size: 14px;
+}
+.wtwo-tag--light{
+    border: none !important;
+}
+}

@@ -1,0 +1,13 @@
+@forward 'element-plus/theme-chalk/src/mixins/config.scss' with (
+  $namespace: 'wtwo'
+);
+/* scopecss-disable */
+//导入Element plus的完整样式
+@use "element-plus/theme-chalk/src/index.scss";
+
+@use '@/assets/scss/reset.scss';
+@use '@/assets/scss/base.scss';
+@use '@/assets/scss/popup.scss';
+@use '@/assets/scss/layout.scss';
+@use '@/assets/scss/custom.scss';
+@use '@/assets/scss/components/course-card.scss';

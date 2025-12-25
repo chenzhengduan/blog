@@ -1,0 +1,431 @@
+.emoji-face {
+	display: inline-block;
+	background-image: url(./img/face-sprite.png);
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-size: 24px;
+	width: 24px;
+	height: 24px;
+	vertical-align: middle;
+	zoom: 1;
+}
+
+.face0 {
+	background-position: 0 0px;
+}
+
+.face1 {
+	background-position: 0 -24px;
+}
+
+.face2 {
+	background-position: 0 -48px;
+}
+
+.face3 {
+	background-position: 0 -72px;
+}
+
+.face4 {
+	background-position: 0 -96px;
+}
+
+.face5 {
+	background-position: 0 -120px;
+}
+
+.face6 {
+	background-position: 0 -144px;
+}
+
+.face7 {
+	background-position: 0 -168px;
+}
+
+.face8 {
+	background-position: 0 -192px;
+}
+
+.face9 {
+	background-position: 0 -216px;
+}
+
+.face10 {
+	background-position: 0 -240px;
+}
+
+.face11 {
+	background-position: 0 -264px;
+}
+
+.face12 {
+	background-position: 0 -288px;
+}
+
+.face13 {
+	background-position: 0 -312px;
+}
+
+.face14 {
+	background-position: 0 -336px;
+}
+
+.face15 {
+	background-position: 0 -360px;
+}
+
+.face16 {
+	background-position: 0 -384px;
+}
+
+.face17 {
+	background-position: 0 -408px;
+}
+
+.face18 {
+	background-position: 0 -432px;
+}
+
+.face19 {
+	background-position: 0 -456px;
+}
+
+.face20 {
+	background-position: 0 -480px;
+}
+
+.face21 {
+	background-position: 0 -504px;
+}
+
+.face22 {
+	background-position: 0 -528px;
+}
+
+.face23 {
+	background-position: 0 -552px;
+}
+
+.face24 {
+	background-position: 0 -576px;
+}
+
+.face25 {
+	background-position: 0 -600px;
+}
+
+.face26 {
+	background-position: 0 -624px;
+}
+
+.face27 {
+	background-position: 0 -648px;
+}
+
+.face28 {
+	background-position: 0 -672px;
+}
+
+.face29 {
+	background-position: 0 -696px;
+}
+
+.face30 {
+	background-position: 0 -720px;
+}
+
+.face31 {
+	background-position: 0 -744px;
+}
+
+.face32 {
+	background-position: 0 -768px;
+}
+
+.face33 {
+	background-position: 0 -792px;
+}
+
+.face34 {
+	background-position: 0 -816px;
+}
+
+.face35 {
+	background-position: 0 -840px;
+}
+
+.face36 {
+	background-position: 0 -864px;
+}
+
+.face37 {
+	background-position: 0 -888px;
+}
+
+.face38 {
+	background-position: 0 -912px;
+}
+
+.face39 {
+	background-position: 0 -936px;
+}
+
+.face40 {
+	background-position: 0 -960px;
+}
+
+.face41 {
+	background-position: 0 -984px;
+}
+
+.face42 {
+	background-position: 0 -1008px;
+}
+
+.face43 {
+	background-position: 0 -1032px;
+}
+
+.face44 {
+	background-position: 0 -1056px;
+}
+
+.face45 {
+	background-position: 0 -1080px;
+}
+
+.face46 {
+	background-position: 0 -1104px;
+}
+
+.face47 {
+	background-position: 0 -1128px;
+}
+
+.face48 {
+	background-position: 0 -1152px;
+}
+
+.face49 {
+	background-position: 0 -1176px;
+}
+
+.face50 {
+	background-position: 0 -1200px;
+}
+
+.face51 {
+	background-position: 0 -1224px;
+}
+
+.face52 {
+	background-position: 0 -1248px;
+}
+
+.face53 {
+	background-position: 0 -1272px;
+}
+
+.face54 {
+	background-position: 0 -1296px;
+}
+
+.face55 {
+	background-position: 0 -1320px;
+}
+
+.face56 {
+	background-position: 0 -1344px;
+}
+
+.face57 {
+	background-position: 0 -1368px;
+}
+
+.face58 {
+	background-position: 0 -1392px;
+}
+
+.face59 {
+	background-position: 0 -1416px;
+}
+
+.face60 {
+	background-position: 0 -1440px;
+}
+
+.face61 {
+	background-position: 0 -1464px;
+}
+
+.face62 {
+	background-position: 0 -1488px;
+}
+
+.face63 {
+	background-position: 0 -1512px;
+}
+
+.face64 {
+	background-position: 0 -1536px;
+}
+
+.face65 {
+	background-position: 0 -1560px;
+}
+
+.face66 {
+	background-position: 0 -1584px;
+}
+
+.face67 {
+	background-position: 0 -1608px;
+}
+
+.face68 {
+	background-position: 0 -1632px;
+}
+
+.face69 {
+	background-position: 0 -1656px;
+}
+
+.face70 {
+	background-position: 0 -1680px;
+}
+
+.face71 {
+	background-position: 0 -1704px;
+}
+
+.face72 {
+	background-position: 0 -1728px;
+}
+
+.face73 {
+	background-position: 0 -1752px;
+}
+
+.face74 {
+	background-position: 0 -1776px;
+}
+
+.face75 {
+	background-position: 0 -1800px;
+}
+
+.face76 {
+	background-position: 0 -1824px;
+}
+
+.face77 {
+	background-position: 0 -1848px;
+}
+
+.face78 {
+	background-position: 0 -1872px;
+}
+
+.face79 {
+	background-position: 0 -1896px;
+}
+
+.face80 {
+	background-position: 0 -1920px;
+}
+
+.face81 {
+	background-position: 0 -1944px;
+}
+
+.face82 {
+	background-position: 0 -1968px;
+}
+
+.face83 {
+	background-position: 0 -1992px;
+}
+
+.face84 {
+	background-position: 0 -2016px;
+}
+
+.face85 {
+	background-position: 0 -2040px;
+}
+
+.face86 {
+	background-position: 0 -2064px;
+}
+
+.face87 {
+	background-position: 0 -2088px;
+}
+
+.face88 {
+	background-position: 0 -2112px;
+}
+
+.face89 {
+	background-position: 0 -2136px;
+}
+
+.face90 {
+	background-position: 0 -2160px;
+}
+
+.face91 {
+	background-position: 0 -2184px;
+}
+
+.face92 {
+	background-position: 0 -2208px;
+}
+
+.face93 {
+	background-position: 0 -2232px;
+}
+
+.face94 {
+	background-position: 0 -2256px;
+}
+
+.face95 {
+	background-position: 0 -2280px;
+}
+
+.face96 {
+	background-position: 0 -2304px;
+}
+
+.face97 {
+	background-position: 0 -2328px;
+}
+
+.face98 {
+	background-position: 0 -2352px;
+}
+
+.face99 {
+	background-position: 0 -2376px;
+}
+
+.face100 {
+	background-position: 0 -2400px;
+}
+
+.face101 {
+	background-position: 0 -2424px;
+}
+
+.face102 {
+	background-position: 0 -2448px;
+}
+
+.face103 {
+	background-position: 0 -2472px;
+}
+
+.face104 {
+	background-position: 0 -2496px;
+}

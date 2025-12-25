@@ -1,0 +1,524 @@
+// 校验错误单元格样式合集
+:deep(.validation-error-cell) {
+    background-color: #fef7e0 !important; // 黄色背景
+
+    &:hover {
+        background-color: #fef2c0 !important; // hover时稍微深一点的黄色
+    }
+}
+
+// 特定错误字段的单元格样式
+:deep(.validation-error-field-cell) {
+    outline: 1px solid #f56c6c !important; // 红色 - 错误字段
+    outline-offset: -2px;
+}
+
+// 预检查字段样式
+:deep(.precheck-invalid-field) {
+    outline: 1px solid #f56c6c !important; // 红色 - 错误字段
+    outline-offset: -2px;
+}
+
+:deep(.precheck-restriction-field) {
+    outline: 1px solid #f56c6c !important; // 红色 - 限制字段
+    outline-offset: -2px;
+}
+
+:deep(.precheck-conflict-field) {
+    outline: 1px solid #f56c6c !important; // 红色 - 冲突字段
+    outline-offset: -2px;
+}
+
+:deep(.precheck-error-field) {
+    outline: 1px solid #f56c6c !important; // 红色 - 错误字段
+    outline-offset: -2px;
+}
+
+// 全屏容器样式
+.fullscreen-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: #ffffff !important;
+    z-index: 1000 !important; // 降低z-index，让Element Plus组件能够显示
+    overflow: hidden !important;
+
+    .operation-bar {
+        border-radius: 0 !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+    }
+}
+
+
+#loading-container {
+    .fan-table-container {
+        :deep(.fan-table-header-th) {
+            padding: 0px 4px !important;
+        }
+
+        // Y滚动条隐藏
+        .fan-table-container-y-scrollbar {
+            display: none;
+        }
+
+        // 隐藏Y轴滚动条但保留滚动功能
+        .fan-table-container-y-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        // 兼容Firefox
+        .fan-table-container-y-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+    }
+
+    // 直接针对滚动条容器隐藏
+    :deep(.fan-table-container-y-scrollbar) {
+        display: none !important;
+    }
+
+    :deep(.wtwo-input) {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    :deep(.wtwo-select) {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+
+        .wtwo-select__wrapper {
+            height: 100%;
+            border-radius: 0;
+            box-shadow: none;
+        }
+    }
+}
+
+// 表格单元格和表头样式
+:deep(.operation-column-cell) {
+    // 默认状态
+    background-color: #f8f9fa !important;
+    color: #6c757d !important;
+    font-weight: 500;
+    border-right: 1px solid #dee2e6;
+
+    // 选中状态 - 更美观的蓝色主题
+    &.fan-table-body-td-selected {
+        background-color: #409eff !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 4px rgba(64, 158, 255, 0.3);
+
+        // 选中时的hover状态
+        &:hover {
+            background-color: #337ecc !important;
+            color: #ffffff !important;
+        }
+    }
+
+    // hover状态
+    &:hover {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+    }
+}
+
+// 表头样式（通用和操作列）
+:deep(.table-header-cell) {
+    background-color: #f5f7fa !important;
+    color: #606266 !important;
+    font-weight: 600;
+    border-bottom: 2px solid #e4e7ed;
+    border-right: 1px solid #e4e7ed;
+
+    &:hover {
+        background-color: #ecf5ff !important;
+        color: #409eff !important;
+    }
+}
+
+:deep(.operation-column-header) {
+    background-color: #f8f9fa !important;
+    color: #6c757d !important;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+
+    &:hover {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+    }
+}
+
+// footer行样式
+:deep(.footer-row-cell) {
+    background-color: var(--fan-table-body-background-color) !important;
+    // border-top: 1px solid #e4e7ed !important;
+    border-left: none !important;
+    border-right: none !important;
+
+    &:hover {
+        // background-color: #e3f2fd !important;
+    }
+}
+
+:deep(.fan-table-sort) {
+    position: absolute !important;
+    right: 8px !important;
+    top: 40% !important;
+    transform: translateY(-50%) !important;
+
+}
+
+:deep(.wtwotable-header-cell) {
+    // 给排序让位置
+    width: calc(100% - 20px);
+    text-align: left;
+}
+
+// 分组行样式
+:deep(.group-header-cell),
+:deep(.group-footer-cell) {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+:deep(.group-header-cell) {
+    background-color: #F7F8FA !important;
+    font-weight: bold;
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    border: none;
+
+    &:hover {
+        background-color: #F7F8FA !important;
+    }
+
+    .group-toggle-icon {
+        transition: transform 0.3s ease;
+        display: inline-block;
+        margin-right: 12px;
+        font-size: 12px;
+        color: #909399;
+    }
+
+    .group-name {
+        margin-right: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #606266;
+    }
+
+    .group-count {
+        color: #909399;
+        font-size: 12px;
+        font-weight: 400;
+        margin-left: 12px;
+    }
+}
+
+:deep(.group-footer-cell) {
+    background-color: #fafafa !important;
+}
+
+// 确保分组行撑满整个表格宽度
+:deep(.fan-table-body-td) {
+    padding: 0 !important;
+    padding-left: 12px !important;
+    // padding-right: 12px !important;
+    position: relative;
+}
+
+:deep(.fan-table-body-td-span-ellipsis) {
+    line-height: normal;
+}
+
+:deep(.fan-table-body-tr) {
+    td:first-child {
+        padding-left: 0px !important;
+    }
+}
+
+// 复选框样式（表头和内容）
+:deep(.fan-table-body-td),
+:deep(.fan-table-header-td) {
+    .wtwo-checkbox {
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+
+        .wtwo-checkbox__input {
+            width: 16px !important;
+            height: 16px !important;
+        }
+
+        .wtwo-checkbox__label {
+            display: none !important;
+        }
+    }
+}
+
+// 行悬浮样式
+:deep(.hovered-row) {
+    background-color: #f0f9ff !important;
+    transition: background-color 0.2s ease !important;
+
+    .fan-table-body-td {
+        background-color: #f0f9ff !important;
+    }
+}
+
+// 默认悬浮样式（作为备用）
+:deep(.fan-table-body-tr:hover) {
+    background-color: #f5f7fa !important;
+
+    .fan-table-body-td {
+        background-color: #f5f7fa !important;
+    }
+
+    .validation-error-cell {
+        background-color: #fef7e0 !important; // 保持黄色背景
+    }
+}
+
+:deep(.fan-table-body-td .group-header-cell),
+:deep(.fan-table-body-td .group-footer-cell) {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+:deep(.fan-table-footer-td) {
+    padding: 0 !important;
+}
+
+// 滚动条配置：隐藏Y轴，保留X轴
+:deep(.fan-table-container) {
+
+    // 隐藏Y轴滚动条
+    .fan-table-container-y-scrollbar {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
+    // 隐藏所有滚动条
+    &::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+    }
+
+    // 兼容Firefox
+    scrollbar-width: thin !important;
+    -ms-overflow-style: auto !important;
+}
+
+// 预检查开关容器样式
+.pre-check-switch-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    :deep(.wtwo-switch__label) {
+        color: #606266 !important;
+    }
+
+    .passed-count {
+        font-weight: 400;
+        font-size: 14px;
+        margin-left: 12px;
+        color: #00B42A;
+    }
+
+    .failed-count {
+        margin-left: 12px;
+        font-weight: 400;
+        font-size: 14px;
+        color: #F53F3F;
+    }
+
+}
+
+// 预检查对话框样式
+.pre-check-dialog-content {
+    .pre-check-message {
+        background-color: #f0f9ff;
+        border: 1px solid #b3d8ff;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 16px;
+        color: #606266;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .pre-check-checkbox {
+        margin-bottom: 16px;
+
+        .wtwo-checkbox {
+            font-size: 14px;
+            color: #606266;
+        }
+    }
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+// 分组popover样式
+.custom-group-popover {
+    .group-popover-content {
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .group-title {
+                font-weight: 500;
+                font-size: 14px;
+                color: #606266;
+            }
+
+            .cancel-group {
+                font-weight: 500;
+                font-size: 14px;
+                color: #2878E8;
+                cursor: pointer;
+                text-decoration: none;
+            }
+        }
+
+        .group-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 320px;
+            overflow: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .group-list::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        :deep(.custom-group-popover) .group-list {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        :deep(.custom-group-popover) .group-list::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .group-item {
+            padding: 10px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 14px;
+            color: #606266;
+        }
+
+        .group-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .group-item.active {
+            background: #ecf5ff;
+            color: #409eff;
+            font-weight: 600;
+        }
+    }
+}
+
+
+
+// 错误字段tooltip样式
+:deep(.error-field-tooltip) {
+    .wtwo-tooltip__content {
+        color: #f56c6c;
+        font-weight: 500;
+        background-color: #fef0f0;
+        border: 1px solid #f56c6c;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 12px;
+        max-width: 200px;
+        line-height: 1.4;
+    }
+
+    .wtwo-tooltip__arrow {
+        border-top-color: #f56c6c !important;
+    }
+}
+
+:deep(.fan-table-selection-autofill-area) {
+    .fan-table-selection-border {
+        background-color: #4b89ff !important;
+    }
+}
+
+.precheck-invalid-field {
+    outline: 1px solid #f56c6c;
+    outline-offset: -1px;
+}
+
+// 删除确认 Popover 样式
+.delete-popover-content {
+    padding: 16px;
+
+    .delete-message {
+        display: flex;
+        align-items: flex-start;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        color: #303133;
+        line-height: 1.5;
+
+
+        .delete-count {
+            color: #f56c6c;
+            font-weight: 600;
+        }
+    }
+
+    .delete-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+}
+
+// 删除确认 Popover 全局样式
+:deep(.delete-confirm-popover) {
+    .wtwo-popover__content {
+        padding: 0;
+    }
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/logo.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Expires" content="0">
+  <!-- oss -->
+  <script src="https://cdn01.xiaogj.com/uploads/x3/libs/official/axios/0.18.0/axios.min.js"></script>
+  <script src="https://cdn01.xiaogj.com/uploads/fe/libs/oss/1.1.7/xgjzt.umd.min.js"></script>
+  <style>
+    /* 全局骨架屏样式 - 极简版本 */
+    #app-loading-skeleton {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #F0F2F5;
+      z-index: 9999;
+      padding: 40px;
+    }
+
+    .skeleton-container {
+      max-width: 800px;
+    }
+
+    /* 骨架屏项 */
+    .skeleton-item {
+      background: linear-gradient(90deg, #e8ecf0 25%, #d8dde3 50%, #e8ecf0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite linear;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .skeleton-item.long {
+      height: 24px;
+      width: 100%;
+    }
+
+    .skeleton-item.long:nth-child(2) {
+      width: 85%;
+    }
+
+    .skeleton-item.long:nth-child(3) {
+      width: 70%;
+    }
+
+    .skeleton-item.short {
+      height: 24px;
+      width: 50%;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="wtwo-app-body">
+  <!-- 全局加载骨架屏 - 极简版本 -->
+  <div id="app-loading-skeleton">
+    <div class="skeleton-container">
+      <!-- 三长一短 -->
+      <div class="skeleton-item long"></div>
+      <div class="skeleton-item long"></div>
+      <div class="skeleton-item long"></div>
+      <div class="skeleton-item short"></div>
+    </div>
+  </div>
+
+  <div id="wtwo-app"></div>
+  <script type="module" src="/src/main.ts"></script>
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-M9P4GFVZL3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-M9P4GFVZL3');
+  </script> -->
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4981024 */
+  src: url('iconfont.woff2?t=1766050137708') format('woff2'),
+       url('iconfont.woff?t=1766050137708') format('woff'),
+       url('iconfont.ttf?t=1766050137708') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.w2-shaixuan:before {
+  content: "\e7ab";
+}
+
+.w2-qiehuan:before {
+  content: "\e7ac";
+}
+
+.w2-a-Refreshshuaxin:before {
+  content: "\e7aa";
+}
+
+.w2-xueyuanxinxi:before {
+  content: "\e7a9";
+}
+
+.w2-xueyuanxiangqing:before {
+  content: "\e7a8";
+}
+
+.w2-jinyong:before {
+  content: "\e7a7";
+}
+
+.w2-quanxian:before {
+  content: "\e7a6";
+}
+
+.w2-shezhi:before {
+  content: "\e7a1";
+}
+
+.w2-caiwusuodingfanwei:before {
+  content: "\e7a0";
+}
+
+.w2-caiwuhongchong:before {
+  content: "\e7a2";
+}
+
+.w2-dingshi:before {
+  content: "\e7a3";
+}
+
+.w2-dingshi-1:before {
+  content: "\e7a4";
+}
+
+.w2-weisuoding:before {
+  content: "\e79f";
+}
+
+.w2-suoding:before {
+  content: "\e7a5";
+}
+
+.w2-gengduohover:before {
+  content: "\e79a";
+}
+
+.w2-xueyuanxinxikapianmoren:before {
+  content: "\e799";
+}
+
+.w2-xueyuanxinxikapianxuanzhong:before {
+  content: "\e798";
+}
+
+.w2-paixu:before {
+  content: "\e795";
+}
+
+.w2-shouqi:before {
+  content: "\e794";
+}
+
+.w2-zhankai:before {
+  content: "\e793";
+}
+
+.w2-gengduo1:before {
+  content: "\e769";
+}
+
+.w2-a-Arrow-circle-rightyou-jiantou:before {
+  content: "\e78d";
+}
+
+.w2-qingchu:before {
+  content: "\e78c";
+}
+
+.w2-a-Plattetiaosepan:before {
+  content: "\e787";
+}
+
+.w2-a-Setting-oneshezhi:before {
+  content: "\e789";
+}
+
+.w2-quanjusuoxiao:before {
+  content: "\e785";
+}
+
+.w2-tuodongpaixu:before {
+  content: "\e6fe";
+}
+
+.w2-xuanke1:before {
+  content: "\e778";
+}
+
+.w2-xuanban1:before {
+  content: "\e783";
+}
+
+.w2-xuanzhong:before {
+  content: "\e784";
+}
+
+.w2-jiaoshi:before {
+  content: "\e782";
+}
+
+.w2-shijian:before {
+  content: "\e781";
+}
+
+.w2-xinzenghang:before {
+  content: "\e77f";
+}
+
+.w2-shanchu:before {
+  content: "\e780";
+}
+
+.w2-quanjufangda:before {
+  content: "\e779";
+}
+
+.w2-fenzu:before {
+  content: "\e77a";
+}
+
+.w2-caogaobaocunzhong:before {
+  content: "\e77b";
+}
+
+.w2-xianzhi:before {
+  content: "\e77c";
+}
+
+.w2-tongguo:before {
+  content: "\e77d";
+}
+
+.w2-chongtu:before {
+  content: "\e77e";
+}
+
+.w2-xuanren:before {
+  content: "\e777";
+}
+
+.w2-tianjia:before {
+  content: "\e76c";
+}
+
+.w2-shezhichangyongtiaojian:before {
+  content: "\e76d";
+}
+
+.w2-xuanzelie:before {
+  content: "\e76e";
+}
+
+.w2-yichu:before {
+  content: "\e76f";
+}
+
+.w2-xuanban:before {
+  content: "\e770";
+}
+
+.w2-sousuo:before {
+  content: "\e771";
+}
+
+.w2-xinxitishi:before {
+  content: "\e772";
+}
+
+.w2-xuanke:before {
+  content: "\e773";
+}
+
+.w2-gengduocaozuo:before {
+  content: "\e774";
+}
+
+.w2-changyongshiduan:before {
+  content: "\e775";
+}
+
+.w2-baocunkuaijieshaixuan:before {
+  content: "\e776";
+}
+

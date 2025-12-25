@@ -1,0 +1,301 @@
+## 前端项目开发规范：Vue 3 + Vite + Ant Design
+
+## 核心原则
+-  清晰、高效、可维护且技术准确 的代码，并提供相关示例。
+-  严格遵循  Vue 3、Vite 和 Ant Design 的官方最佳实践和约定 。
+-  所有代码必须使用 TypeScript ，确保强类型和更好的开发体验。
+-  优先选择 迭代和模块化 ，而非代码重复，促进组件和逻辑的复用。
+-  为变量、方法、组件和文件使用 描述性且有意义的名称 。
+-  注重 组件的单一职责原则 ，让组件小巧、专注。
+
+## 代码风格与结构
+### 文件组织
+  -  系统化目录结构 ：每个文件应仅包含相关内容，例如导出的组件、子组件、辅助函数、静态内容和类型定义。
+  -  目录命名 ：所有目录名称均使用 小写加短划线命名法（kebab-case） ，例如：`components/user-profile`。
+  -  推荐的顶层目录结构 ：
+
+    ```
+    src/
+    ├── api/             # API 请求服务抽象，与后端接口对应
+    ├── assets/          # 静态资源，如图片、字体、全局CSS变量
+    ├── components/      # 可复用UI组件 (不含业务逻辑)
+    │   ├── base/        # 基础通用组件，如：BaseButton.vue, BaseInput.vue
+    │   └── common/      # 应用内通用组件，如：AppHeader.vue, DataTable.vue
+    ├── composables/     # 组合式函数 (VueUse或自定义的逻辑复用，如：useAuth, useDialog)
+    ├── config/          # 全局配置，例如API地址、常量、环境配置
+    ├── constants/       # 全局常量定义
+    ├── layouts/         # 页面布局组件 (例如: DefaultLayout.vue, AuthLayout.vue)
+    ├── locales/         # 国际化（i18n）文件
+    ├── router/          # Vue Router 配置和路由守卫
+    ├── stores/          # Pinia 状态管理模块，按业务领域划分
+    ├── types/           # 全局类型定义（如：interface RequestOptions, type UserData）
+    ├── utils/           # 辅助工具函数（如：formatDate, validateEmail）
+    ├── views/           # 页面级组件 (对应路由，包含特定业务逻辑)
+    ├── App.vue          # 根组件
+    └── main.ts          # 入口文件
+    ``
+
+### 命名约定
+  -  组件命名 ：
+      * 文件名和组件名（`name` 选项或 `script setup` 自动推断）使用 大写驼峰命名法（PascalCase） ，例如：`UserProfile.vue`。
+      * 在模板中使用时，应使用 连字符命名法（kebab-case） ，例如：`<user-profile>`。
+  -  变量命名 ：使用 小写驼峰命名法（camelCase） ，并辅以助动词来表示状态，例如：`isLoading`、`hasError`、`isModalVisible`。
+  -  函数命名 ：
+      *  纯函数 （无副作用，给定相同输入总是返回相同输出）使用 `function` 关键字定义，以受益于提升（hoisting）和代码清晰度。
+      *  方法 （组件内或组合式函数内）使用 `function` 关键字 `定义。
+      *  计算属性 （computed properties）使用带有`const`的 箭头函数 定义。
+  -  文件导出 ：优先使用`命名导出（named exports）`而不是`默认导出（default exports）`来导出函数、常量和接口，以提高代码可读性和可维护性。
+
+### TypeScript 使用
+
+  -  强制使用 ：所有前端代码必须使用  TypeScript 。
+  -  接口 vs. 类型别名 ：优先使用 `接口（interface）`来定义对象结构和类契约。类型别名（type）主要用于定义联合类型、交叉类型或字面量类型。
+  -  避免枚举（Enums） ：避免使用TypeScript的`enum`，改用 对象常量（`const` object）或映射（`map`） ，以获得更好的类型安全性和灵活性。
+    ```typescript
+    // BAD
+    // enum UserRole { ADMIN, EDITOR, VIEWER }
+
+    // GOOD
+    const UserRole = {
+      ADMIN: 'admin',
+      EDITOR: 'editor',
+      VIEWER: 'viewer',
+    } as const; // 使用 as const 确保类型推断为字面量联合类型
+
+    type UserRoleType = typeof UserRole[keyof typeof UserRole];
+    // 或使用联合类型
+    // type UserRoleType = 'admin' | 'editor' | 'viewer';
+    ```
+  -  严格类型声明 ：所有函数参数、返回值和组件props都应明确声明类型。
+
+### 函数风格
+  -  接收对象，返回对象（RORO）模式 ：对于参数较多或可能需要扩展的函数，优先采用此模式，提高可读性和灵活性。
+    ```typescript
+    interface FetchDataOptions {
+      url: string;
+      method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+      params?: Record<string, any>;
+      body?: Record<string, any>;
+    }
+    async function fetchData({ url, method = 'GET', params, body }: FetchDataOptions): Promise<any> {
+      // ... 实现
+      return { data: {}, error: null };
+    }
+    ```
+  -  单行条件语句 ：对于简单的条件语句，优先使用单行语法，提高简洁性。
+
+    ```typescript
+    if (condition) return;
+    if (anotherCondition) {
+      doSomething();
+    }
+    ```
+
+## 错误处理与验证
+  -  早期返回/守卫子句 ：在函数或逻辑块的 开头 处理错误和边界情况。使用 `早期返回（early returns） 和 守卫子句（guard clauses） `来处理前置条件和无效状态，避免深层嵌套的`if`语句。
+  -  避免不必要的 `else` ：优先使用`if-return`模式，而不是`if-else`，提高代码扁平化。
+  -  恰当的错误日志 ：使用浏览器控制台的`console.error`进行开发时错误输出。生产环境考虑集成统一的日志服务。
+  -  用户友好提示 ：向用户提供清晰、具体且有指导性的错误消息（通过 Ant Design 的`message`、`notification`组件）。避免直接暴露后端错误信息。
+  -  自定义错误类型 ：对于应用特有的错误场景，可以考虑定义 自定义错误类型 或 错误工厂 ，以实现一致的错误处理和捕获。
+
+## Vue.js 特定规范
+
+### 组件开发
+  -  `script setup` 风格 ：所有Vue组件必须使用  `<script setup>` 语法糖 ，它简化了组件声明并提供了更好的TypeScript支持。
+  -  Props 定义 ：使用`defineProps`宏与TypeScript接口结合定义组件的props，并为可选props设置默认值。
+    ```typescript
+    // MyComponent.vue
+    <script setup lang="ts">
+    interface Props {
+      title: string;
+      count?: number; // 可选属性
+      isEnabled: boolean;
+    }
+    // 为可选属性提供默认值，避免运行时错误
+    const props = withDefaults(defineProps<Props>(), {
+      count: 0,
+      isEnabled: true,
+    });
+    </script>
+    ```
+  -  Emits 定义 ：使用`defineEmits`宏以简洁的类型定义方式声明组件事件，清晰地表明事件名称和参数类型。
+    ```typescript
+    // MyButton.vue
+    <script setup lang="ts">
+    const emit = defineEmits<{
+      (e: 'click', id: number): void; // 事件名为 click，参数为 number 类型的 id
+      (e: 'update:modelValue', value: string): void; // 双向绑定事件
+    }>();
+
+    function handleClick() {
+      emit('click', 123);
+    }
+    </script>
+    ```
+  -  双向绑定 ：优先使用 `defineModel`宏来创建组件内部的双向绑定，简化代码。
+    ```typescript
+    // MyInput.vue
+    <script setup lang="ts">
+    const model = defineModel<string>(); // 默认绑定到 'modelValue' prop
+    // 如果需要绑定到不同名称的 prop，例如 'checked'
+    const checked = defineModel<boolean>('checked');
+    </script>
+
+    <template>
+      <a-input v-model:value="model" />
+      <a-checkbox v-model:checked="checked" />
+    </template>
+    ```
+  -  计算属性 ：使用箭头函数定义计算属性，确保其依赖的响应式数据发生变化时能正确重新计算。
+    ```typescript
+    import { ref, computed } from 'vue';
+    const firstName = ref('John');
+    const lastName = ref('Doe');
+    const fullName = computed(() => `${firstName.value} ${lastName.value}`);
+    ```
+  -  方法定义 ：使用`function`关键字定义组件方法，保持函数上下文的清晰。
+    ```typescript
+    function submitForm() {
+      // ...
+    }
+    ```
+
+###  响应性与组合式函数
+  -  响应式数据 ：
+      - 对于 原始值类型（`string`, `number`, `boolean`等） ，使用`ref`。
+      - 对于 对象类型 ，可以使用`reactive`或`ref`包裹对象（推荐`ref`，因为它更灵活且不需要担心解构丢失响应性）。
+  -  VueUse ：充分利用  VueUse 库 提供的各种组合式函数（Composables），例如`useMouse`、`useStorage`、`useForm`等，以增强响应性和代码复用性。
+  -  自定义组合式函数 ：将可复用的逻辑封装到`src/composables`目录下的自定义组合式函数中，提高代码的模块化和复用性。
+### 路由管理
+  -  Vue Router ：使用  Vue Router  进行单页应用（SPA）的导航和动态路由。
+  -  路由懒加载 ：为所有视图组件（`src/views`）配置 路由懒加载（Lazy Loading） ，使用动态导入（`import()`），显著提高应用的首次加载性能。
+    ```typescript
+    // router/index.ts
+    import { createRouter, createWebHistory } from 'vue-router';
+    const router = createRouter({
+      history: createWebHistory(),
+      routes: [
+        {
+          path: '/',
+          name: 'Home',
+          component: () => import('@/views/HomeView.vue'), // 懒加载示例
+        },
+        {
+          path: '/about',
+          name: 'About',
+          component: () => import('@/views/AboutView.vue'),
+        },
+        // ... 其他路由
+      ],
+    });
+    export default router;
+    ```
+  -  路由守卫 ：合理使用全局、路由独享和组件内守卫，实现认证、权限、页面跳转确认等逻辑。
+### 状态管理
+  -  Pinia ：使用  Pinia  作为官方推荐的状态管理库。
+  -  模块化 Store ：根据业务领域将store拆分为不同的模块（例如：`stores/user.ts`、`stores/product.ts`）。
+  -  getter、action ：遵循Pinia的最佳实践，使用getter获取派生状态，使用action进行异步操作和业务逻辑封装。
+
+    ```typescript
+    // stores/user.ts
+    import { defineStore } from 'pinia';
+    interface UserState {
+      name: string;
+      isAuthenticated: boolean;
+      token: string | null;
+    }
+    export const useUserStore = defineStore('user', {
+      state: (): UserState => ({
+        name: 'Guest',
+        isAuthenticated: false,
+        token: null,
+      }),
+      getters: {
+        userName: (state) => state.name,
+        isLoggedIn: (state) => state.isAuthenticated,
+      },
+      actions: {
+        login(name: string, token: string) {
+          this.name = name;
+          this.token = token;
+          this.isAuthenticated = true;
+          // 可以在这里存储 token 到 localStorage 或 sessionStorage
+        },
+        logout() {
+          this.name = 'Guest';
+          this.token = null;
+          this.isAuthenticated = false;
+          // 移除存储的 token
+        },
+      },
+    });
+    ```
+## UI 与样式
+### Ant Design Vue
+  -  首选组件库 ：优先使用  Ant Design Vue  提供的组件。在选择组件时，应考虑其功能、可用性和符合Ant Design设计规范的程度。
+  -  遵循设计规范 ：严格遵循 Ant Design 的设计指南，确保UI风格、交互行为、色彩、排版等在整个应用中保持高度一致性。
+  -  按需导入 ：通过Vite插件（如`vite-plugin-style-import`）实现Ant Design组件的按需导入，减少打包体积。
+### Tailwind CSS
+  -  原子化 CSS ：使用  Tailwind CSS  进行原子化CSS开发，通过组合实用工具类来实现组件样式，最大限度地减少自定义CSS。
+  -  响应式设计 ：采用 `移动优先（Mobile-First）`的方法，结合Tailwind的响应式前缀（`sm:`, `md:`, `lg:`等）实现完全响应式布局。
+  -  Ant Design 与 Tailwind 结合 ：
+      - 对于 Ant Design 组件的 结构和布局 ，优先使用Tailwind的flexbox、grid、spacing、sizing等工具类。
+      - 对于 Ant Design 组件的 外观定制 ，首先检查Ant Design提供的Props或Slot是否满足。如果需要更深层次的定制，可以通过Ant Design的@主题定制功能进行全局修改。
+      - 在极少数情况下，如果必须覆盖Ant Design组件的内部样式，可以考虑使用 Scoped CSS ，并确保选择器足够具体，避免影响其他组件。 避免使用 `!important`。 
+  -  避免自定义 CSS 文件 ：尽量避免创建独立的`.css`或`.scss`文件来编写大量自定义CSS，除非是复杂的动画或第三方库样式覆盖。
+### Radix Vue (可选)
+  -  特定场景补充 ：当 Ant Design 无法满足特定、高度定制化或无障碍性要求极高的UI交互（例如：完全自定义的下拉菜单、模态框、工具提示等）时，可以引入  Radix Vue  作为底层无样式（headless）组件库。
+  -  结合 Tailwind CSS ：使用Radix Vue 提供的无样式组件，并结合Tailwind CSS 构建自定义外观和行为。
+
+## 性能优化
+### Vite 构建优化
+  -  代码分割（Code Splitting） ：
+      - 利用`动态导入（Dynamic Imports）`对路由组件、大型第三方库进行按需加载。
+      - 在`vite.config.ts`中配置 Rollup手动分块（`build.rollupOptions.output.manualChunks`） ，将常用但非关键的依赖项打包成独立块，提高缓存命中率。
+  -  生产环境优化 ：
+      - 在生产构建中自动移除`console.log`和`debugger`语句（Vite默认提供配置）。
+      - 启用CSS代码压缩、JavaScript代码混淆和压缩。
+### Vue 特定优化
+  -  异步组件与 Suspense ：
+      - 将 异步组件 （例如：大型图表库、复杂表格）包裹在带有 fallback UI的Suspense 中，在组件加载时显示加载状态，提升用户体验，避免白屏。
+    <!-- end list -->
+    ```vue
+    <template>
+      <Suspense>
+        <template #default>
+          <AsyncChartView />
+        </template>
+        <template #fallback>
+          <a-spin size="large" tip="加载中..." />
+        </template>
+      </Suspense>
+    </template>
+    ```
+  -  组件懒加载 ：对于不影响首屏加载时间的非关键组件，使用`defineAsyncComponent`进行异步加载。
+### 图像优化
+  -  格式优化 ：优先使用现代图像格式如 WebP ，它们通常提供更好的压缩比和图像质量。
+  -  尺寸属性 ：在`<img>`标签中明确设置`width`和`height`属性，避免图片加载引起的 累积布局偏移（CLS） 。
+  -  懒加载 ：对于首屏之外的图片，使用 图片懒加载 （例如：`loading="lazy"`属性或使用`VueUse`的`useImage`）。
+### Web Vitals 优化
+  -  持续监控 ：定期使用Lighthouse、WebPageTest、PageSpeed Insights等工具对应用进行性能审计。
+  -  关注核心指标 ：特别关注 LCP（最大内容绘制） 、 CLS（累积布局偏移） 、 FID（首次输入延迟） ，并根据审计结果进行针对性优化。
+
+## 关键约定与最佳实践
+1.   单向数据流 ：严格遵循Vue的单向数据流原则，props向下传递，事件向上抛出。避免直接修改props。
+2.   API 抽象 ：将所有API请求逻辑抽象并封装到`src/api`目录下的服务模块中。组件只负责调用这些服务，不直接处理HTTP请求细节。
+3.   可复用逻辑 ：积极利用Vue 3的Composition API创建可复用的组合式函数（`src/composables`目录），实现逻辑的解耦和复用。
+4.   国际化（i18n） ：使用  Vue I18n  进行多语言支持，将所有文本内容外部化。
+5.   表单验证 ：
+      - 优先使用 Ant Design 表单组件自带的验证规则。
+      - 对于复杂的自定义验证逻辑，可以结合`async-validator`或自定义验证方法。
+      - 充分利用`a-form-item`的`rules`属性进行声明式验证。
+6.   数据结构统一 ：在前端定义清晰的TypeScript接口，与后端API返回的数据结构保持一致，减少类型转换和错误。
+7.   组件通信策略 ：
+      -  父子通信 ：优先使用props（父到子）和emits（子到父）。
+      -  兄弟/不相关组件通信 ：使用Pinia进行状态管理。
+      -  避免全局事件总线 ：尽量避免使用不明确的全局事件总线，除非在非常特定的场景下。
+8.   可访问性（Accessibility） ：在开发过程中考虑WCAG标准，确保应用对所有用户（包括残障人士）都可用。Ant Design组件本身具有较好的可访问性支持，但仍需在自定义内容时注意。
+9.   持续集成/持续部署 (CI/CD) ：将代码质量检查（ESLint, Prettier）、单元测试、集成测试和生产构建流程自动化。
+10.  Git Commit 规范 ：遵循 Conventional Commits 规范（例如：`feat:`, `fix:`, `chore:`等前缀），使提交历史清晰、可追溯。
+11.  代码审查（Code Review） ：实施严格的代码审查流程，确保代码质量和遵循规范。
+12.  文档 ：为复杂组件、自定义组合式函数、API接口和关键业务逻辑编写清晰、简洁的文档，提高团队协作效率。

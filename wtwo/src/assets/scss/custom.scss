@@ -1,0 +1,216 @@
+:root {
+    --fan-table-head-row-td-padding: 0px 8px !important;
+    --day-column-min-width: 150px;
+}
+.wtwo-loading-spinner .path{
+    will-change: transform;
+}
+.fan-table.fan-table-border-around{
+    height: 100% !important;
+}
+.fan-table .fan-table-edit-input-container-show{
+    z-index: 20 !important;
+}
+.wtwo-app-body{
+    .compare-canlendar-dialog{
+        background: #F0F2F5;
+        --wtwo-dialog-padding-primary:0;
+        border-radius: 6px;
+        
+        > .wtwo-dialog__header{
+            background: #fff !important;
+            padding: 8px 30px 8px 20px;
+        }
+        > .wtwo-dialog__body{
+            padding: 0 12px;
+        }
+    }
+}
+.custom-select-dropdown {
+    min-width: 340px !important;
+    .wtwo-empty__description {
+        font-size: 12px !important;
+    }
+
+    .wtwo-empty__description p {
+        font-size: 12px !important;
+    }
+
+    .search-container {
+        width: 100%;
+        padding: 8px 12px;
+        border-bottom: 1px solid #e4e7ed;
+    }
+
+    .wtwo-input__wrapper {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .wtwo-input__wrapper.is-focus {
+        box-shadow: none;
+    }
+
+    .wtwo-select-dropdown__header {
+        padding: 0;
+        border: none;
+    }
+
+    .wtwo-select-dropdown__footer {
+        padding: 8px 12px
+    }
+
+    .wtwo-select-dropdown__list {
+        max-height: 300px;
+        padding: 0 !important;
+    }
+
+    .wtwo-select-dropdown__footer {
+        border-top: 1px solid #F0F2F5 !important;
+    }
+
+    .option-status {
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-weight: 500;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .status-free {
+        background-color: #E6F7EA;
+        color:#00B42A;
+    }
+
+    .status-busy {
+        background-color: #FFF7E8;
+        color:#FF7D00;
+    }
+}
+
+.custom-select-dropdown-empty {
+    .wtwo-select-dropdown__empty {
+        padding: 0px !important;
+    }
+
+    .wtwo-empty {
+        padding: 20px 0px !important;
+    }
+}
+.error-field-tooltip{
+    cursor: pointer;
+
+    el-icon {
+        width: 14px;
+        height: 17px;
+    }
+
+    svg {
+        width: 14px;
+        height: 17px;
+    }
+
+}
+
+.add-menu-icon-wrapper {
+    cursor: pointer;
+
+    el-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    use {
+        fill: #606266 !important;
+    }
+}
+
+.add-menu-icon-wrapper:hover {
+    use {
+        fill: #2878E8 !important;
+    }
+}
+
+.click-group-row {
+    .fan-table-selection-border {
+        background-color: transparent !important;
+    }
+
+    .fan-table-selection-corner {
+        display: none !important;
+    }
+}
+
+// 新增按钮弹出菜单样式
+.custom-menu-popover {
+    cursor: pointer;
+    padding: 4px !important;
+    min-width: 120px !important;
+
+    .wtwo-popover__content {
+        padding: 4px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .add-menu-content {
+        .add-menu-item {
+            padding: 4px 6px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            border-radius: 4px !important;
+            position: relative !important;
+            width: 112px;
+            height: 28px;
+            font-weight: 400;
+            font-size: 14px;
+            color: #606266;
+            &:hover {
+                background: rgba(0,0,0,0.06);
+            }
+        }
+    }
+}
+
+.customSelect {
+
+    .wtwo-select__wrapper,
+    .wtwo-select__input {
+        cursor: default;
+    }
+}
+
+.custom-group-popover {
+    .wtwo-divider--horizontal {
+        margin: 8px 0px;
+        border-top: 1px solid #f4f4f4;
+    }
+}   
+
+.fan-table-footer-tr {
+    &:hover {
+        background-color: #f5f7fa !important;
+        
+        .fan-table-footer-td {
+            background-color: #f5f7fa !important;
+        }
+    }
+}
+
+.campus-multi-select-popover{
+    .wtwo-input__wrapper{
+        box-shadow: none;
+      background-color: #f5f7fa;
+
+    }
+}

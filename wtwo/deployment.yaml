@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podname
+  namespace: podnspace
+  labels:
+    app: podname
+spec:
+  selector:
+    matchLabels:
+      app: podname
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: podname
+      name: podname
+    spec:
+      containers:
+        - name: podname
+          image: csharbor.xiaogj.com:9443/xgj/podname:xgjversion
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP

@@ -1,0 +1,66 @@
+.wtwo-app-body{
+    .wtwo-popper{
+        position: fixed !important;
+    }
+    .text-left {
+        text-align: left;
+    }
+    
+    .text-right {
+        text-align: right;
+    }
+    
+    .text-center {
+        text-align: center;
+    }
+    
+    .ellipsis-single {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
+    .table-column-ellipsis {
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle ;
+    }
+    // 表格列两行省略，以后有需求可以扩展成多行
+    .table-multi-ellipsis {
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+    
+    .square-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 6px 0;
+        border-radius: 4px;
+        cursor: pointer;
+        .wtwo-icon{
+            fill:#606266;
+        }
+        &:hover{
+            background: rgba(0,0,0,0.06);
+            .wtwo-icon{
+                fill: #2878e8;
+                svg{
+                    color:#2878e8;
+                }
+            }
+        }
+        &.has-border {
+            border: 1px solid #DCDFE6;
+        }
+    }
+}
