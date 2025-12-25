@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP双因素认证登录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+
+        .otp-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .otp-group input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #1890ff;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        .btn-primary:disabled {
+            background: #d9d9d9;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            white-space: nowrap;
+            border: 1px solid #d9d9d9;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            color: #1890ff;
+            border-color: #1890ff;
+        }
+
+        .btn-secondary:disabled {
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #fafafa;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 2px;
+        }
+
+        .info-box h3 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-box ul {
+            color: #666;
+            font-size: 13px;
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .otp-display {
+            background: #fafafa;
+            border: 1px solid #d9d9d9;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .otp-display .otp-code {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .otp-display .otp-time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .countdown {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>用户登录</h1>
+            <p>基于OTP的双因素认证</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">账号</label>
+                <input type="text" id="username" name="username" placeholder="请输入账号" required>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <div class="otp-display" id="otpDisplay">
+                <div class="otp-code" id="otpCode">------</div>
+                <div class="otp-time">验证码有效期：<span class="countdown" id="countdown">30</span>秒</div>
+            </div>
+
+            <div class="form-group">
+                <label for="otp">验证码</label>
+                <div class="otp-group">
+                    <input type="text" id="otp" name="otp" placeholder="请输入6位验证码" maxlength="6" required>
+                    <button type="button" class="btn btn-secondary" id="getOtpBtn">获取验证码</button>
+                </div>
+                <div class="success-message" id="otpSuccess"></div>
+                <div class="error-message" id="otpError"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">登录</button>
+        </form>
+
+        <div class="info-box">
+            <h3>OTP生成规则</h3>
+            <ul>
+                <li>基于账号和密码生成TOTP（时间型一次性密码）</li>
+                <li>使用HMAC-SHA1算法结合当前时间戳</li>
+                <li>每30秒自动更新一次验证码</li>
+                <li>6位数字验证码</li>
+                <li>密钥由账号密码组合生成</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // TOTP生成器类
+        class TOTPGenerator {
+            constructor(secret) {
+                this.secret = secret;
+                this.timeStep = 30; // 30秒有效期
+                this.digits = 6; // 6位验证码
+            }
+
+            // 将字符串转换为密钥
+            static stringToSecret(str) {
+                // 简单的base32编码模拟
+                const base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                let secret = '';
+                for (let i = 0; i < str.length; i++) {
+                    secret += base32Chars[str.charCodeAt(i) % 32];
+                }
+                // 确保密钥长度足够
+                while (secret.length < 32) {
+                    secret += base32Chars[Math.floor(Math.random() * 32)];
+                }
+                return secret.substring(0, 32);
+            }
+
+            // Base32解码
+            base32Decode(base32) {
+                const base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                let bits = '';
+                
+                for (let i = 0; i < base32.length; i++) {
+                    const val = base32Chars.indexOf(base32[i].toUpperCase());
+                    if (val === -1) continue;
+                    bits += val.toString(2).padStart(5, '0');
+                }
+
+                const bytes = new Uint8Array(Math.floor(bits.length / 8));
+                for (let i = 0; i < bytes.length; i++) {
+                    bytes[i] = parseInt(bits.substr(i * 8, 8), 2);
+                }
+                
+                return bytes;
+            }
+
+            // HMAC-SHA1实现（简化版，实际应使用crypto库）
+            async hmacSha1(key, message) {
+                const encoder = new TextEncoder();
+                const keyData = typeof key === 'string' ? encoder.encode(key) : key;
+                const messageData = typeof message === 'string' ? encoder.encode(message) : message;
+                
+                const cryptoKey = await crypto.subtle.importKey(
+                    'raw',
+                    keyData,
+                    { name: 'HMAC', hash: 'SHA-1' },
+                    false,
+                    ['sign']
+                );
+                
+                const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+                return new Uint8Array(signature);
+            }
+
+            // 生成TOTP
+            async generate() {
+                const epoch = Math.floor(Date.now() / 1000);
+                let time = Math.floor(epoch / this.timeStep);
+                
+                // 将时间转换为8字节数组
+                const timeBytes = new Uint8Array(8);
+                for (let i = 7; i >= 0; i--) {
+                    timeBytes[i] = time & 0xff;
+                    time >>= 8;
+                }
+
+                // 解码密钥
+                const key = this.base32Decode(this.secret);
+                
+                // 生成HMAC
+                const hmac = await this.hmacSha1(key, timeBytes);
+                
+                // 动态截取
+                const offset = hmac[hmac.length - 1] & 0x0f;
+                const binary = 
+                    ((hmac[offset] & 0x7f) << 24) |
+                    ((hmac[offset + 1] & 0xff) << 16) |
+                    ((hmac[offset + 2] & 0xff) << 8) |
+                    (hmac[offset + 3] & 0xff);
+                
+                // 生成6位数字
+                const otp = binary % Math.pow(10, this.digits);
+                return otp.toString().padStart(this.digits, '0');
+            }
+
+            // 获取剩余时间
+            getRemainingTime() {
+                const epoch = Math.floor(Date.now() / 1000);
+                return this.timeStep - (epoch % this.timeStep);
+            }
+        }
+
+        // 页面逻辑
+        let totpGenerator = null;
+        let countdownInterval = null;
+        let currentOTP = null;
+
+        const form = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const otpInput = document.getElementById('otp');
+        const getOtpBtn = document.getElementById('getOtpBtn');
+        const otpDisplay = document.getElementById('otpDisplay');
+        const otpCode = document.getElementById('otpCode');
+        const countdown = document.getElementById('countdown');
+
+        // 获取验证码
+        getOtpBtn.addEventListener('click', async () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // 清除错误信息
+            document.getElementById('usernameError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('otpError').style.display = 'none';
+
+            if (!username) {
+                showError('usernameError', '请输入账号');
+                return;
+            }
+
+            if (!password) {
+                showError('passwordError', '请输入密码');
+                return;
+            }
+
+            // 基于账号和密码生成密钥
+            const secret = TOTPGenerator.stringToSecret(username + password);
+            totpGenerator = new TOTPGenerator(secret);
+
+            // 生成并显示验证码
+            await updateOTP();
+            
+            // 立即显示当前剩余时间
+            const initialRemaining = totpGenerator.getRemainingTime();
+            countdown.textContent = initialRemaining;
+            
+            otpDisplay.style.display = 'block';
+            
+            showSuccess('otpSuccess', '验证码已生成！');
+            setTimeout(() => {
+                document.getElementById('otpSuccess').style.display = 'none';
+            }, 3000);
+
+            // 禁用按钮30秒
+            disableButton(getOtpBtn, 30);
+
+            // 启动倒计时
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            let lastRemaining = initialRemaining;
+            countdownInterval = setInterval(async () => {
+                const remaining = totpGenerator.getRemainingTime();
+                countdown.textContent = remaining;
+                
+                // 当倒计时重新开始时（从1跳到30），更新验证码
+                if (remaining > lastRemaining) {
+                    await updateOTP();
+                }
+                lastRemaining = remaining;
+            }, 1000);
+        });
+
+        // 更新OTP显示
+        async function updateOTP() {
+            currentOTP = await totpGenerator.generate();
+            otpCode.textContent = currentOTP;
+        }
+
+        // 禁用按钮倒计时
+        function disableButton(button, seconds) {
+            button.disabled = true;
+            const originalText = button.textContent;
+            
+            const interval = setInterval(() => {
+                seconds--;
+                button.textContent = `${seconds}秒后重试`;
+                
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    button.disabled = false;
+                    button.textContent = originalText;
+                }
+            }, 1000);
+        }
+
+        // 表单提交
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const otp = otpInput.value.trim();
+
+            // 清除所有错误信息
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+            // 验证输入
+            let hasError = false;
+
+            if (!username) {
+                showError('usernameError', '请输入账号');
+                hasError = true;
+            }
+
+            if (!password) {
+                showError('passwordError', '请输入密码');
+                hasError = true;
+            }
+
+            if (!otp) {
+                showError('otpError', '请输入验证码');
+                hasError = true;
+            } else if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+                showError('otpError', '验证码必须为6位数字');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // 验证OTP
+            if (!currentOTP) {
+                showError('otpError', '请先获取验证码');
+                return;
+            }
+
+            if (otp !== currentOTP) {
+                showError('otpError', '验证码错误或已过期');
+                return;
+            }
+
+            // 模拟登录成功
+            alert(`登录成功！\n\n账号：${username}\n验证方式：OTP双因素认证`);
+            
+            // 清空表单
+            form.reset();
+            otpDisplay.style.display = 'none';
+            currentOTP = null;
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        });
+
+        // 显示错误信息
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        // 显示成功信息
+        function showSuccess(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        // 页面卸载时清理定时器
+        window.addEventListener('beforeunload', () => {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        });
+    </script>
+</body>
+</html>
