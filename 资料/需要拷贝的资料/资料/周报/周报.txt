@@ -1,0 +1,25 @@
+1. 6.26日
+	1. 上午办理入职手续
+	2. 下午学习完价值观
+	3. 到岗，准备电脑，熟悉系统
+	4. 开通工作相关账号权限
+2. 6.27日 
+	1. 学习云校系统业务视频，跟着操作使用系统
+	2. 搭建完开发环境
+	3. 开通工作相关账号权限
+3. 6.28日 
+	1. 使用云校系统，记录可优化的点，
+	2. 参与评估云校PC端优化方案
+	3. 修改/优化 PC端首页
+4. 6.29日
+	1. 学习云校业务需求
+	2. 修改布局样式【面包屑】
+	3. 系统主题颜色变化准备
+
+
+
+
+      // document.documentElement.style.setProperty('--primary', command);
+      // document.documentElement.style.setProperty('--el-color-primary', command,'important');
+      // document.documentElement.style.setProperty('--el-color-primary-light-3', command,'important');
+      // document.documentElement.style.setProperty('--el-text-color-regular', command,'important');
