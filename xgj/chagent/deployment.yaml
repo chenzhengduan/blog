@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${CI_PROJECT_NAME}
+  namespace: ${TARGET_NS}
+  labels:
+    app: ${CI_PROJECT_NAME}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ${CI_PROJECT_NAME}
+  template:
+    metadata:
+      labels:
+        app: ${CI_PROJECT_NAME}
+    spec:
+      hostNetwork: false
+      containers:
+        - name: ${CI_PROJECT_NAME}
+          image: ${IMAGE_NAME}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: ${SERVER_PORT}
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "50Mi"
+            limits:
+              cpu: "1"
+              memory: "2048Mi"
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: '-Xmx512m -Xms512m'
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: nacosconfig
+                  key: nacos.env
+            - name: NACOS_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: nacosconfig
+                  key: nacos.namespace
+            - name: NACOS_SERVER_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: nacosconfig
+                  key: nacos.host
+            - name: NACOS_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: nacosconfig
+                  key: nacos.username
+            - name: NACOS_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: nacosconfig
+                  key: nacos.password
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 10"]

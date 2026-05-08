@@ -1,0 +1,89 @@
+variables:
+  SERVER_PORT: "9510"
+  IMAGE_REGISTRY: "xiaogj-registry-vpc.cn-hangzhou.cr.aliyuncs.com"
+  IMAGE_NAMESPACE: "xgj"
+  IMAGE_NAME: "$IMAGE_REGISTRY/$IMAGE_NAMESPACE/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA"
+  NAS_M2_BASE: "/root/.m2"
+
+stages:
+  - build_and_package
+  - deploy_dev
+  - deploy_test
+  - deploy_sit
+
+.build_template: &build_logic
+  stage: build_and_package
+  tags:
+    - ack
+  image: xiaogj-registry-vpc.cn-hangzhou.cr.aliyuncs.com/base/mavendocker:3.8.6-jdk-17-kaniko
+  script:
+    - echo "--- [1/3] 动态初始化 NAS 环境隔离路径 ---"
+    - export MAVEN_REPO_LOCAL="${NAS_M2_BASE}/repository/${TARGET_NS}"
+    - export MAVEN_CLI_OPTS="-s /root/.m2/settings.xml --batch-mode -DskipTests -Dmaven.repo.local=$MAVEN_REPO_LOCAL"
+    - mkdir -p $MAVEN_REPO_LOCAL
+    - echo "--- [2/3] 执行 Maven 编译 ---"
+    - mvn $MAVEN_CLI_OPTS clean install -U -T 1C
+    - echo "--- [3/3] 定位 JAR 并使用 Kaniko 构建镜像 ---"
+    - JAR_PATH=$(find . -name "*.jar" | grep "target/" | grep -v "sources" | xargs du -b | sort -nr | head -n 1 | cut -f2)
+    - echo "Detected JAR:$JAR_PATH"
+    - cp $JAR_PATH ./app.jar
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$IMAGE_REGISTRY\":{\"username\":\"$REGISTRY_USER\",\"password\":\"$REGISTRY_PWD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $IMAGE_NAME --cache=true --single-snapshot --ignore-path=/var/mail --ignore-path=/var/spool/mail --build-arg JAR_FILE=app.jar
+
+.deploy_template: &deploy_logic
+  tags:
+    - ack
+  image: xiaogj-registry-vpc.cn-hangzhou.cr.aliyuncs.com/base/k8sctl:v1
+  script:
+    - echo "--- 正在部署至环境 $TARGET_NS ---"
+    - sed -i "s|\${IMAGE_NAME}|$IMAGE_NAME|g" deployment.yaml
+    - sed -i "s|\${CI_PROJECT_NAME}|$CI_PROJECT_NAME|g" deployment.yaml
+    - sed -i "s|\${TARGET_NS}|$TARGET_NS|g" deployment.yaml
+    - sed -i "s|\${SERVER_PORT}|$SERVER_PORT|g" deployment.yaml
+    - mkdir -p ~/.kube && cp "$KUBE_CONFIG" ~/.kube/config
+    - kubectl apply -f deployment.yaml
+    - kubectl rollout status deployment/$CI_PROJECT_NAME -n $TARGET_NS
+
+build_dev:
+  <<: *build_logic
+  variables:
+    TARGET_NS: "x3dev"
+  only:
+    - dev
+    - master
+
+deploy_dev:
+  <<: *deploy_logic
+  stage: deploy_dev
+  variables:
+    TARGET_NS: "x3dev"
+  when: manual
+  only:
+    - dev
+    - master
+
+deploy_test:
+  <<: *deploy_logic
+  stage: deploy_test
+  variables:
+    TARGET_NS: "x3test"
+  when: manual
+  only:
+    - dev
+    - master
+
+build_sit:
+  <<: *build_logic
+  variables:
+    TARGET_NS: "x3sit"
+  only:
+    - master_not
+
+deploy_sit:
+  <<: *deploy_logic
+  stage: deploy_sit
+  variables:
+    TARGET_NS: "x3sit"
+  only:
+    - master_not

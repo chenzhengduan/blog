@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"find /root/workspace/project/xzt-ai-doc/xzt-xzx/sub-3 -type f \\\\( -name \\\"*.js\\\" -o -name \\\"*.ts\\\" \\\\) | xargs grep -l \\\"fetch\\\\|XMLHttpRequest\\\\|EventSource\\\" 2>/dev/null\"}",
+  "error": "Exit code 123",
+  "timestamp": "2026-05-01T11:16:56.092Z",
+  "retry_count": 1
+}

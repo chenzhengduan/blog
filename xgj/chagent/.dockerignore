@@ -1,0 +1,13 @@
+# Git 与 IDE 目录不应进入 Docker 构建上下文。
+.git
+.gitignore
+.idea
+*.iml
+
+# Maven 构建产物与本地缓存不需要进入镜像构建上下文。
+target
+.mvn
+.m2
+
+# 仅保留后端源码与构建描述，避免无关文件放大上下文。
+Dockerfile

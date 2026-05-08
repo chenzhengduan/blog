@@ -1,0 +1,128 @@
+spring:
+  application:
+    name: jegent
+  datasource:
+    url: jdbc:mysql://172.18.6.29:3306/jegent?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    username: root
+    password: mysql11
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+
+  redis:
+    # 当前项目沿用既有 spring.redis.* 配置格式，不强依赖 spring.data.redis.*。
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 1000
+
+
+xzagent:
+  security:
+    jwt-secret: xzagent-v1-jwt-secret-please-change-for-production-2026
+    jwt-expire-minutes: 480
+    header-encryption-password: xzagent-header-encryption-password
+    header-encryption-salt: 5c0744940b5c369b
+    api-key-prefix: sk-
+    api-key-lookup-prefix-length: 15
+    cors:
+      enabled: true
+      allowed-origin-patterns:
+        - "*"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      allowed-headers:
+        - "*"
+      exposed-headers: []
+      allow-credentials: false
+      max-age-seconds: 3600
+  remote-tool:
+    logging:
+      log-raw-payloads: true
+      max-payload-length: 4000
+  model:
+    provider: anthropic
+  anthropic:
+    api-key: sk-cp-6546555-5654-76767-6546
+    model-name: MiniMax-M2.7-highspeed
+    stream-enabled: true
+    base-url: https://api.minimaxi.com/anthropic
+  openai:
+    api-key:
+    model-name:
+    stream-enabled: true
+    base-url:
+  auto-context:
+    large-payload-threshold: 2048
+    max-token: 100000
+    token-ratio: 0.75
+    offload-single-preview: 120
+    msg-threshold: 30
+    last-keep: 16
+    min-consecutive-tool-messages: 3
+    current-round-compression-ratio: 0.35
+    min-compression-token-threshold: 1200
+  agent:
+    name: xzagent-v1
+    system-prompt: |
+      你是 xzagent 的单 Agent 运行时。
+      优先使用 Skill 元数据判断是否需要加载 Skill。
+      如果未加载相关 Skill，不要臆造工具能力。
+      只使用当前会话中可见的 Tool 和 MCP Tool。
+    max-iterations: 50
+  a2a:
+    enabled: false
+    host: 127.0.0.1
+    port: ${server.port:8080}
+    card-name: "Xzagent Default Agent"
+    card-description: "Xzagent 默认智能体的 A2A 暴露服务"
+    version: 1.0.0
+  dashscope:
+    # DashScope API Key，用于万相系列图像生成工具（wan2.7-image-pro 等）
+    # 配置后 image_generate 工具自动注册，可通过 Skill 绑定分配给 Agent
+    api-key:
+    # 图像生成工具默认模型；工具调用方无需显式传 model
+    image-model: wan2.7-image
+  tools:
+    html-screenshot:
+      enabled: true
+      # 截图上传接口地址，POST 原始 PNG 文件流，成功后返回 JSON {"url": "..."} 或纯文本 URL
+      upload-url: https://xzt-test.xiaogj.com/api/common/aiagent/image/upload
+      # 上传凭证 ID（可选），对应 user_third_party_credential 表的 credential_id
+      # 配置后，工具会附加该用户凭证中的 HTTP 请求头（如 Authorization）进行鉴权
+      upload-credential-id: mp-plugin-default
+    image-generate:
+      # 图像生成供应商，可选值：dashscope（阿里云万相）、openai（OpenAI DALL-E）
+      # 对应环境变量 XZAGENT_IMAGE_GENERATE_PROVIDER
+      provider: dashscope
+      # 图片上传接口地址，POST 原始图片文件流，成功后返回 JSON {"url": "..."} 或纯文本 URL
+      upload-url: https://xzt-test.xiaogj.com/api/common/aiagent/image/upload
+      # 上传凭证 ID（可选），对应 user_third_party_credential 表的 credential_id
+      # 配置后，工具会附加该用户凭证中的 HTTP 请求头（如 Authorization）进行鉴权
+      upload-credential-id: mp-plugin-default
+
+# ===== 日志配置（配置到 Nacos 的 xzagent.yml） =====
+log:
+  console:
+    enable: true   # 是否输出控制台日志
+  level: INFO      # 日志级别
+  aliyunlog:
+    enable: true   # 是否上传阿里云 SLS
+
+# 阿里云 SLS 日志配置（配置到 Nacos 的 xzagent.yml）
+aliyun:
+  log:
+    endpoint: cn-hangzhou-intranet.log.aliyuncs.com
+    accessKeyId: your-access-key-id
+    accessKeySecret: your-access-key-secret
+    project: your-sls-project
+    logStore: your-log-store
+    topic: xzagent
+    source: ""     # 留空则自动取本机 IP

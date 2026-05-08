@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "provider": {
+    "name": "project-research-provider",
+    "displayName": "项目研究示例工具组",
+    "description": "用于演示 xzagent 远程工具元数据标准的最小示例。"
+  },
+  "defaults": {
+    "baseUrl": "https://api.example.com",
+    "timeoutSeconds": 15
+  },
+  "tools": [
+    {
+      "name": "search_project_documents",
+      "description": "按关键词搜索项目文档。",
+      "method": "GET",
+      "path": "/docs/search",
+      "enabled": true,
+      "riskLevel": "READ",
+      "skillIds": [
+        "project_research"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "搜索关键词。"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "request": {
+        "queryParams": {
+          "q": "{{query}}"
+        }
+      },
+      "response": {
+        "contentType": "application/json",
+        "mapping": {
+          "type": "json_path",
+          "path": "$.items"
+        }
+      }
+    }
+  ]
+}

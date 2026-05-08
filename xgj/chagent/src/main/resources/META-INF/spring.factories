@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+xiaogj.xzagent.config.NacosConfigEnvironmentPostProcessor
