@@ -1,0 +1,367 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1777385652805,
+  "projectRoot": "/root/workspace/project/jegent-workspace/jegent",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Java",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pom.xml"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "maven",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1777385652799,
+      "keyFiles": []
+    },
+    "target": {
+      "path": "target",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1777385652800,
+      "keyFiles": [
+        "jegent-0.0.1-SNAPSHOT.jar",
+        "jegent-0.0.1-SNAPSHOT.jar.original"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/main/java",
+      "accessCount": 11,
+      "lastAccessed": 1777796058911,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/jeweis/jegent/tool/ImageGenerateTool.java",
+      "accessCount": 10,
+      "lastAccessed": 1777388226509,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 10,
+      "lastAccessed": 1777795365447,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool/ImageGenerateTool.java",
+      "accessCount": 9,
+      "lastAccessed": 1777796048564,
+      "type": "file"
+    },
+    {
+      "path": "Dockerfile",
+      "accessCount": 7,
+      "lastAccessed": 1777459757323,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/AgentFactory.java",
+      "accessCount": 6,
+      "lastAccessed": 1777796058870,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/ChatApplicationService.java",
+      "accessCount": 5,
+      "lastAccessed": 1777637908605,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/config/ToolConfig.java",
+      "accessCount": 5,
+      "lastAccessed": 1777796058855,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/jeweis/jegent/tool/HtmlScreenshotTool.java",
+      "accessCount": 4,
+      "lastAccessed": 1777388226449,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/application.yml",
+      "accessCount": 4,
+      "lastAccessed": 1777637897494,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/resources/schema.sql",
+      "accessCount": 4,
+      "lastAccessed": 1777795964920,
+      "type": "file"
+    },
+    {
+      "path": "deployment.yaml",
+      "accessCount": 3,
+      "lastAccessed": 1777455465448,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool/provider/ImageGenerateProvider.java",
+      "accessCount": 3,
+      "lastAccessed": 1777795965109,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool/provider/DashScopeImageGenerateProvider.java",
+      "accessCount": 3,
+      "lastAccessed": 1777795965311,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool/provider/OpenAiImageGenerateProvider.java",
+      "accessCount": 3,
+      "lastAccessed": 1777795965503,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 2,
+      "lastAccessed": 1777456788686,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/web/AguiChatController.java",
+      "accessCount": 2,
+      "lastAccessed": 1777622601551,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/web",
+      "accessCount": 2,
+      "lastAccessed": 1777635919910,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/repository/jdbc/JdbcSessionHistoryRepository.java",
+      "accessCount": 2,
+      "lastAccessed": 1777636428147,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/web/SessionController.java",
+      "accessCount": 2,
+      "lastAccessed": 1777636437366,
+      "type": "file"
+    },
+    {
+      "path": "pom.xml",
+      "accessCount": 1,
+      "lastAccessed": 1777385892073,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/jeweis/jegent/config/ToolConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1777386112859,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/jeweis/jegent/config/XzagentDashScopeProperties.java",
+      "accessCount": 1,
+      "lastAccessed": 1777386184326,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/jeweis/jegent/tool",
+      "accessCount": 1,
+      "lastAccessed": 1777386260785,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/jeweis/jegent/web",
+      "accessCount": 1,
+      "lastAccessed": 1777386260884,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/config/A2aApiKeyAuthenticationManager.java",
+      "accessCount": 1,
+      "lastAccessed": 1777451782079,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/config/XzagentDashScopeProperties.java",
+      "accessCount": 1,
+      "lastAccessed": 1777451782135,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool/HtmlScreenshotTool.java",
+      "accessCount": 1,
+      "lastAccessed": 1777456795134,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/web/AguiSessionController.java",
+      "accessCount": 1,
+      "lastAccessed": 1777635928975,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent",
+      "accessCount": 1,
+      "lastAccessed": 1777636028655,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/AgentRuntime.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637860369,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/InMemoryRunStreamRegistry.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637860399,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/config/SecurityConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637860419,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/SessionActiveSkillService.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637871263,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/SkillBindingService.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637871313,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/RuntimeSnapshotRegistry.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637871331,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/RunStreamRegistry.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637871416,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/RemoteToolFactory.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637891347,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/infrastructure/mcp/McpClientRegistry.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637891411,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/repository/AgentRunRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637897418,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/repository/jdbc/JdbcAgentRunRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637897451,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/config/NacosRegistrationConfig.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637897481,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/AgentRunFinalizationService.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637908594,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/infrastructure/session/MysqlAgentSession.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637916684,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/hook/A2uiSurfaceTrackingHook.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637972231,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/service/RemoteToolMetaService.java",
+      "accessCount": 1,
+      "lastAccessed": 1777637972248,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool",
+      "accessCount": 1,
+      "lastAccessed": 1777795373106,
+      "type": "directory"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/tool/UserToolContext.java",
+      "accessCount": 1,
+      "lastAccessed": 1777795637755,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/model/TokenUsage.java",
+      "accessCount": 1,
+      "lastAccessed": 1777795850040,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/xiaogj/xzagent/repository/TokenUsageRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1777795850053,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
