@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "provider": {
+    "name": "cx-question-capture",
+    "displayName": "题目录入",
+    "description": "使用图片、PDF 或 Word 文件 URL 创建录题任务，并查询或取消任务。"
+  },
+  "defaults": {
+    "baseUrl": "__CX_API_BASE_URL__",
+    "timeoutSeconds": 60,
+    "authFlow": {
+      "type": "oauth2",
+      "authorizationUrl": "__CX_WEB_BASE_URL__/agent/authorize",
+      "tokenUrl": "__CX_API_BASE_URL__/cx/oauth/token",
+      "clientId": "__OAUTH_CLIENT_ID__"
+    }
+  },
+  "tools": [
+    {
+      "name": "create_question_capture",
+      "displayName": "创建录题任务",
+      "description": "使用按顺序排列的图片、PDF 或 Word HTTPS URL 创建后台录题任务。立即返回任务 ID 和题目复核链接；识别、答案生成和草稿保存继续在后台执行。",
+      "method": "POST",
+      "path": "/cx/aiagent/question-capture-tasks/create",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "inputSchema": {
+        "type": "object",
+        "required": ["sources"],
+        "properties": {
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 20,
+            "description": "按处理顺序排列的来源；最多一份文档，文档展开页与图片合计最多 20 页",
+            "items": {
+              "type": "object",
+              "required": ["kind", "position", "type", "url", "name", "mimeType"],
+              "properties": {
+                "kind": {"type": "string", "enum": ["image", "document"], "description": "图片或文档"},
+                "position": {"type": "integer", "minimum": 1, "description": "从 1 开始连续的处理顺序"},
+                "type": {"type": "string", "enum": ["url"], "description": "固定为 url"},
+                "url": {"type": "string", "description": "可由后端访问的 HTTPS 文件 URL"},
+                "name": {"type": "string", "maxLength": 255, "description": "原始文件名"},
+                "mimeType": {"type": "string", "maxLength": 64, "description": "文件 MIME 类型"},
+                "clientImageId": {"type": "string", "maxLength": 64, "description": "图片来源标识，可选"}
+              }
+            }
+          },
+          "subject": {"type": "string", "maxLength": 32, "description": "学科提示，可选"},
+          "grade": {"type": "integer", "minimum": 1, "maximum": 9, "description": "年级提示，可选"},
+          "extraRequirement": {"type": "string", "maxLength": 500, "description": "识别补充要求，可选"}
+        }
+      },
+      "request": {
+        "bodyTemplate": {
+          "externalUserId": "0",
+          "externalUserName": "agent",
+          "sources": "{{sources}}",
+          "subject": "{{subject}}",
+          "grade": "{{grade}}",
+          "extraRequirement": "{{extraRequirement}}",
+          "generateAnswer": true
+        }
+      },
+      "response": {"contentType": "application/json", "mapping": {"type": "json_path", "path": "$.data"}}
+    },
+    {
+      "name": "get_question_capture",
+      "displayName": "查询录题结果",
+      "description": "查询录题任务的当前状态、识别题量、低置信度和待复核数量、AI 答案完成情况及复核链接，不返回完整题目正文。",
+      "method": "GET",
+      "path": "/cx/aiagent/question-capture-tasks/{{taskId}}",
+      "enabled": true,
+      "riskLevel": "READ",
+      "inputSchema": {
+        "type": "object",
+        "required": ["taskId"],
+        "properties": {"taskId": {"type": "string", "description": "录题任务 ID"}}
+      },
+      "request": {"pathParams": {"taskId": "{{taskId}}"}},
+      "response": {"contentType": "application/json", "mapping": {"type": "json_path", "path": "$.data"}}
+    },
+    {
+      "name": "cancel_question_capture",
+      "displayName": "取消录题任务",
+      "description": "取消当前应用中仍处于待处理或处理中的录题任务。仅在用户明确要求停止录题时使用，终态任务不能取消。",
+      "method": "DELETE",
+      "path": "/cx/aiagent/question-capture-tasks/{{taskId}}",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "inputSchema": {
+        "type": "object",
+        "required": ["taskId"],
+        "properties": {"taskId": {"type": "string", "description": "要取消的录题任务 ID"}}
+      },
+      "request": {"pathParams": {"taskId": "{{taskId}}"}},
+      "response": {"contentType": "application/json", "mapping": {"type": "json_path", "path": "$.data"}}
+    }
+  ]
+}

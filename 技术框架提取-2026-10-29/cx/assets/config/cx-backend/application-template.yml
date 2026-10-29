@@ -1,0 +1,450 @@
+# =====================================================================
+# cx-backend Nacos 配置模板。
+# 将本文件内容配置到 Nacos：
+#   Data ID : cx-backend.yml
+#   Group   : DEFAULT_GROUP（与 cx-gateway 同 namespace/group）
+# =====================================================================
+#
+#
+# 注意：Nacos 中本配置会覆盖本地 application.yml 的同名字段（Nacos 优先级更高）。
+
+# 数据源：PostgreSQL（JDBC）。MySQL 已迁移下线（specs/050）。
+spring:
+  datasource:
+    # PostgreSQL 连接地址；生产由环境变量/Nacos 注入，此处仅占位。
+    # reWriteBatchedInserts=true 保留批量 INSERT 的 rewrite 优化（对应 MySQL 的 rewriteBatchedStatements）。
+    # 时区在 RDS PostgreSQL 实例参数设置 timezone=Asia/Shanghai（或连接串追加 options=-c timezone%3DAsia/Shanghai），
+    # 以保证 naive timestamp 的读写时区与应用 LocalDateTime 一致（specs/050）。
+    url: ${CX_DB_URL:jdbc:postgresql://127.0.0.1:5432/cx?reWriteBatchedInserts=true}
+    username: ${CX_DB_USERNAME:root}
+    password: ${CX_DB_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      # 脚手架阶段不自动初始化 schema（不建业务表）
+      mode: never
+  data:
+    redis:
+      # Spring Boot 3 标准配置键 spring.data.redis.*（由 Spring Boot 自动装配 Lettuce 连接工厂）
+      database: 0
+      host: ${CX_REDIS_HOST:127.0.0.1}
+      port: ${CX_REDIS_PORT:6379}
+      password: ${CX_REDIS_PASSWORD:}
+      timeout: 1000
+
+# ===== 知识点导入与语义索引配置（修改后须同步 Nacos cx-backend.yml） =====
+knowledge:
+  importing:
+    # 全集群同时进入数据库事务的体系数量；等待槽位期间不占 JDBC 连接。
+    max-active-trees: ${CX_KNOWLEDGE_IMPORTING_MAX_ACTIVE_TREES:2}
+    # 容量持续繁忙时的最长等待时间，超时后返回可重试的 429。
+    wait-timeout: ${CX_KNOWLEDGE_IMPORTING_WAIT_TIMEOUT:120s}
+  indexing:
+    # 单棵体系内部的 Embedding 最大并发；不同体系还受 max-active-trees 全局槽位限制。
+    concurrency: ${CX_KNOWLEDGE_INDEXING_CONCURRENCY:5}
+    # 全集群同时索引的体系数量，通过 Redis 槽位锁控制，不随后端副本数放大。
+    max-active-trees: ${CX_KNOWLEDGE_INDEXING_MAX_ACTIVE_TREES:2}
+    # 单批生成并写入的向量数量，避免整棵树向量长期驻留 JVM 堆。
+    batch-size: ${CX_KNOWLEDGE_INDEXING_BATCH_SIZE:100}
+    # 定期扫描数据库差集并补跑，覆盖进程重启或本地触发信号丢失。
+    reconcile-interval: ${CX_KNOWLEDGE_INDEXING_RECONCILE_INTERVAL:300s}
+
+# ===== 平台管理身份配置（修改后须同步 Nacos cx-backend.yml） =====
+platform:
+  # 空清单表示不放行任何管理方；生产环境必须显式配置。
+  admin-app-ids: ${CX_PLATFORM_ADMIN_APP_IDS:}
+  # 【临时机制】空清单关闭私有体系到公共体系的镜像；修改后须同步 Nacos cx-backend.yml。
+  # 平台公共体系转由专人稳定维护后，连同镜像服务和 Controller 调用一起删除。
+  knowledge-mirror-source-app-ids: ${CX_PLATFORM_KNOWLEDGE_MIRROR_SOURCE_APP_IDS:}
+
+# ===== 日志配置（配置到 Nacos 的 cx-backend.yml） =====
+log:
+  console:
+    enable: true      # 是否输出控制台日志
+  level: INFO         # 日志级别
+  aliyunlog:
+    enable: true      # 是否上传阿里云 SLS
+
+# 阿里云 SLS 日志配置（配置到 Nacos 的 cx-backend.yml）
+# 凭证由 Nacos 注入，不提交进源码（宪法原则 IV）；source 留空则自动取本机 IP
+# （由启动类预解析的 app.local.ip 提供）
+aliyun:
+  log:
+    endpoint: ${CX_SLS_ENDPOINT:cn-hangzhou-intranet.log.aliyuncs.com}
+    accessKeyId: ${CX_SLS_ACCESS_KEY_ID:}
+    accessKeySecret: ${CX_SLS_ACCESS_KEY_SECRET:}
+    project: ${CX_SLS_PROJECT:your-sls-project}
+    logStore: ${CX_SLS_LOGSTORE:your-log-store}
+    topic: cx-backend
+    source: ""        # 留空则自动取本机 IP
+
+# ===== AI 出题 LLM 连接配置 =====
+# 至少定义一个端点，每个端点必须包含 protocol / api-key / model
+# 协议支持：openai | anthropic | dashscope
+# 凭证（api-key）必须通过环境变量或 Nacos 注入，不得硬编码
+cx:
+  # 公共可恢复异步任务（修改后须同步 Nacos cx-backend.yml）。
+  async-task:
+    # Redis Stream Key：跨实例共享的任务分发流，所有 cx-backend 实例必须一致。
+    stream-key: ${CX_ASYNC_TASK_STREAM_KEY:cx:async-task:dispatch:backend}
+    # Consumer Group 名：多实例共用同一组实现负载分摊，单实例内 consumer 名自动生成唯一。
+    consumer-group: ${CX_ASYNC_TASK_CONSUMER_GROUP:cx-backend-workers}
+    # Worker 阻塞读取 Stream 的最长等待时间（XREADGROUP BLOCK），到时间无消息则进入下一轮。
+    poll-timeout: ${CX_ASYNC_TASK_POLL_TIMEOUT:2s}
+    # 单实例并行执行的步骤数上限；过大会拖垮模型/数据库，按实例规格调整。
+    worker-concurrency: ${CX_ASYNC_TASK_WORKER_CONCURRENCY:4}
+    # Worker 有界等待队列容量，禁止无界积压；满时新消息留在 PEL 等待接管。
+    worker-queue-capacity: ${CX_ASYNC_TASK_WORKER_QUEUE_CAPACITY:100}
+    # PEL 租约心跳间隔：活动消息按此频率自我刷新 idle，必须显著小于 claim-idle-time。
+    heartbeat-interval: ${CX_ASYNC_TASK_HEARTBEAT_INTERVAL:15s}
+    # 失联接管阈值：消息连续未刷新心跳超过该时长，才允许其他实例 XCLAIM 接管。
+    claim-idle-time: ${CX_ASYNC_TASK_CLAIM_IDLE_TIME:90s}
+    # Redis 5 XPENDING 分页扫描间隔（恢复协调器巡检失联消息）。
+    pending-scan-interval: ${CX_ASYNC_TASK_PENDING_SCAN_INTERVAL:30s}
+    # 每轮 XPENDING 分页最多读取的消息数。
+    pending-scan-batch-size: ${CX_ASYNC_TASK_PENDING_SCAN_BATCH_SIZE:100}
+    # Outbox 兜底扫描间隔：事务提交事件的即时唤醒丢失时，按此间隔补发到期的待发布分发。
+    outbox-fallback-interval: ${CX_ASYNC_TASK_OUTBOX_FALLBACK_INTERVAL:5s}
+    # 每个发布事务最多处理的 Outbox 条数（FOR UPDATE SKIP LOCKED 多实例分摊）。
+    outbox-batch-size: ${CX_ASYNC_TASK_OUTBOX_BATCH_SIZE:100}
+    # 数据库与 Redis 一致性协调间隔：检查未终态步骤是否缺少对应 Redis 消息，不得超过 5 分钟。
+    reconcile-interval: ${CX_ASYNC_TASK_RECONCILE_INTERVAL:120s}
+    # 协调安全年龄：只有创建超过该时长的未终态步骤才参与消息缺失修复，避免误伤刚分发的步骤。
+    reconcile-safe-age: ${CX_ASYNC_TASK_RECONCILE_SAFE_AGE:120s}
+    # 每轮数据库协调最多处理的步骤数。
+    reconcile-batch-size: ${CX_ASYNC_TASK_RECONCILE_BATCH_SIZE:200}
+
+  # xzagent 对话平台调用配置（042-agent-api-key / 046-ai-agent-xzagent）—— 改后须同步 Nacos cx-backend.yml
+  # 鉴权走 xzagent 标准公开接口（OAS），外网域名直连（不经 Nacos 服务发现）：
+  # app-token 签 Tenant JWT（tenantKey 直接用 CX 当前请求的 appId，不单独配置）→ user-login-bind 签 User JWT + 写 ak_ 凭证
+  # appSecret 为密钥，MUST 由 Nacos 注入，不入源码；其余标识/地址类字段按环境显式配置，不提供可用默认值
+  xzagent:
+    base-url: ${CX_XZAGENT_BASE_URL:}              # 外网基地址，如 https://service.example.com/api
+    app-token-path: ${CX_XZAGENT_APP_TOKEN_PATH:/xzagent/api/auth/app-token}
+    user-login-bind-path: ${CX_XZAGENT_USER_LOGIN_BIND_PATH:/xzagent/api/tenant/auth/user-login-bind}
+    app-id: ${CX_XZAGENT_APP_ID:}
+    app-secret: ${CX_XZAGENT_APP_SECRET:}
+    agent-id: ${CX_XZAGENT_AGENT_ID:cx}
+    timeout: 5s
+  # 内部服务调用基础配置（仅用于 Nacos 服务发现的内网调用，如 cx-py）。
+  internal-services:
+    default-connect-timeout: ${CX_INTERNAL_SERVICE_CONNECT_TIMEOUT:3s}
+    default-response-timeout: ${CX_INTERNAL_SERVICE_RESPONSE_TIMEOUT:65s}
+    default-retry-times: ${CX_INTERNAL_SERVICE_RETRY_TIMES:1}
+    services:
+      # cx-py 是通用 Python 内网能力服务；题内图检测只是当前首个能力。
+      cx-py:
+        service-name: cx-py
+        direct-base-url: ${CX_PY_DIRECT_BASE_URL:}
+        scheme: ${CX_PY_SCHEME:http}
+        connect-timeout: ${CX_PY_CONNECT_TIMEOUT:3s}
+        response-timeout: ${CX_PY_RESPONSE_TIMEOUT:65s}
+        retry-times: ${CX_PY_RETRY_TIMES:1}
+  # 题内图检测能力客户端：业务代码注入 DiagramDetectionClient，底层按 service-key 解析 cx-py。
+  diagram-detection:
+    enabled: ${CX_DIAGRAM_DETECTION_ENABLED:true}
+    service-key: ${CX_DIAGRAM_DETECTION_SERVICE_KEY:cx-py}
+    path: ${CX_DIAGRAM_DETECTION_PATH:/py/private/diagram-detect}
+  # 图片增强能力客户端：业务代码注入 ImageEnhancementClient，底层按 service-key 解析 cx-py。
+  image-enhancement:
+    enabled: ${CX_IMAGE_ENHANCEMENT_ENABLED:true}
+    service-key: ${CX_IMAGE_ENHANCEMENT_SERVICE_KEY:cx-py}
+    path: ${CX_IMAGE_ENHANCEMENT_PATH:/py/private/image-enhance}
+
+  # xzagent 出卷适配（041-aiagent-exam-generate）—— 改后须同步 Nacos cx-backend.yml
+  # web-base-url：CX 前端站点根（无尾斜杠），用于拼详情链接；必须按环境显式配置，禁止写死/默认域名
+  aiagent:
+    web-base-url: ${CX_AIAGENT_WEB_BASE_URL:}
+
+  # 可信来源 URL（040-app-trusted-hosts）—— 改后须同步 Nacos cx-backend.yml
+  security:
+    trusted-source-urls:
+      https-only: true
+      cache-ttl-seconds: 600
+      # 平台默认可信 host；生产请配置真实 OSS/CDN 域名
+      platform-default-hosts:
+        # - type: SUFFIX
+        #   pattern: ".your-platform-oss.aliyuncs.com"
+        # - type: EXACT
+        #   pattern: "static.cx-platform.example.com"
+
+  # 录题性能优化参数（029-question-capture-perf）
+  capture:
+    # 单个父题或子题的知识点 Embedding + Top30 + Agent 完整匹配超时。
+    # 修改后须同步 Nacos cx-backend.yml。
+    knowledge-match-timeout: ${CX_CAPTURE_KNOWLEDGE_MATCH_TIMEOUT:30s}
+    perf:
+      recognition-batch-concurrency: ${CX_CAPTURE_RECOGNITION_BATCH_CONCURRENCY:2}
+      recognition-batch-max-attempts: ${CX_CAPTURE_RECOGNITION_BATCH_MAX_ATTEMPTS:2}
+      recognition-batch-attempt-timeout: ${CX_CAPTURE_RECOGNITION_BATCH_ATTEMPT_TIMEOUT:600s}
+      diagram-locate-concurrency: ${CX_CAPTURE_DIAGRAM_LOCATE_CONCURRENCY:3}
+      # AI 答案生成统一并发上限。
+      # 修改后须同步 Nacos cx-backend.yml。
+      ai-answer-concurrency: ${CX_CAPTURE_AI_ANSWER_CONCURRENCY:3}
+      ai-answer-attempt-timeout: ${CX_CAPTURE_AI_ANSWER_ATTEMPT_TIMEOUT:300s}
+      # 单任务与单实例知识点匹配并发上限；排队完成后才开始计算 knowledge-match-timeout。
+      # 修改后须同步 Nacos cx-backend.yml。
+      knowledge-match-concurrency: ${CX_CAPTURE_KNOWLEDGE_MATCH_CONCURRENCY:3}
+      knowledge-match-global-concurrency: ${CX_CAPTURE_KNOWLEDGE_MATCH_GLOBAL_CONCURRENCY:12}
+
+  # 产题链路知识点受控识别参数（055-unified-knowledge-match）—— 改后须同步 Nacos cx-backend.yml
+  # 适用于单题/整卷生成、单题/整卷变式、题目/子题重生成；识别失败降级为空，不阻断产题。
+  generation:
+    knowledge-match:
+      # 单个产题任务内同时执行的父题或子题识别数量上限。
+      concurrency: ${CX_GENERATION_KNOWLEDGE_MATCH_CONCURRENCY:3}
+      # 当前服务实例的产题识别总并发上限，防止多个整卷任务叠加压垮模型端点。
+      global-concurrency: ${CX_GENERATION_KNOWLEDGE_MATCH_GLOBAL_CONCURRENCY:10}
+      # 单题识别（Embedding + Top30 召回 + 受控选择）的硬超时；等待全局许可不计入。
+      timeout: ${CX_GENERATION_KNOWLEDGE_MATCH_TIMEOUT:30s}
+  agent:
+
+    # ─── 通用 Embedding 模型（修改后须同步 Nacos cx-backend.yml） ──────
+    embedding:
+      base-url: ${CX_AGENT_EMBEDDING_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+      api-key: ${CX_AGENT_EMBEDDING_API_KEY:}
+      model: ${CX_AGENT_EMBEDDING_MODEL:text-embedding-v4}
+      dimensions: ${CX_AGENT_EMBEDDING_DIMENSIONS:1024}
+
+    # ─── Studio 可观测性集成（默认关闭） ───────────────────────────────
+    # 开启方式：CX_AGENT_STUDIO_ENABLED=true
+    studio:
+      # 是否启用 Studio 集成；开启后自动推送 Agent 链路数据到 Studio UI
+      enabled: ${CX_AGENT_STUDIO_ENABLED:false}
+      # Studio 服务端地址（已启动的 Studio Server，如 http://localhost:3000）
+      url: ${CX_AGENT_STUDIO_URL:http://localhost:3000}
+      # Studio 项目名称，用于在 UI 中分组多个运行
+      project: CX出卷平台
+      # run 名称模板，{taskName} 会被替换为 chuti-question 等业务任务名
+      run-name: cx-backend_{taskName}
+
+    # ─── LLM 端点与任务路由 ────────────────────────────────────────────
+    llm:
+      # ─── 命名端点字典 ──────────────────────────────────────────────
+      endpoints:
+        openai-main:
+          protocol: openai
+          # 填写实际的 API Key 环境变量名，如 ${CX_LLM_OPENAI_KEY}
+          api-key: ${CX_LLM_OPENAI_KEY:}
+          model: gpt-4o-mini
+          base-url: https://api.openai.com/v1
+          timeout: 60s
+          # 原生结构化能力必须按“具体端点 + 具体模型”验证后显式开启；协议名不能作为能力依据。
+          options:
+            temperature: 0.7
+            max-tokens: 4096
+            max-completion-tokens: 65536
+            # ─── 思考控制（OpenAI 协议，按端点实际模型支持范围配置，配错可能报错）───
+            # thinking-budget: 2048        # 思考 token 上限；仅 Qwen3.x 系列识别
+            # reasoning-effort: low        # 推理力度；qwen3.8-max/DeepSeek-V4/GLM/kimi-k3 识别，Qwen3.7 无效
+            # additional-body-params:      # 厂商私有请求体参数透传
+            #   enable_thinking: false     # 关闭思考；Qwen3.x/Kimi-K2.6/GLM 等支持，MiniMax-M3 用 thinking.type
+            # 录题识别（question-capture-parse）与 AI 答案（question-ai-answer）如需不同思考策略，
+            # 在 Nacos 定义两个端点并分别路由，无需改代码。
+        claude-main:
+          protocol: anthropic
+          api-key: ${CX_LLM_CLAUDE_KEY:}
+          model: claude-sonnet-4-5-20250929
+          timeout: 120s
+          # AgentScope 2.0 Anthropic 扩展当前不声明原生结构化输出能力。
+          options:
+            thinking-budget: 5000
+            max-completion-tokens: 65536
+        qwen-main:
+          protocol: dashscope
+          api-key: ${CX_LLM_QWEN_KEY:}
+          model: qwen-max
+          base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+          timeout: 60s
+          # AgentScope 2.0 中 thinking 会强制模型流式，本项目所有 Agent 均关闭该能力。
+          options:
+            enable-thinking: false
+            thinking-budget: 2048
+            max-completion-tokens: 65536
+            # endpoint-type：DashScope 特有，强制端点类型，绕过模型名自动识别
+            #   auto       - 自动识别（默认，按模型名白名单路由）
+            #   multimodal - 强制多模态 API（qwen3.5/qwen3.6/qwen3.7/qwen-vl 等系列）
+            #   text       - 强制文本生成 API（qwen-max/qwen-plus 等纯文本模型）
+            # qwen-max 为纯文本模型，无需显式设置；使用 qwen3.7-plus 等新多模态模型时
+            # 若 agentscope 自动识别未覆盖，需显式设为 multimodal，否则会报 url error
+            # endpoint-type: multimodal
+
+      # ─── 默认端点 ──────────────────────────────────────────────────
+      # 未配置 tasks 的任务路由到此端点；不设置时取 endpoints 中第一个
+      default-endpoint: openai-main
+
+      # ─── 任务路由 ──────────────────────────────────────────────────
+      # 将业务任务映射到有序端点列表（第一个为首选，后续为 fallback）
+      # max-iters：ReActAgent 最大推理轮次，未设置时使用系统默认值 20
+      #   Skill 渐进加载会消耗 3-5 轮（SKILL.md + references/xxx.md），
+      #   建议单题任务 ≥ 15，整卷任务 ≥ 80（60题逐题+大纲+知识加载+校验重试余量）
+      tasks:
+        chuti-question:
+          endpoints: [openai-main]
+          max-iters: 15
+        chuti-exam:
+          endpoints: [openai-main]
+          max-iters: 100   # 整卷V2：25题约67轮+校验/TikZ重试余量
+        pijiao:
+          endpoints: [openai-main]
+          max-iters: 15
+        photo-submission-parse:
+          endpoints: [openai-main]
+          max-iters: 8
+        question-capture-parse:
+          # 录题图片识别：需路由到输出上限足够大的端点，避免多图多题时 reasoning 耗尽 maxTokens
+          # 导致最终结构化结果被截断（finish_reason=length）。
+          # 端点输出上限通过 endpoints.<name>.options.max-completion-tokens 配置。
+          endpoints: [openai-main]
+          max-iters: 100
+        # AI 答案与视觉识别拆分路由；初始保持同一端点，便于后续在 Nacos 独立灰度模型。
+        question-ai-answer:
+          endpoints: [openai-main]
+          max-iters: 3
+        knowledge-point-match:
+          endpoints: [openai-main]
+          max-iters: 3
+        # 独立分析使用支持PNG/JPEG多图的端点，上线前验证10图容量。
+        question-difficulty:
+          endpoints: [openai-main]
+          max-iters: 1
+        question-explanation:
+          endpoints: [openai-main]
+          max-iters: 1
+        bianshi:
+          endpoints: [openai-main]
+          max-iters: 100   # 整卷变式工具提交模式：逐题变式轮次消耗大（Skill渐进加载+大纲+每题若干轮），参考出题V2给足余量
+        question-variant:
+          endpoints: [xiaogj-ali-nothink,xiaogj-aliflash-nothink]
+          max-iters: 100
+
+    # ─── Agent 通用工具配置 ────────────────────────────────────────────
+    tools:
+      # ─── 生图工具 ──────────────────────────────────────────────────
+      # 配置结构对齐 cx.agent.llm.endpoints 命名端点字典风格
+      # 切换 default-endpoint 可在 dashscope-image 和 openai-image 之间选择供应商
+      # 凭证（api-key）必须通过环境变量或 Nacos 注入，不得硬编码
+      image-generate:
+        # 是否启用生图工具；false 时不会创建 Provider 和 ToolFactory
+        enabled: ${CX_AGENT_IMAGE_GENERATE_ENABLED:false}
+        # 默认生图端点名；为空时取 endpoints 中第一个
+        default-endpoint: dashscope-image
+        # 工具级总超时（含供应商调用、下载、上传）
+        timeout: 300s
+        # 单次生图请求张数上限
+        max-images-per-call: 1
+        # 参考图数量上限
+        max-reference-images: 4
+        # 提示词长度上限
+        max-prompt-length: 5000
+        # 图片持久化存储；type=todo 为占位，type=oss 时使用中台 STS + 阿里云 OSS 上传
+        storage:
+          type: ${CX_AGENT_IMAGE_STORAGE_TYPE:todo}
+          oss:
+            # 当前支持 zt-sts；后续可扩展为其他凭证来源
+            credential-provider: zt-sts
+            # 是否使用临时文件业务线
+            temp: false
+            # 文件中心业务类型，用于区分 Agent 生图文件
+            business-type: agentImageGenerate
+            company-id: cx-agent
+            user-id: cx-agent
+            user-name: ""
+            terminal: 0
+            file-type: 1
+            is-managed: 1
+        # ─── 生图模型端点字典 ──────────────────────────────────────────
+        endpoints:
+          dashscope-image:
+            provider: dashscope
+            api-key: ${DASHSCOPE_API_KEY:}
+            model: wan2.7-image
+            timeout: 180s
+          openai-image:
+            provider: openai
+            api-key: ${OPENAI_IMAGE_API_KEY:}
+            model: dall-e-3
+            base-url: https://api.openai.com
+            timeout: 300s
+
+  # ─── 可观测平台（默认关闭，按需启用） ────────────────────────────────
+  # 旧配置键 cx.agent.langfuse.* 已废弃，改用 cx.observability.*
+  # 凭证 MUST 通过环境变量或 Nacos 密文配置注入，禁止提交真实值
+  # 独立难度/解析共用实例保护；修改后同步Nacos并滚动重启。
+  question-analysis:
+    deadline: 120s
+    attempt-timeout: 60s
+    max-model-attempts: 3
+    instance-concurrency: 5
+    app-concurrency: 2
+    max-images: 10
+    max-image-bytes: 5242880
+    max-total-image-bytes: 20971520
+    max-image-pixels: 20000000
+    max-total-image-pixels: 40000000
+    connect-timeout: 3s
+    read-timeout: 10s
+
+  observability:
+    # 可观测总开关；关闭时不初始化 SDK、不读取凭证、不创建后台导出线程
+    enabled: ${CX_OBSERVABILITY_ENABLED:false}
+    # 唯一生效的可观测平台，enabled=true 时必填；可选值：langfuse、agent-loop
+    platform: ${CX_OBSERVABILITY_PLATFORM:langfuse}
+    # 上报到 OpenTelemetry 的服务名称
+    service-name: cx-backend
+    # 采样比例（0-1），1.0 = 全量采样
+    sampling-ratio: ${CX_OBSERVABILITY_SAMPLING_RATIO:1.0}
+    # 单次 OTLP 批量导出超时
+    export-timeout: ${CX_OBSERVABILITY_EXPORT_TIMEOUT:10s}
+    # 批量 span 最大等待时间
+    batch-export-delay: ${CX_OBSERVABILITY_BATCH_EXPORT_DELAY:5s}
+    # Langfuse 平台配置（platform=langfuse 时必填）
+    langfuse:
+      base-url: ${CX_OBSERVABILITY_LANGFUSE_BASE_URL:https://cloud.langfuse.com}
+      public-key: ${CX_OBSERVABILITY_LANGFUSE_PUBLIC_KEY:}
+      secret-key: ${CX_OBSERVABILITY_LANGFUSE_SECRET_KEY:}
+    # 阿里云 AgentLoop 平台配置（platform=agent-loop 时必填）
+    agent-loop:
+      endpoint: ${CX_OBSERVABILITY_AGENT_LOOP_ENDPOINT:}
+      license-key: ${CX_OBSERVABILITY_AGENT_LOOP_LICENSE_KEY:}
+      project: ${CX_OBSERVABILITY_AGENT_LOOP_PROJECT:}
+      workspace: ${CX_OBSERVABILITY_AGENT_LOOP_WORKSPACE:}
+
+xiaogj:
+  zt:
+    ztGatewayUrl: ${ZT_GATEWAY_URL:}
+    appid: ${ZT_APP_ID:}
+    appKey: ${ZT_APP_KEY:}
+    oss:
+      businessName: ${ZT_OSS_BUSINESS_NAME:}
+      tempFileBusinessName: ${ZT_OSS_TEMP_BUSINESS_NAME:}
+      signKey: ${ZT_OSS_SIGN_KEY:}
+      aesSecretKey: ${ZT_OSS_AES_SECRET_KEY:}
+
+# 通用文档导出（061）：人工同步 DEFAULT_GROUP/cx-backend.yml，参数变更滚动重启。
+# 部署后直接提供导出接口；以下参数用于容量、超时和资源限制。
+document-export:
+  max-body-bytes: 33554432
+  max-html-bytes: 10485760
+  max-css-bytes: 1048576
+  max-image-bytes: 10485760
+  max-image-pixels: 20000000
+  max-total-image-bytes: 52428800
+  # 多图试卷放宽累计像素；单图解码、总字节、并发及worker堆继续限制资源峰值。
+  max-total-image-pixels: 80000000
+  max-resources: 500
+  max-blocks: 10000
+  max-runs: 50000
+  max-group-depth: 16
+  max-dom-nodes: 50000
+  max-dom-depth: 64
+  max-output-bytes: 52428800
+  instance-concurrency: 5
+  app-concurrency: 2
+  deadline-seconds: 60
+  connect-timeout-seconds: 3
+  read-timeout-seconds: 10
+  max-redirects: 3
+  worker-heap-mi-b: 512
+  # 临时目录由部署环境提供，可写且仅用于本功能；内容只在请求生命周期存在。
+  temporary-directory: ${java.io.tmpdir}/cx-document-export

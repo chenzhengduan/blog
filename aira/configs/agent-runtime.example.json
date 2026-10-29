@@ -1,0 +1,56 @@
+{
+  "Redis": {
+    "ConnectionString": "127.0.0.1:6379,password=<YOUR_REDIS_PASSWORD>,defaultDatabase=0"
+  },
+  "AppSettings": {
+    "CentraHubConnectionString": "Server=<SQL_SERVER>;Database=<CENTRAHUB_DB>;User Id=<DB_USER>;Password=<DB_PASSWORD>;TrustServerCertificate=True",
+    "TemplateDBConnectionString": "Server=<SQL_SERVER>;Database=<TEMPLATE_DB>;User Id=<DB_USER>;Password=<DB_PASSWORD>;TrustServerCertificate=True",
+    "ADBConnectionString": "Server=<ADB_HOST>;Database=<ADB_DB>;Uid=<ADB_USER>;Pwd=<ADB_PASSWORD>",
+    "PublicGateUrl": "https://tenant-gateway.example.invalid",
+    "ZtServerUrl": "https://center.example.invalid",
+    "WTwoDomainUrl": "https://aira.example.invalid",
+    "WXServerUrl": "https://wechat.example.invalid",
+    "OpenAI": {
+      "Endpoint": "https://model.example.invalid/v1",
+      "ApiKey": "<MAIN_MODEL_API_KEY>",
+      "Deployment": "<MAIN_MODEL_ID>",
+      "FallbackDeployment": "<BACKUP_MODEL_ID>",
+      "AuxiliaryDeployment": "<AUXILIARY_MODEL_ID>",
+      "MultimodalDeployment": "<VISION_MODEL_ID>",
+      "MaxConcurrentCalls": 8,
+      "Backup": {
+        "Endpoint": "https://backup-model.example.invalid/v1",
+        "ApiKey": "<BACKUP_MODEL_API_KEY>"
+      }
+    },
+    "AgentTurn": {
+      "MaxConcurrentTurnsPerInstance": 2,
+      "ChatHistoryTake": 10,
+      "ScheduleChatHistoryTake": 3,
+      "ChatHistoryTokenBudget": 48000,
+      "CompactionEnabled": true,
+      "CompactionTriggerTokens": 100000
+    },
+    "ReportValidatorUrl": "http://report-validator:9210",
+    "AgentOAuth": {
+      "ResourceUris": ["/agent/mcp", "/api/agent/mcp"],
+      "AccessTokenTtlSeconds": 3600,
+      "RefreshTokenTtlSeconds": 2592000,
+      "AuthorizationCodeTtlSeconds": 90,
+      "DcrEnabled": true,
+      "ConsentPagePath": ""
+    }
+  },
+  "OssUpload": {
+    "BusinessName": "<REGISTERED_BUSINESS_NAME>",
+    "BusinessType": "<REGISTERED_BUSINESS_TYPE>",
+    "EncryptKey": "<YOUR_STS_ENCRYPT_KEY>",
+    "DecryptKey": "<YOUR_STS_DECRYPT_KEY>"
+  },
+  "OpenTelemetry": {
+    "Enabled": false,
+    "ServiceName": "aira-local",
+    "DeploymentEnvironment": "development",
+    "CaptureMessageContent": false
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-29",
+  "main_markdown_files": 12,
+  "main_relative_links_checked": 23,
+  "full_source_references_checked": 256,
+  "fenced_blocks": 40,
+  "assets_hash_verified": 100,
+  "json_files_parsed": 15,
+  "issues": [],
+  "scope_notes": [
+    "附件中的原始Prompt/Skill历史相对引用未自动修复；实际版本选择和已知旧链接在04/06章说明。",
+    "未运行Java/前端/Python构建、数据库初始化、真实模型或Bot联调。",
+    "敏感模式扫描加人工配置审查不等同完整安全审计；未读取.env或application-local。"
+  ]
+}

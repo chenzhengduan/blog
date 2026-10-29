@@ -1,0 +1,403 @@
+{
+  "version": "1.1.0",
+  "requiredCapabilities": ["remote-tool-sse-v1"],
+  "provider": {
+    "name": "cx-exam",
+    "displayName": "试卷生成与查询",
+    "description": "生成、查询和整卷变式试卷，返回简要摘要与试卷详情链接。"
+  },
+  "defaults": {
+    "baseUrl": "__CX_API_BASE_URL__",
+    "timeoutSeconds": 900,
+    "idleTimeoutSeconds": 60,
+    "authFlow": {
+      "type": "oauth2",
+      "authorizationUrl": "__CX_WEB_BASE_URL__/agent/authorize",
+      "tokenUrl": "__CX_API_BASE_URL__/cx/oauth/token",
+      "clientId": "__OAUTH_CLIENT_ID__"
+    }
+  },
+  "tools": [
+    {
+      "name": "generate_exam",
+      "displayName": "生成试卷",
+      "description": "生成试卷。必填学科 subject（math/chinese/english）与年级 grade（1-9）；可选知识点 topic、标题 title、补充要求 extraRequirements、难度 difficulty、满分 totalScore、题型分布 questionDistribution。成功返回摘要与查看链接，不含完整题目。",
+      "method": "POST",
+      "path": "/cx/aiagent/exams/generate",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "stream": true,
+      "timeoutSeconds": 900,
+      "idleTimeoutSeconds": 60,
+      "inputSchema": {
+        "type": "object",
+        "required": ["subject", "grade"],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "enum": ["math", "chinese", "english"],
+            "description": "学科：math 数学 / chinese 语文 / english 英语"
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9,
+            "description": "年级 1-9"
+          },
+          "topic": {
+            "type": "string",
+            "description": "知识点或考察范围"
+          },
+          "title": {
+            "type": "string",
+            "description": "试卷标题"
+          },
+          "extraRequirements": {
+            "type": "string",
+            "description": "补充出卷要求"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["easy", "medium", "hard"],
+            "description": "难度，默认 medium"
+          },
+          "totalScore": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 500,
+            "description": "满分，默认 100"
+          },
+          "questionDistribution": {
+            "type": "array",
+            "maxItems": 10,
+            "description": "自定义题型分布，不传则由后端按学科使用默认分布。各项 count 之和不能超过 60。",
+            "items": {
+              "type": "object",
+              "required": ["questionType", "count"],
+              "properties": {
+                "questionType": {
+                  "type": "string",
+                  "enum": ["choice", "multi", "judge", "fill", "short", "apply", "calculation", "solution", "reading", "writing", "custom"],
+                  "description": "题型：choice 单选 / multi 多选 / judge 判断 / fill 填空 / short 简答 / apply 应用 / calculation 计算 / solution 解答 / reading 阅读理解 / writing 写作 / custom 自定义"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 50,
+                  "description": "该题型题目数量"
+                },
+                "customQuestionTypeName": {
+                  "type": "string",
+                  "description": "自定义题型名称，仅 questionType=custom 时必填"
+                }
+              }
+            }
+          }
+        }
+      },
+      "request": {
+        "bodyTemplate": {
+          "subject": "{{subject}}",
+          "grade": "{{grade}}",
+          "topic": "{{topic}}",
+          "title": "{{title}}",
+          "extraRequirements": "{{extraRequirements}}",
+          "difficulty": "{{difficulty}}",
+          "totalScore": "{{totalScore}}",
+          "questionDistribution": "{{questionDistribution}}"
+        }
+      },
+      "response": {
+        "contentType": "text/event-stream",
+        "mapping": {
+          "type": "sse_xzagent_v1"
+        }
+      }
+    },
+    {
+      "name": "list_exams",
+      "displayName": "查询试卷列表",
+      "description": "分页查询已有试卷列表。默认第 1 页 5 条，可按学科/年级/操作人过滤，也可按试卷 ID 精确查询。返回试卷摘要（标题/学科/年级/满分/题量/难度/作答时长）和试卷查看链接，不含题目内容。当用户想查看已有试卷、按条件筛选试卷时使用。",
+      "method": "GET",
+      "path": "/cx/aiagent/exams",
+      "enabled": true,
+      "riskLevel": "READ",
+      "stream": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "examId": {
+            "type": "string",
+            "description": "按试卷 ID 精确过滤（可选）"
+          },
+          "subject": {
+            "type": "string",
+            "enum": ["math", "chinese", "english"],
+            "description": "学科过滤：math / chinese / english"
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9,
+            "description": "年级过滤 1-9"
+          },
+          "externalUserId": {
+            "type": "string",
+            "description": "操作人标识过滤（可选）"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "页码，默认 1"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "每页条数，默认 5，最大 20"
+          }
+        }
+      },
+      "request": {
+        "queryParams": {
+          "examId": "{{examId}}",
+          "subject": "{{subject}}",
+          "grade": "{{grade}}",
+          "externalUserId": "{{externalUserId}}",
+          "page": "{{page}}",
+          "size": "{{size}}"
+        }
+      },
+      "response": {
+        "contentType": "application/json",
+        "mapping": {
+          "type": "json_path",
+          "path": "$.data"
+        }
+      }
+    },
+    {
+      "name": "get_exam_detail",
+      "displayName": "查看试卷详情",
+      "description": "查询单份试卷的详情摘要（标题/学科/年级/满分/难度/题量/作答时长/操作人），不含题目内容，附试卷查看链接。入参 examUrl 为试卷查看链接（格式同生成试卷返回的查看链接）。当用户通过链接或试卷 ID 想了解某份试卷的概况时使用。",
+      "method": "GET",
+      "path": "/cx/aiagent/exams/detail",
+      "enabled": true,
+      "riskLevel": "READ",
+      "stream": false,
+      "inputSchema": {
+        "type": "object",
+        "required": ["examUrl"],
+        "properties": {
+          "examUrl": {
+            "type": "string",
+            "description": "试卷查看链接，如 https://<前端地址>/assessment/detail?id=1930..."
+          }
+        }
+      },
+      "request": {
+        "queryParams": {
+          "examUrl": "{{examUrl}}"
+        }
+      },
+      "response": {
+        "contentType": "application/json",
+        "mapping": {
+          "type": "json_path",
+          "path": "$.data"
+        }
+      }
+    },
+    {
+      "name": "list_questions",
+      "displayName": "查询题目列表",
+      "description": "分页查询已有题目列表，支持全部搜索条件（题干关键词/题型/学科/年级/知识点/难度/来源/创建时间范围）。默认第 1 页 5 条。返回题目摘要（题干摘要/题型/学科/年级/难度/知识点/来源），不含完整题干和答案。当用户想查看已有题目、按条件筛选题目时使用。",
+      "method": "GET",
+      "path": "/cx/aiagent/questions",
+      "enabled": true,
+      "riskLevel": "READ",
+      "stream": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "description": "题干关键词（模糊匹配）"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["choice", "multi", "judge", "fill", "short", "apply", "calculation", "solution", "reading", "writing", "custom"],
+            "description": "题型过滤"
+          },
+          "subject": {
+            "type": "string",
+            "enum": ["math", "chinese", "english"],
+            "description": "学科过滤"
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9,
+            "description": "年级过滤 1-9"
+          },
+          "knowledgePoint": {
+            "type": "string",
+            "description": "知识点名称过滤"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["easy", "medium", "hard"],
+            "description": "难度过滤"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["AI", "PHOTO", "VARIANT_QUESTION"],
+            "description": "来源过滤"
+          },
+          "createdFrom": {
+            "type": "string",
+            "description": "创建时间起（含），格式 yyyy-MM-dd"
+          },
+          "createdTo": {
+            "type": "string",
+            "description": "创建时间止（含），格式 yyyy-MM-dd"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "页码，默认 1"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "每页条数，默认 5，最大 20"
+          }
+        }
+      },
+      "request": {
+        "queryParams": {
+          "keyword": "{{keyword}}",
+          "type": "{{type}}",
+          "subject": "{{subject}}",
+          "grade": "{{grade}}",
+          "knowledgePoint": "{{knowledgePoint}}",
+          "difficulty": "{{difficulty}}",
+          "source": "{{source}}",
+          "createdFrom": "{{createdFrom}}",
+          "createdTo": "{{createdTo}}",
+          "page": "{{page}}",
+          "size": "{{size}}"
+        }
+      },
+      "response": {
+        "contentType": "application/json",
+        "mapping": {
+          "type": "json_path",
+          "path": "$.data"
+        }
+      }
+    },
+    {
+      "name": "generate_variant_exam_from_exam",
+      "displayName": "根据已有试卷生成变式卷",
+      "description": "基于当前应用已有试卷生成一份整卷变式。保持原卷知识点和题型结构，可调整目标难度、标题和补充要求。成功返回新试卷摘要与查看链接，不返回整卷题目正文。",
+      "method": "POST",
+      "path": "/cx/aiagent/variants/exams/from-exam/{{examId}}",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "stream": true,
+      "timeoutSeconds": 900,
+      "idleTimeoutSeconds": 60,
+      "inputSchema": {
+        "type": "object",
+        "required": ["examId"],
+        "properties": {
+          "examId": {
+            "type": "string",
+            "description": "源试卷 ID，必须属于当前已授权应用"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["easy", "medium", "hard"],
+            "description": "新试卷目标难度；不传时沿用源卷难度或使用中等难度"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "新试卷标题；不传时由系统生成"
+          },
+          "extraRequirements": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "补充变式要求"
+          }
+        }
+      },
+      "request": {
+        "pathParams": {"examId": "{{examId}}"},
+        "bodyTemplate": {
+          "difficulty": "{{difficulty}}",
+          "title": "{{title}}",
+          "extraRequirements": "{{extraRequirements}}"
+        }
+      },
+      "response": {
+        "contentType": "text/event-stream",
+        "mapping": {"type": "sse_xzagent_v1"}
+      }
+    },
+    {
+      "name": "generate_variant_exam_from_images",
+      "displayName": "根据图片生成变式卷",
+      "description": "基于按页排序的试卷图片 URL 生成一份整卷变式。图片视为同一份试卷的连续页面。成功返回新试卷摘要与查看链接，不返回整卷题目正文。",
+      "method": "POST",
+      "path": "/cx/aiagent/variants/exams/from-images",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "stream": true,
+      "timeoutSeconds": 900,
+      "idleTimeoutSeconds": 60,
+      "inputSchema": {
+        "type": "object",
+        "required": ["imageUrls"],
+        "properties": {
+          "imageUrls": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "description": "按原卷页码顺序排列的 1-10 个 HTTPS 图片 URL",
+            "items": {"type": "string"}
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["easy", "medium", "hard"],
+            "description": "新试卷目标难度"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "新试卷标题"
+          },
+          "extraRequirements": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "补充变式要求"
+          }
+        }
+      },
+      "request": {
+        "bodyTemplate": {
+          "imageUrls": "{{imageUrls}}",
+          "difficulty": "{{difficulty}}",
+          "title": "{{title}}",
+          "extraRequirements": "{{extraRequirements}}"
+        }
+      },
+      "response": {
+        "contentType": "text/event-stream",
+        "mapping": {"type": "sse_xzagent_v1"}
+      }
+    }
+  ]
+}

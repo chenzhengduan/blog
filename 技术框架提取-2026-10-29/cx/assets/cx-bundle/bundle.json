@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "bundleType": "content-with-environment",
+  "importEnvironment": true,
+  "agentId": "cx",
+  "agentName": "创新AI助手",
+  "bundleId": "cx-aiagent-suite"
+}

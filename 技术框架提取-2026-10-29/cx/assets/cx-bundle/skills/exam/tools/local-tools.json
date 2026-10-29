@@ -1,0 +1,9 @@
+{
+  "tools": [
+    {
+      "toolName": "render_a2ui",
+      "catalogId": "cx-exam-cards",
+      "enabled": true
+    }
+  ]
+}

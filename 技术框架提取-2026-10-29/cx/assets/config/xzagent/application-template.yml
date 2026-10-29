@@ -1,0 +1,341 @@
+# xzagent 非本地运行配置模板。
+# 本文件对应 Nacos Data ID：xzagent.yml（Group: DEFAULT_GROUP，命名空间按部署环境）。
+# 修改本文件后必须人工同步对应环境的 Nacos 配置；application.yml 只保留最小启动与 Nacos 连接配置。
+spring:
+  application:
+    name: jegent
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/jegent
+    username: root
+    password: "<REQUIRED_SECRET>"
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: never
+
+  redis:
+    # 当前项目沿用既有 spring.redis.* 配置格式，不强依赖 spring.data.redis.*。
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 1000
+
+springdoc:
+  api-docs:
+    # OpenAPI JSON 文档入口。经网关访问时外部路径为 /api/xzagent/v3/api-docs。
+    path: ${XZAGENT_OPENAPI_API_DOCS_PATH:/xzagent/v3/api-docs}
+    enabled: ${XZAGENT_OPENAPI_API_DOCS_ENABLED:true}
+  swagger-ui:
+    # Swagger UI 是交互式联调入口；经网关访问时外部路径为 /api/xzagent/swagger-ui.html。
+    path: ${XZAGENT_OPENAPI_SWAGGER_UI_PATH:/xzagent/swagger-ui.html}
+    enabled: ${XZAGENT_OPENAPI_SWAGGER_UI_ENABLED:true}
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+xzagent:
+  # 控制台部署设置，修改后人工同步xzagent.yml；不保存模型业务配置或网页登录会话。
+  console:
+    # 默认无人具备平台管理权；仅纯App身份命中此名单可操作全局模型。
+    admin-app-ids: []
+    # 同一环境各实例必须一致；不同环境使用不同标识隔离Redis缓存与测试准入。
+    deployment: default
+
+  # Skill/Bundle 上传安全上限。非本地环境修改后必须同步到 xzagent 对应的 Nacos Data ID。
+  skill-bundle:
+    # HTTP 层完成聚合后的 ZIP 最大字节数；52428800 = 50 MiB。
+    max-request-bytes: 52428800
+    # ZIP 内单个文件解压后的最大字节数；20971520 = 20 MiB。
+    max-entry-bytes: 20971520
+    # 单个 ZIP 所有文件解压后的累计最大字节数；104857600 = 100 MiB。
+    max-expanded-bytes: 104857600
+    # ZIP 中允许的文件条目数量，不含目录和平台垃圾文件。
+    max-entries: 1000
+
+  # 多模态附件统一处理配置。
+  # AG-UI、飞书和 A2A 收到的图片或文档都会先进入该处理层，再以 attachmentId 提供给 Agent。
+  # 非本地环境修改后必须同步到 xzagent 对应的 Nacos Data ID。
+  attachments:
+    # 附件能力总开关。false 时不创建 OSS 客户端，也不会向 Agent 注册附件内置工具。
+    enabled: false
+    # 单次用户请求最多允许携带的附件数量，默认 5 个。
+    max-attachments: 5
+    # 单个附件解码或下载后的最大字节数；20971520 = 20 MiB。
+    max-file-bytes: 20971520
+    # 单次用户请求内所有附件解码或下载后的累计最大字节数；52428800 = 50 MiB。
+    max-request-bytes: 52428800
+    # 客户端使用 Base64/data URL 内联传输时，单个附件允许的最大原始字节数；10485760 = 10 MiB。
+    max-inline-data-bytes: 10485760
+    # 后端从 HTTPS URL 下载附件的总超时时间，支持 Spring Duration 写法。
+    download-timeout: 30s
+    # 下载外部 URL 时最多允许跟随的重定向次数；每次跳转都会重新执行 SSRF 安全校验。
+    max-redirects: 1
+    # 文本、Markdown 或 PDF 解析后最多交给模型的字符数，避免附件内容耗尽上下文窗口。
+    max-extracted-characters: 20000
+    # attachment_get_temporary_url 工具为官方 OSS 生成的签名 URL 有效期；中台未提供精确过期时刻时返回空 expiresAt。
+    signed-url-ttl: 10m
+    # xzagent 本地附件引用的保留时间；到期后只删除数据库记录，物理文件由存储平台生命周期策略清理。
+    retention: 7d
+    # 恢复历史会话时，最多向当前 Run 暴露的历史附件数量。
+    history-limit: 20
+    # 校验失败或处理失败附件的隔离保留时间，便于短期排查且避免长期占用存储。
+    quarantine-retention: 24h
+    # 新附件写入 Provider：ALIYUN_OSS（官方私有 OSS）或 XIAOGJ_ZT_STS_OSS（小高姐中台单文件 STS）。
+    # 该值只影响新上传；读取会按每条附件记录的 Provider 精确路由，失败时不会自动回退。
+    storage-provider: ALIYUN_OSS
+    # 附件过期清理任务的扫描间隔。
+    lifecycle-scan-delay: 10m
+    # 阿里云 OSS 私有 Bucket 配置。写入选择官方 OSS 时必填；读取历史官方附件时也应保留此配置。
+    aliyun-oss:
+      # OSS Endpoint，例如 https://oss-cn-hangzhou.aliyuncs.com；建议与应用部署地域一致。
+      endpoint:
+      # 用于保存附件的私有 Bucket 名称，请勿配置为公共读 Bucket。
+      bucket:
+      # OSS AccessKey ID。仅通过 Nacos 密文能力或部署环境注入，模板不得填写真实值。
+      access-key-id:
+      # OSS AccessKey Secret。应使用仅具备目标 Bucket 最小权限的专用 RAM 身份。
+      access-key-secret:
+      # OSS Object Key 的目录前缀，不需要填写开头或结尾的斜杠。
+      key-prefix: attachments
+    # 小高姐中台 STS OSS。写入选择 XIAOGJ_ZT_STS_OSS 时必填；密钥只能通过 Nacos 密文或部署环境注入。
+    # 中台返回的是公开读 URL：URL 自身没有签名过期时间，已授权暴露后 xzagent 无法撤回；敏感附件请继续使用官方私有 OSS。
+    xiaogj-zt-sts-oss:
+      # 中台 HTTPS 网关 Origin，不要附加 /file/getStsInfoV3 路径。
+      gateway-url:
+      # 中台分配的应用 ID；属于敏感认证上下文，普通日志不得输出。
+      app-id:
+      # 用于计算 x-zt-sign 的应用密钥，禁止明文提交仓库。
+      app-key:
+      # 用于加密文件登记 JSON 的十六进制 AES 密钥，长度必须为 128/192/256 位。
+      sign-key:
+      # 用于解密临时 AK/SK/Token 的十六进制 AES 密钥，禁止持久化。
+      aes-secret-key:
+      # 中台分配的业务名称，参与文件归属和生命周期策略。
+      business-name:
+      # 中台分配的业务类型，参与物理文件自动过期策略。
+      business-type:
+      # 中台终端类型字符串，未特别约定时保持 1。
+      terminal: "1"
+      # 是否由中台托管生命周期，未特别约定时保持 1。
+      is-managed: "1"
+      # 与中台建立连接的超时时间。
+      connect-timeout: 10s
+      # 单次授权及公开对象读取的请求超时时间。
+      request-timeout: 30s
+  security:
+    jwt-secret: "<REQUIRED_SECRET>"
+    jwt-expire-minutes: 480
+    header-encryption-password: "<REQUIRED_SECRET>"
+    header-encryption-salt: "<REQUIRED_SECRET>"
+    # 必须先人工同步目标Nacos xzagent.yml，临时管理员导入使用本部署模型专用加密设置。
+    # 模型专用部署密钥，与header设置独立；不进数据库/SQL，不自动生成或回退。
+    # password为非空且已解析的字符串；salt为16～64位偶数长度十六进制。
+    # 启动后固定，修改须协调重新部署及既有模型密文处理，本期不做动态轮换。
+    model-encryption-password: ${XZAGENT_MODEL_ENCRYPTION_PASSWORD:}
+    model-encryption-salt: ${XZAGENT_MODEL_ENCRYPTION_SALT:}
+    api-key-prefix: sk-
+    api-key-lookup-prefix-length: 15
+    cors:
+      enabled: true
+      allowed-origin-patterns:
+        - "*"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      allowed-headers:
+        - "*"
+      exposed-headers: []
+      allow-credentials: false
+      max-age-seconds: 3600
+  # 修改后同步本文件头的Nacos xzagent.yml；不写入application.yml或数据库。
+  mcp:
+    client-cache:
+      max-size: 256
+      idle-seconds: 600
+      sweep-seconds: 60
+      close-timeout-seconds: 5
+  remote-tool:
+    logging:
+      log-raw-payloads: true
+      max-payload-length: 4000
+  oauth:
+    # OAuth2 授权回调的公网基础地址，用于拼接 redirect_uri（{callbackBaseUrl}/xzagent/api/oauth/callback）。
+    # 生产必须显式配置为对外的 HTTPS 地址；未配置时发起授权会抛异常，避免静默生成错误回调。
+    callback-base-url: ${XZAGENT_OAUTH_CALLBACK_BASE_URL:https://agent.example.com}
+  # 021模型专项：连接/模型/CHAT主备和IMAGE_GENERATION路由由数据库管理。
+  # 首次迁移由管理员显式调用临时import-nacos接口；正常运行不读取或回退旧Nacos模型值。
+  # TEMP(021-app-console): 临时迁移使用，下一版删除接口及入口；导入核验后可移除旧模型段。
+  auto-context:
+    # v2 Harness 仅承担上下文压缩和 TaskList；其余能力在本次升级中默认关闭。
+    large-payload-threshold: 2048
+    max-token: 100000
+    token-ratio: 0.75
+    offload-single-preview: 120
+    msg-threshold: 30
+    last-keep: 16
+    min-consecutive-tool-messages: 3
+    current-round-compression-ratio: 0.35
+    min-compression-token-threshold: 1200
+    task-list-enabled: true
+    filesystem-tools-enabled: false
+    shell-tools-enabled: false
+    memory-tools-enabled: false
+    workspace-context-enabled: false
+    path-references-enabled: false
+    subagents-enabled: false
+    dynamic-skills-enabled: false
+    dynamic-subagents-enabled: false
+    tools-config-enabled: false
+    plan-mode-enabled: false
+    workspace-root: ${java.io.tmpdir}/xzagent-harness
+    workspace-retention: 24h
+    # 独立后台清理间隔（毫秒）；仅清理已登记、可证明排空的目录。修改后同步Nacos。
+    # 未知旧目录/裸构造/可选文件、MEMORY、技能、计划、Shell和子Agent等能力所用目录保留，需受控维护。
+    workspace-cleanup-interval-ms: 10000
+  agent:
+    name: xzagent-v1
+    system-prompt: |
+      你是 xzagent 的单 Agent 运行时。
+      优先使用 Skill 元数据判断是否需要加载 Skill。
+      如果未加载相关 Skill，不要臆造工具能力。
+      只使用当前会话中可见的 Tool 和 MCP Tool。
+    max-iterations: 50
+  a2a:
+    enabled: false
+    host: 127.0.0.1
+    port: ${server.port:8080}
+    card-name: "Xzagent Default Agent"
+    card-description: "Xzagent 默认智能体的 A2A 暴露服务"
+    version: 1.0.0
+  tools:
+    # 同步本文件头部指定的 Nacos Data ID；工具产物不受 attachments.enabled 控制。
+    storage:
+      default-provider: ALIYUN_OSS
+      connect-timeout: 10s
+      request-timeout: 30s
+      max-file-bytes: 20971520
+      max-response-bytes: 1048576
+      signed-url-ttl: 10m
+      http:
+        # 通用原始字节上传协议；未指定应用覆盖时使用本组参数。
+        upload-url:
+        credential-id:
+        api-key:
+        api-key-header-name: "<REQUIRED_SECRET>"
+      # OSS 分组为空时复用同名附件连接参数，不复用附件开关、路由或生命周期。
+      aliyun-oss: {}
+      xiaogj-zt-sts-oss: {}
+      # 平台必须配置精确元组；复用连接参数不会自动放行。应用不能扩展此规则。
+      outbound:
+        aliyun-targets: []
+        # - endpoint: https://oss-cn-example.aliyuncs.com
+        #   bucket: example-bucket
+        sts-targets: []
+        # - gateway-url: https://gateway.example.com
+        #   authorization-path: /file/getStsInfoV3
+        #   endpoint: https://oss-cn-example.aliyuncs.com
+        #   bucket: example-bucket
+        #   public-origin: https://example-bucket.oss-cn-example.aliyuncs.com
+        #   public-path-prefix: /
+        #   callback-url: https://gateway.example.com/file/callback
+    html-screenshot:
+      enabled: true
+      # 已弃用：新版本读取 storage / 应用覆盖；滚动兼容期保留，发布 smoke 后人工清理。
+      # 截图上传接口地址，POST 原始 PNG 文件流，成功后返回 JSON {"url": "..."} 或纯文本 URL
+      upload-url: https://service.example.com/api/common/aiagent/image/upload
+      # 上传凭证 ID（可选），对应 user_third_party_credential 表的 credential_id
+      # 配置后，工具会附加该用户凭证中的 HTTP 请求头（如 Authorization）进行鉴权
+      upload-credential-id: mp-plugin-default
+    image-generate:
+      # 供应商和模型由数据库IMAGE_GENERATION路由决定，工具稳定注册。
+      # 已弃用：新版本读取 storage / 应用覆盖；滚动兼容期保留，发布 smoke 后人工清理。
+      # 图片上传接口地址，POST 原始图片文件流，成功后返回 JSON {"url": "..."} 或纯文本 URL
+      upload-url: https://service.example.com/api/common/aiagent/image/upload
+      # 上传凭证 ID（可选），对应 user_third_party_credential 表的 credential_id
+      # 配置后，工具会附加该用户凭证中的 HTTP 请求头（如 Authorization）进行鉴权
+      upload-credential-id: mp-plugin-default
+      # 幂等开关，默认开启。同一 run 内对相同入参的重复调用直接返回缓存 URL，
+      # 打断模型反复重画同一张图的退化循环。关闭则每次调用都真实生成，便于灰度回退
+      idempotent-enabled: true
+  feishu:
+    # 飞书渠道总开关，默认 false（不启用）。关闭时飞书厂商层全部 Bean（加解密服务、
+    # 绑定服务、消息处理/发送、WS 连接管理、启动重建器、HTTP 管理接口、JDBC 仓储）
+    # 均不会被 Spring 容器装配，应用可以在未配置飞书密钥的情况下正常启动。
+    enabled: ${XZAGENT_FEISHU_ENABLED:false}
+    # 飞书 appSecret 加密密钥（AES-256-GCM），必须通过环境变量注入，不允许写入明文配置文件。
+    secret-key: ${XZAGENT_FEISHU_SECRET_KEY:}
+    # 飞书 WebSocket 长连接建连超时时间（秒）。
+    connect-timeout-seconds: ${XZAGENT_FEISHU_CONNECT_TIMEOUT_SECONDS:30}
+    # 异步处理飞书消息事件的线程池大小。
+    async-thread-pool-size: ${XZAGENT_FEISHU_ASYNC_THREAD_POOL_SIZE:8}
+    # 收到消息后贴的占位表情（reaction）的飞书 emoji_type 标识，默认 OnIt（👀 在看），
+    # 让用户感知机器人已收到、正在处理。飞书渠道开启即生效，无需额外开关。
+    # 可选值参见飞书 emoji 列举文档：
+    # https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message-reaction/emojis-introduce
+    ack-reaction-emoji: ${XZAGENT_FEISHU_ACK_REACTION_EMOJI:OnIt}
+
+  observability:
+    # 可观测总开关。默认关闭；关闭时不初始化 OpenTelemetry SDK、不读取平台凭证、
+    # 不启动导出线程，也不挂载追踪中间件。
+    enabled: false
+    # 唯一生效的可观测平台，enabled=true 时必填；可选值：langfuse、agent-loop。
+    # 每个进程同一时间只启用一个平台，切换平台必须修改配置并重启应用。
+    platform: langfuse
+    # 两个平台共用的公共参数，均可省略（省略时使用所示默认值）。
+    service-name: xzagent
+    sampling-ratio: 1.0
+    export-timeout: 10s
+    batch-export-delay: 5s
+    # 可选覆盖（省略时自动取值，仍无法确定则不上报对应 Resource 属性）：
+    # service-version: 1.0.0          # 默认取 jar 构建版本（build-info）
+    # deployment-environment: prod    # 默认取 Spring 激活 Profile 首个值
+    # platform=langfuse 时必填；未选择时无需配置，也不会被校验或读取。
+    langfuse:
+      # 这里只配置 Langfuse 根地址，代码会固定拼接 /api/public/otel/v1/traces。
+      base-url: https://cloud.langfuse.com
+      # 密钥必须由环境变量或 Nacos 密文配置注入，禁止提交真实值。
+      public-key: "<REQUIRED_SECRET>"
+      secret-key: "<REQUIRED_SECRET>"
+    # platform=agent-loop 时必填；未选择时无需配置，也不会被校验或读取。
+    agent-loop:
+      # 阿里云控制台提供的完整 traces 上报地址，代码原样使用不做路径拼接。
+      endpoint: XZAGENT_AGENT_LOOP_ENDPOINT
+      # 密钥必须由环境变量或 Nacos 密文配置注入，禁止提交真实值。
+      license-key: "<REQUIRED_SECRET>"
+      project: XZAGENT_AGENT_LOOP_PROJECT
+      workspace: XZAGENT_AGENT_LOOP_WORKSPACE
+# ===== 日志配置（配置到 Nacos 的 xzagent.yml） =====
+log:
+  console:
+    enable: true   # 是否输出控制台日志
+  level: INFO      # 日志级别
+  aliyunlog:
+    enable: true   # 是否上传阿里云 SLS
+
+# 阿里云 SLS 日志配置（配置到 Nacos 的 xzagent.yml）
+aliyun:
+  log:
+    endpoint: cn-hangzhou-intranet.log.aliyuncs.com
+    accessKeyId: "<REQUIRED_SECRET>"
+    accessKeySecret: "<REQUIRED_SECRET>"
+    project: your-sls-project
+    logStore: your-log-store
+    topic: xzagent
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID  # 雪花 ID，应用层生成，替代数据库自增
+    source: ""     # 留空则自动取本机 IP
+
+# MCP SDK可能输出工具错误原文；由自有MCP适配器记录脱敏ERROR。
+logging.level.io.agentscope.core.tool.mcp: 'OFF'
+logging.level.io.modelcontextprotocol: 'OFF'
+
+

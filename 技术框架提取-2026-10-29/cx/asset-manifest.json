@@ -1,0 +1,802 @@
+[
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/application.yml",
+    "artifact": "assets/config/cx-backend/application.yml",
+    "sanitized": true,
+    "source_sha256": "6bfe8aeb50e818164971ee2a44a677d4d682645d11640dc8f8762eed65d88dd0",
+    "artifact_sha256": "4bcea64dd5e9f1d1fb533d7247cb98949d85cd7dbf6cdab174d9b8e8e1fe6a8e"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/application-template.yml",
+    "artifact": "assets/config/cx-backend/application-template.yml",
+    "sanitized": true,
+    "source_sha256": "51b9f06971262321fd66f1be189924ef6e9bccdf877496cd5c06ed8e4a594426",
+    "artifact_sha256": "10de2930d13573d4f79b885ed2ee6f5e09c4b80757059f81266c20c2c30b9cbd"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-gateway/src/main/resources/application.yml",
+    "artifact": "assets/config/cx-gateway/application.yml",
+    "sanitized": true,
+    "source_sha256": "477a5d31a04ff20e0b9395f5dd450b47147abe4cc0e1f6232401e89da1e755b2",
+    "artifact_sha256": "64f68c25e32248c113323fb8609f34b86f21c76fce118dd1f3f28f7003123448"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-gateway/src/main/resources/application-template.yml",
+    "artifact": "assets/config/cx-gateway/application-template.yml",
+    "sanitized": true,
+    "source_sha256": "2c06a3a8a5ad5e5854939066373804fbe605c1c07d21a24eb00bdb33c4d11e08",
+    "artifact_sha256": "e1b50be2c646754027ec1acc4a910ed07fb8ebac5aa370d78e0dd16d403aa3ca"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-py/config/application.yml",
+    "artifact": "assets/config/cx-py/application.yml",
+    "sanitized": true,
+    "source_sha256": "1770616d42807f7c561d5f612f8caf62fc95ccdeb80bd331999e1eb461a4c8e6",
+    "artifact_sha256": "62c0ea2ca4b339cf9aadd110a06426e5d83e7034a21cc193d83efd0d98f0cbf9"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-py/config/application-template.yml",
+    "artifact": "assets/config/cx-py/application-template.yml",
+    "sanitized": true,
+    "source_sha256": "d7d95ee9a36b5027746a2e61698eacf75e278e866b8ffabf9375d2cde59d2450",
+    "artifact_sha256": "d7d95ee9a36b5027746a2e61698eacf75e278e866b8ffabf9375d2cde59d2450"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/application.yml",
+    "artifact": "assets/config/xzagent/application.yml",
+    "sanitized": true,
+    "source_sha256": "64659a4ebd01cbd292f2a32065a01f8a1d03b2731fc1c28079aa2d590b3934c9",
+    "artifact_sha256": "f14729308dc97493121a07d1edd0c5493e1c8cfab0bb477c43944dfce41c81aa"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/application-template.yml",
+    "artifact": "assets/config/xzagent/application-template.yml",
+    "sanitized": true,
+    "source_sha256": "cf15e9292da600e459271374c2f43e18fc71335fd554ec562b8555a5b053985b",
+    "artifact_sha256": "1fcbefd3d8e567f28b9f5a4f18adf80f55d40a4df99209750ee7385bbcb94057"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "db/schema.sql",
+    "artifact": "assets/database/cx-schema.sql",
+    "sanitized": false,
+    "source_sha256": "0d80065e5cdb2d455e683182852c48ba6a6a8003ee675f4b8b44c58d5b52a2c0",
+    "artifact_sha256": "0d80065e5cdb2d455e683182852c48ba6a6a8003ee675f4b8b44c58d5b52a2c0"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/exam-agent/system-prompt.md",
+    "artifact": "assets/prompts/exam-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "f4dbc06cd6573884d455cb86fd12c95dc8bb6fed79f79eaf3dd90f6291fd185a",
+    "artifact_sha256": "f4dbc06cd6573884d455cb86fd12c95dc8bb6fed79f79eaf3dd90f6291fd185a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/exam-agent/user-prompt.md",
+    "artifact": "assets/prompts/exam-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "7728ee451dca794bbe1309505b0548e21fb74b23f2d76ebedce2190af28d5fbb",
+    "artifact_sha256": "7728ee451dca794bbe1309505b0548e21fb74b23f2d76ebedce2190af28d5fbb"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/exam-agent/v2-system-prompt.md",
+    "artifact": "assets/prompts/exam-agent/v2-system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "6553ee5976c71bd240bfd40fdae8e5f28913c358fe48b6a9e61579feae932a36",
+    "artifact_sha256": "6553ee5976c71bd240bfd40fdae8e5f28913c358fe48b6a9e61579feae932a36"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/exam-agent/v2-user-prompt.md",
+    "artifact": "assets/prompts/exam-agent/v2-user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "60541651bffc7979644eac5fc5febc83b0c4b6c8cbd3c74d4542df3d79e89dce",
+    "artifact_sha256": "60541651bffc7979644eac5fc5febc83b0c4b6c8cbd3c74d4542df3d79e89dce"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/grading-agent/system-prompt.md",
+    "artifact": "assets/prompts/grading-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "69fd54d72a3115b5e66c1262492922cb35b825fbdf49819a5b0a4d842440a5d6",
+    "artifact_sha256": "69fd54d72a3115b5e66c1262492922cb35b825fbdf49819a5b0a4d842440a5d6"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/grading-agent/user-prompt.md",
+    "artifact": "assets/prompts/grading-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "16c818a13e0207cf2de914e027ca2285512fc6cf7e54c7827fa95012f4758fcc",
+    "artifact_sha256": "16c818a13e0207cf2de914e027ca2285512fc6cf7e54c7827fa95012f4758fcc"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/knowledge-point-match/system-prompt.md",
+    "artifact": "assets/prompts/knowledge-point-match/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "950c5267ec13c3c4bbd0addc2681c327c9cf721eb78e30b1bfaf6a4fbbc77cbf",
+    "artifact_sha256": "950c5267ec13c3c4bbd0addc2681c327c9cf721eb78e30b1bfaf6a4fbbc77cbf"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/photo-recognition-agent/system-prompt.md",
+    "artifact": "assets/prompts/photo-recognition-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "d17913ad88d1e1bdef1903222bc7724ea4cc67ed5c7b821316e8b87ae761c836",
+    "artifact_sha256": "d17913ad88d1e1bdef1903222bc7724ea4cc67ed5c7b821316e8b87ae761c836"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/photo-recognition-agent/user-prompt.md",
+    "artifact": "assets/prompts/photo-recognition-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "15d55a5dedbcec8895062b11704496279c57e195ac6757e8ffea8018c99afc04",
+    "artifact_sha256": "15d55a5dedbcec8895062b11704496279c57e195ac6757e8ffea8018c99afc04"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-agent/regenerate-prompt.md",
+    "artifact": "assets/prompts/question-agent/regenerate-prompt.md",
+    "sanitized": true,
+    "source_sha256": "7a8270a177a5bab7ecb8be617370cc15489cec637ff6a4f535ead0f7c593a2dd",
+    "artifact_sha256": "7a8270a177a5bab7ecb8be617370cc15489cec637ff6a4f535ead0f7c593a2dd"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "7cc1c3a223e0f005c1a595625db554a21cedabe769b7ed5d216736ab52fea67c",
+    "artifact_sha256": "7cc1c3a223e0f005c1a595625db554a21cedabe769b7ed5d216736ab52fea67c"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-agent/user-prompt.md",
+    "artifact": "assets/prompts/question-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "07bfcb4b456edbefc8a23c1dd7e3287922c1f2b7556c34543f2e8a064c11068a",
+    "artifact_sha256": "07bfcb4b456edbefc8a23c1dd7e3287922c1f2b7556c34543f2e8a064c11068a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-ai-answer-agent/README.md",
+    "artifact": "assets/prompts/question-ai-answer-agent/README.md",
+    "sanitized": true,
+    "source_sha256": "7ca70a1601ccd49a682ba4ca1feeb908310cbec775a599cfe88122d2bacdccb9",
+    "artifact_sha256": "7ca70a1601ccd49a682ba4ca1feeb908310cbec775a599cfe88122d2bacdccb9"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-ai-answer-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-ai-answer-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "a94ebe7e72ac9fb7e377ceb912589389cf1b8e12e307a1f0359bb8dc060a406c",
+    "artifact_sha256": "a94ebe7e72ac9fb7e377ceb912589389cf1b8e12e307a1f0359bb8dc060a406c"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-ai-answer-agent/user-prompt.md",
+    "artifact": "assets/prompts/question-ai-answer-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "092547a968f9508fbdadc433c9121fee7cf8c9e7c744551ed3d971e53631f3ec",
+    "artifact_sha256": "092547a968f9508fbdadc433c9121fee7cf8c9e7c744551ed3d971e53631f3ec"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-ai-answer-agent-v2/system-prompt.md",
+    "artifact": "assets/prompts/question-ai-answer-agent-v2/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "c7f3f3502c5a36b2f8f2b9c09186e8005020bffd86e303be6487eaf39c334af6",
+    "artifact_sha256": "c7f3f3502c5a36b2f8f2b9c09186e8005020bffd86e303be6487eaf39c334af6"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-capture-agent/README.md",
+    "artifact": "assets/prompts/question-capture-agent/README.md",
+    "sanitized": true,
+    "source_sha256": "bfc08c3fef06b7379322dcf3568d0d9b2715b2d54fa36e57b2053e70891abe29",
+    "artifact_sha256": "bfc08c3fef06b7379322dcf3568d0d9b2715b2d54fa36e57b2053e70891abe29"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-capture-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-capture-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "50ea4e06375e4e4b0d56f87210379452d6d5cf79b5be737efad64b8d843a13f7",
+    "artifact_sha256": "50ea4e06375e4e4b0d56f87210379452d6d5cf79b5be737efad64b8d843a13f7"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-capture-agent/user-prompt.md",
+    "artifact": "assets/prompts/question-capture-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "1de6d9e2ad43abaf003683fbf2bfb691ad317c8ad8fe4dac25f25f7c1fcea665",
+    "artifact_sha256": "1571a322084cf8c7355ce6ac775e1b404c6e4e6049f30185ca9e82ed81601534"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-capture-agent-v2/system-prompt.md",
+    "artifact": "assets/prompts/question-capture-agent-v2/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "f13a18ddf46390d641992ec1e314fff95b67e2936d11ed6d3590540524927177",
+    "artifact_sha256": "f13a18ddf46390d641992ec1e314fff95b67e2936d11ed6d3590540524927177"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-capture-single-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-capture-single-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "19eefa107db3fcfddf3d3554268e8b827f65aef2d6f76006f493daf7330a9ad2",
+    "artifact_sha256": "19eefa107db3fcfddf3d3554268e8b827f65aef2d6f76006f493daf7330a9ad2"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-difficulty-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-difficulty-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "6fed23a9b5cc5a40b07b751011fe4b5f0711deb14100b339fac68e3e8de2eb58",
+    "artifact_sha256": "6fed23a9b5cc5a40b07b751011fe4b5f0711deb14100b339fac68e3e8de2eb58"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-explanation-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-explanation-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "c8e17050cb38bb6caf2263573fceb30753d5b7c3131f23ef132862203836ab03",
+    "artifact_sha256": "c8e17050cb38bb6caf2263573fceb30753d5b7c3131f23ef132862203836ab03"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-variant-agent/system-prompt-image.md",
+    "artifact": "assets/prompts/question-variant-agent/system-prompt-image.md",
+    "sanitized": true,
+    "source_sha256": "36f793fea6298f59bc2e6850548c453a37dc81410ef81c3923d7c2385e87a4b3",
+    "artifact_sha256": "36f793fea6298f59bc2e6850548c453a37dc81410ef81c3923d7c2385e87a4b3"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-variant-agent/system-prompt.md",
+    "artifact": "assets/prompts/question-variant-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "7454a3650aab48654aa8f24c83bcc6ea5f7c06ac3f14ceb4e0e8da4c38ee1487",
+    "artifact_sha256": "7454a3650aab48654aa8f24c83bcc6ea5f7c06ac3f14ceb4e0e8da4c38ee1487"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-variant-agent/user-prompt-image.md",
+    "artifact": "assets/prompts/question-variant-agent/user-prompt-image.md",
+    "sanitized": true,
+    "source_sha256": "a44fb619a37a257b8c990fa77c686fc6abaabb2daa2a1b331f6a4c2238eb35fa",
+    "artifact_sha256": "a44fb619a37a257b8c990fa77c686fc6abaabb2daa2a1b331f6a4c2238eb35fa"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/question-variant-agent/user-prompt.md",
+    "artifact": "assets/prompts/question-variant-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "5d25326247f86924fd1ef18454c7f784a1313a72816f1ce79c225396eb91922d",
+    "artifact_sha256": "5d25326247f86924fd1ef18454c7f784a1313a72816f1ce79c225396eb91922d"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/variant-exam-agent/system-prompt.md",
+    "artifact": "assets/prompts/variant-exam-agent/system-prompt.md",
+    "sanitized": true,
+    "source_sha256": "dd8edc79f95f0046356fd996497ff8f7090d852da544603434ba959ea9ab3a7a",
+    "artifact_sha256": "dd8edc79f95f0046356fd996497ff8f7090d852da544603434ba959ea9ab3a7a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/variant-exam-agent/user-prompt-from-exam.md",
+    "artifact": "assets/prompts/variant-exam-agent/user-prompt-from-exam.md",
+    "sanitized": true,
+    "source_sha256": "b39cf0d40a14d93f46a94749a77d5ffbcae8e82a6509a928abd37353ee5e558f",
+    "artifact_sha256": "b39cf0d40a14d93f46a94749a77d5ffbcae8e82a6509a928abd37353ee5e558f"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/prompts/variant-exam-agent/user-prompt.md",
+    "artifact": "assets/prompts/variant-exam-agent/user-prompt.md",
+    "sanitized": true,
+    "source_sha256": "977c8741ec73925156b938dd0dc7fc381361cb780e10437fa67fd313376ccec5",
+    "artifact_sha256": "977c8741ec73925156b938dd0dc7fc381361cb780e10437fa67fd313376ccec5"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/bianshi/references/geometry-tikz.md",
+    "artifact": "assets/backend-skills/bianshi/references/geometry-tikz.md",
+    "sanitized": true,
+    "source_sha256": "603d576a2184603228f685b900e8ab12168161948e5a2e29f8a3fd20a3542310",
+    "artifact_sha256": "603d576a2184603228f685b900e8ab12168161948e5a2e29f8a3fd20a3542310"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/bianshi/references/output-format.md",
+    "artifact": "assets/backend-skills/bianshi/references/output-format.md",
+    "sanitized": true,
+    "source_sha256": "9e4916bb602df2315e31628f7fd47af685d31bf76bff11d8c626751fe9c2fea9",
+    "artifact_sha256": "9e4916bb602df2315e31628f7fd47af685d31bf76bff11d8c626751fe9c2fea9"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/bianshi/SKILL.md",
+    "artifact": "assets/backend-skills/bianshi/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "e7272ac12a6bef70f6f1a97ad0e74e351c4d2f812f59c2585621524d7ad0a427",
+    "artifact_sha256": "e7272ac12a6bef70f6f1a97ad0e74e351c4d2f812f59c2585621524d7ad0a427"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-1.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-1.md",
+    "sanitized": true,
+    "source_sha256": "8f12eb8ede094aba4bf6e9ea8f546bf60f33652decd0e7c7d578f8ad14b5a256",
+    "artifact_sha256": "8f12eb8ede094aba4bf6e9ea8f546bf60f33652decd0e7c7d578f8ad14b5a256"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-2.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-2.md",
+    "sanitized": true,
+    "source_sha256": "8bcc42ce4caedecdb605d6f52d2f6456b792d3ff740497477750607074080e9f",
+    "artifact_sha256": "8bcc42ce4caedecdb605d6f52d2f6456b792d3ff740497477750607074080e9f"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-3.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-3.md",
+    "sanitized": true,
+    "source_sha256": "78426d9fcca662653a3d61f43c70e148e24f8a77d05d946bfee8d3e7a5e65a59",
+    "artifact_sha256": "78426d9fcca662653a3d61f43c70e148e24f8a77d05d946bfee8d3e7a5e65a59"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-4.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-4.md",
+    "sanitized": true,
+    "source_sha256": "9e723527dd19ea0e9b37b913116e3118c7e68f131babdfea9f3547cad32eea1d",
+    "artifact_sha256": "9e723527dd19ea0e9b37b913116e3118c7e68f131babdfea9f3547cad32eea1d"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-5.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-5.md",
+    "sanitized": true,
+    "source_sha256": "4b343136d629606b8037a9d20aaea57c231112189718bf166366789672ca7747",
+    "artifact_sha256": "4b343136d629606b8037a9d20aaea57c231112189718bf166366789672ca7747"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-6.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-6.md",
+    "sanitized": true,
+    "source_sha256": "8aa1d70741503126a1270b36bda96e03490fcc1734ee8520cf74071c8f98f5b0",
+    "artifact_sha256": "8aa1d70741503126a1270b36bda96e03490fcc1734ee8520cf74071c8f98f5b0"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-7.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-7.md",
+    "sanitized": true,
+    "source_sha256": "c1f873d1bcafe287d1fa90478a1383f1243d4d0441a9c93a023461bf95d2f79e",
+    "artifact_sha256": "c1f873d1bcafe287d1fa90478a1383f1243d4d0441a9c93a023461bf95d2f79e"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-8.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-8.md",
+    "sanitized": true,
+    "source_sha256": "bd4c68cf9bbc4c787b61baa64a475a973b4bd632d5951e1fbfa4e0b595f46c2e",
+    "artifact_sha256": "bd4c68cf9bbc4c787b61baa64a475a973b4bd632d5951e1fbfa4e0b595f46c2e"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/chinese-grade-9.md",
+    "artifact": "assets/backend-skills/chuti/references/chinese-grade-9.md",
+    "sanitized": true,
+    "source_sha256": "94ad52c41e3cf0cc3b8eb0b480ca04879fa04b3e4622024554e434f7acd0eed9",
+    "artifact_sha256": "94ad52c41e3cf0cc3b8eb0b480ca04879fa04b3e4622024554e434f7acd0eed9"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-1.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-1.md",
+    "sanitized": true,
+    "source_sha256": "e73a285dd6dce6e355aada335533d9748310c21cfc210c21d6a12ec11589e9a4",
+    "artifact_sha256": "e73a285dd6dce6e355aada335533d9748310c21cfc210c21d6a12ec11589e9a4"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-2.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-2.md",
+    "sanitized": true,
+    "source_sha256": "60733ecee7f1023d6cd8b11c433952547a62152b527fa9e329fec719de6f2a0a",
+    "artifact_sha256": "60733ecee7f1023d6cd8b11c433952547a62152b527fa9e329fec719de6f2a0a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-3.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-3.md",
+    "sanitized": true,
+    "source_sha256": "85f1ce7518c449b948d283bf6cacacda238d699648131e182579978d2cd6b5a5",
+    "artifact_sha256": "85f1ce7518c449b948d283bf6cacacda238d699648131e182579978d2cd6b5a5"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-4.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-4.md",
+    "sanitized": true,
+    "source_sha256": "dc5db313ae479683eee66b13163bd602f2063d0a14fe875d2ce062a02c508583",
+    "artifact_sha256": "dc5db313ae479683eee66b13163bd602f2063d0a14fe875d2ce062a02c508583"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-5.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-5.md",
+    "sanitized": true,
+    "source_sha256": "8ac8fd479c4d7e66afe2caf07c3f12c4c3b5f7be3febd7b993ea3ddfd3c032a4",
+    "artifact_sha256": "8ac8fd479c4d7e66afe2caf07c3f12c4c3b5f7be3febd7b993ea3ddfd3c032a4"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-6.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-6.md",
+    "sanitized": true,
+    "source_sha256": "8358d85f3f5823b7186c0bbab8b868f5a21255def6c946d59053e2fc1b0a6dfa",
+    "artifact_sha256": "8358d85f3f5823b7186c0bbab8b868f5a21255def6c946d59053e2fc1b0a6dfa"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-7.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-7.md",
+    "sanitized": true,
+    "source_sha256": "ccbae4dec58bf9d9eee46076e7842c17910140167de2dce605dc6cbb5aac9e2c",
+    "artifact_sha256": "ccbae4dec58bf9d9eee46076e7842c17910140167de2dce605dc6cbb5aac9e2c"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-8.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-8.md",
+    "sanitized": true,
+    "source_sha256": "59d8e7fbcbc6c1e30dfa8d4a6acb54087f38165b1ec9ffa6835efa1182f224e5",
+    "artifact_sha256": "59d8e7fbcbc6c1e30dfa8d4a6acb54087f38165b1ec9ffa6835efa1182f224e5"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/english-grade-9.md",
+    "artifact": "assets/backend-skills/chuti/references/english-grade-9.md",
+    "sanitized": true,
+    "source_sha256": "2d002861b2ddcc9d5ab85c9b2f8dcf102239b3967875e8f13ac4e32e080acd8a",
+    "artifact_sha256": "2d002861b2ddcc9d5ab85c9b2f8dcf102239b3967875e8f13ac4e32e080acd8a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/geometry-tikz.md",
+    "artifact": "assets/backend-skills/chuti/references/geometry-tikz.md",
+    "sanitized": true,
+    "source_sha256": "603d576a2184603228f685b900e8ab12168161948e5a2e29f8a3fd20a3542310",
+    "artifact_sha256": "603d576a2184603228f685b900e8ab12168161948e5a2e29f8a3fd20a3542310"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-1.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-1.md",
+    "sanitized": true,
+    "source_sha256": "0b99a6954bdcea40deacf8695d1003d17224bde17cdc4ddf4c1a985e7a55d9bc",
+    "artifact_sha256": "0b99a6954bdcea40deacf8695d1003d17224bde17cdc4ddf4c1a985e7a55d9bc"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-2.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-2.md",
+    "sanitized": true,
+    "source_sha256": "715d02ffcc144929e76117fbecafc0ae03000f068daeeaf13a0034db7e0bdaba",
+    "artifact_sha256": "715d02ffcc144929e76117fbecafc0ae03000f068daeeaf13a0034db7e0bdaba"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-3.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-3.md",
+    "sanitized": true,
+    "source_sha256": "7efca6909d98006442330cca5e3fcc73846e3141fb746f8a71c968351dc847d2",
+    "artifact_sha256": "7efca6909d98006442330cca5e3fcc73846e3141fb746f8a71c968351dc847d2"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-4.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-4.md",
+    "sanitized": true,
+    "source_sha256": "1b3a37bf7352d98c74445013b20fff86b006d78a859feab9736a7b55aed88ae2",
+    "artifact_sha256": "1b3a37bf7352d98c74445013b20fff86b006d78a859feab9736a7b55aed88ae2"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-5.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-5.md",
+    "sanitized": true,
+    "source_sha256": "1954b0f9a3e46b517cdf98020c73cfb270d501c0875e5492bd4b5c7abdc71a1c",
+    "artifact_sha256": "1954b0f9a3e46b517cdf98020c73cfb270d501c0875e5492bd4b5c7abdc71a1c"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-6.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-6.md",
+    "sanitized": true,
+    "source_sha256": "3457882db405208959a9aa05a2b84bdcde4816566de535bc09b9589ad87a2822",
+    "artifact_sha256": "3457882db405208959a9aa05a2b84bdcde4816566de535bc09b9589ad87a2822"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-7.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-7.md",
+    "sanitized": true,
+    "source_sha256": "dd68fe95b4a97127d6fc59497b486b6742ad8dd56ee16e7758571478dbac10f2",
+    "artifact_sha256": "dd68fe95b4a97127d6fc59497b486b6742ad8dd56ee16e7758571478dbac10f2"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-8.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-8.md",
+    "sanitized": true,
+    "source_sha256": "6b403ead9c359e6c84bef9df40faea5be10a334ec7783ed5bb7d9dc3490c161e",
+    "artifact_sha256": "6b403ead9c359e6c84bef9df40faea5be10a334ec7783ed5bb7d9dc3490c161e"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/references/math-grade-9.md",
+    "artifact": "assets/backend-skills/chuti/references/math-grade-9.md",
+    "sanitized": true,
+    "source_sha256": "f2b4a074aab3998227645a922cb3073bd64a897e500b87cac4e31144d3797494",
+    "artifact_sha256": "f2b4a074aab3998227645a922cb3073bd64a897e500b87cac4e31144d3797494"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/chuti/SKILL.md",
+    "artifact": "assets/backend-skills/chuti/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "bfe5437d975c3e715cecc1a792b4430f407748fc0bd33818ae4f8550f7daec28",
+    "artifact_sha256": "bfe5437d975c3e715cecc1a792b4430f407748fc0bd33818ae4f8550f7daec28"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/pijiao/SKILL.md",
+    "artifact": "assets/backend-skills/pijiao/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "040f79022597fe688879e7b3087c2f70bb2977a842bcff195571d82bdfabfcce",
+    "artifact_sha256": "040f79022597fe688879e7b3087c2f70bb2977a842bcff195571d82bdfabfcce"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/question-variant/references/geometry-tikz.md",
+    "artifact": "assets/backend-skills/question-variant/references/geometry-tikz.md",
+    "sanitized": true,
+    "source_sha256": "603d576a2184603228f685b900e8ab12168161948e5a2e29f8a3fd20a3542310",
+    "artifact_sha256": "603d576a2184603228f685b900e8ab12168161948e5a2e29f8a3fd20a3542310"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/question-variant/references/output-format.md",
+    "artifact": "assets/backend-skills/question-variant/references/output-format.md",
+    "sanitized": true,
+    "source_sha256": "9e4916bb602df2315e31628f7fd47af685d31bf76bff11d8c626751fe9c2fea9",
+    "artifact_sha256": "9e4916bb602df2315e31628f7fd47af685d31bf76bff11d8c626751fe9c2fea9"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-backend/src/main/resources/skills/question-variant/SKILL.md",
+    "artifact": "assets/backend-skills/question-variant/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "e3340bfd4b58a7ae0b58cacbcd0eddfa84874d61789d0a263c14b114e701de00",
+    "artifact_sha256": "e3340bfd4b58a7ae0b58cacbcd0eddfa84874d61789d0a263c14b114e701de00"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/AGENTS.md",
+    "artifact": "assets/cx-bundle/AGENTS.md",
+    "sanitized": true,
+    "source_sha256": "3839a88efeb4d9bc70fe796290a28a944422b91dfe677261458fe19f82554443",
+    "artifact_sha256": "3839a88efeb4d9bc70fe796290a28a944422b91dfe677261458fe19f82554443"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/bundle.json",
+    "artifact": "assets/cx-bundle/bundle.json",
+    "sanitized": true,
+    "source_sha256": "6de2560a743fb051196954971284b259514e3c2c9d3ce0173c6d0696e314a4a8",
+    "artifact_sha256": "6de2560a743fb051196954971284b259514e3c2c9d3ce0173c6d0696e314a4a8"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/environments/default/remote_sources/cx-exam/meta.json",
+    "artifact": "assets/cx-bundle/environments/default/remote_sources/cx-exam/meta.json",
+    "sanitized": true,
+    "source_sha256": "b2f95da0ee795cd9f09e63be99c785574f6bd6c5b7c3ae829d2ad27a626c99f4",
+    "artifact_sha256": "b2f95da0ee795cd9f09e63be99c785574f6bd6c5b7c3ae829d2ad27a626c99f4"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/environments/default/remote_sources/cx-exam/source.json",
+    "artifact": "assets/cx-bundle/environments/default/remote_sources/cx-exam/source.json",
+    "sanitized": true,
+    "source_sha256": "6c197764dd7cd3511c672a516a1f03c40859e475a14590c0cb34dc5a286372b2",
+    "artifact_sha256": "5a68a4c0bf02ab5f5c81847bbcb17249eba00062e08566cab65369067377388f"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/environments/default/remote_sources/cx-question-capture/meta.json",
+    "artifact": "assets/cx-bundle/environments/default/remote_sources/cx-question-capture/meta.json",
+    "sanitized": true,
+    "source_sha256": "5cefddf3ae3a2ff35c975ddb541d2ce164f10eed77e80d25d048e9439aede786",
+    "artifact_sha256": "5cefddf3ae3a2ff35c975ddb541d2ce164f10eed77e80d25d048e9439aede786"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/environments/default/remote_sources/cx-question-capture/source.json",
+    "artifact": "assets/cx-bundle/environments/default/remote_sources/cx-question-capture/source.json",
+    "sanitized": true,
+    "source_sha256": "df5548d94027d1e8f2e772e6d95f0c3d023537fc01e513e61c4b24d87e5e256e",
+    "artifact_sha256": "94b34a39387e6058ad64ef07500d4bb2ef1257cdbbfa0b8b2b4ee547598d0f3f"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/environments/default/remote_sources/cx-question-variant/meta.json",
+    "artifact": "assets/cx-bundle/environments/default/remote_sources/cx-question-variant/meta.json",
+    "sanitized": true,
+    "source_sha256": "9b059e4ed78b2ba900c4baf8c179aa2c4c8bd3b97d491dba49ab2cda49d262a3",
+    "artifact_sha256": "9b059e4ed78b2ba900c4baf8c179aa2c4c8bd3b97d491dba49ab2cda49d262a3"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/environments/default/remote_sources/cx-question-variant/source.json",
+    "artifact": "assets/cx-bundle/environments/default/remote_sources/cx-question-variant/source.json",
+    "sanitized": true,
+    "source_sha256": "4369269d486ca86e5b32a8f35280f7b2d56537f4d98ad87adc50ead16a8b402f",
+    "artifact_sha256": "94d6cd232c260bca8022b6d554da9f2dbf30ed0882286d415e0a98eaaf8c7ec7"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/exam/catalogs/cx-exam-cards.json",
+    "artifact": "assets/cx-bundle/skills/exam/catalogs/cx-exam-cards.json",
+    "sanitized": true,
+    "source_sha256": "1d56dda43db603534aa74e835dfbe37e1be4387ba6a3ca5fdc93463c31a0758c",
+    "artifact_sha256": "fc0132d81323bf64f593fc7707b8cfafc7e80bf84390df76f57ca195620b414a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/exam/SKILL.md",
+    "artifact": "assets/cx-bundle/skills/exam/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "38489119e7643e4af54d868ce2c26f6bcef5d7e406ff73ed3ae8e16759bcee4a",
+    "artifact_sha256": "38489119e7643e4af54d868ce2c26f6bcef5d7e406ff73ed3ae8e16759bcee4a"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/exam/tools/local-tools.json",
+    "artifact": "assets/cx-bundle/skills/exam/tools/local-tools.json",
+    "sanitized": true,
+    "source_sha256": "4a33b3c11dc47f1e5c398dc4f0c161fc10e630cdda37e2b51351c9ec8945a9e3",
+    "artifact_sha256": "7a91c1498cd5b827478d7128121b332a1ba770a4fd6f8cd62e7c322d6a679e9e"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/exam/tools/remote-sources.json",
+    "artifact": "assets/cx-bundle/skills/exam/tools/remote-sources.json",
+    "sanitized": true,
+    "source_sha256": "b4b5df14e5008de2bdbea57c2fda5dbcd7a0fb9faf6e7ff31628b35f7db6f505",
+    "artifact_sha256": "b4b5df14e5008de2bdbea57c2fda5dbcd7a0fb9faf6e7ff31628b35f7db6f505"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/question-capture/SKILL.md",
+    "artifact": "assets/cx-bundle/skills/question-capture/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "d64e844c0d739552e43894c8c95896b12dfd7e492351a124f5f081a65eddda04",
+    "artifact_sha256": "d64e844c0d739552e43894c8c95896b12dfd7e492351a124f5f081a65eddda04"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/question-capture/tools/remote-sources.json",
+    "artifact": "assets/cx-bundle/skills/question-capture/tools/remote-sources.json",
+    "sanitized": true,
+    "source_sha256": "59589266bab153aa4b5cd29af90d0b69e48c238e808b5e05796002b70aa492b9",
+    "artifact_sha256": "59589266bab153aa4b5cd29af90d0b69e48c238e808b5e05796002b70aa492b9"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/question-variant/SKILL.md",
+    "artifact": "assets/cx-bundle/skills/question-variant/SKILL.md",
+    "sanitized": true,
+    "source_sha256": "99a447ee9fec4cc03678b3763c93fabd7029f2b5ed64bbfa4aaf498190f1d62f",
+    "artifact_sha256": "99a447ee9fec4cc03678b3763c93fabd7029f2b5ed64bbfa4aaf498190f1d62f"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-agent-skills-workspace/jegent-bundle/bundle/skills/question-variant/tools/remote-sources.json",
+    "artifact": "assets/cx-bundle/skills/question-variant/tools/remote-sources.json",
+    "sanitized": true,
+    "source_sha256": "82c2cce0d13ed9cfa5cc683383ae792bfb2befa0244d817f9dff1210589d5409",
+    "artifact_sha256": "82c2cce0d13ed9cfa5cc683383ae792bfb2befa0244d817f9dff1210589d5409"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-py/model-manifest.json",
+    "artifact": "assets/local-model/model-manifest.json",
+    "sanitized": true,
+    "source_sha256": "53f049f2897d5a68250348c62b63ac97abec13ddf8f42aaa71fa8c9879eeb5fc",
+    "artifact_sha256": "75813e3d30253b45d5cb6eb865207a9fb402a24300d219be9d4eb3377773e5ad"
+  },
+  {
+    "source_repo": "cx-ai-doc",
+    "source": "cx-py/requirements-cpu.lock",
+    "artifact": "assets/local-model/requirements-cpu.lock",
+    "sanitized": true,
+    "source_sha256": "45d696a35bdc60ace2a79a620dd44acaa8040331761496003d54c5eee29871f8",
+    "artifact_sha256": "eaea19c2a33090f5d2004968592e66c7996d9c7e001270ae9f17846286e5320f"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/a2a.md",
+    "artifact": "assets/xzagent-api-notes/a2a.md",
+    "sanitized": true,
+    "source_sha256": "5c06a546ffb152186965b2ee6006aaff34ea897b6a937dc03c62f7a55f6494b2",
+    "artifact_sha256": "5c06a546ffb152186965b2ee6006aaff34ea897b6a937dc03c62f7a55f6494b2"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/app-admin.md",
+    "artifact": "assets/xzagent-api-notes/app-admin.md",
+    "sanitized": true,
+    "source_sha256": "08eb8e5adaf7c2f526097b839a4c8d069ebf946d97026989af5e7286bdad344a",
+    "artifact_sha256": "08eb8e5adaf7c2f526097b839a4c8d069ebf946d97026989af5e7286bdad344a"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/internal.md",
+    "artifact": "assets/xzagent-api-notes/internal.md",
+    "sanitized": true,
+    "source_sha256": "8358e84bca010c93fec39637ca80be171a839a866678f2ff850706ece22aa6d7",
+    "artifact_sha256": "8358e84bca010c93fec39637ca80be171a839a866678f2ff850706ece22aa6d7"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/platform-advanced.md",
+    "artifact": "assets/xzagent-api-notes/platform-advanced.md",
+    "sanitized": true,
+    "source_sha256": "b5406f2a637d238ca4c5c70e969e50822aeebe59667739c7e59d0d4a3991f8de",
+    "artifact_sha256": "b5406f2a637d238ca4c5c70e969e50822aeebe59667739c7e59d0d4a3991f8de"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/skill-integration.md",
+    "artifact": "assets/xzagent-api-notes/skill-integration.md",
+    "sanitized": true,
+    "source_sha256": "883f8cd62a95a0fa06d1d9bd69a9929515db7262e7fc0fa3d33f6ebd8d7fbd30",
+    "artifact_sha256": "883f8cd62a95a0fa06d1d9bd69a9929515db7262e7fc0fa3d33f6ebd8d7fbd30"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/tenant-admin.md",
+    "artifact": "assets/xzagent-api-notes/tenant-admin.md",
+    "sanitized": true,
+    "source_sha256": "a5e8f01349ec7d0ed3c1160803243e1877ea352b9fc96dc58dddd0a382a4dac5",
+    "artifact_sha256": "a5e8f01349ec7d0ed3c1160803243e1877ea352b9fc96dc58dddd0a382a4dac5"
+  },
+  {
+    "source_repo": "xzagent",
+    "source": "src/main/resources/openapi-docs/user-runtime.md",
+    "artifact": "assets/xzagent-api-notes/user-runtime.md",
+    "sanitized": true,
+    "source_sha256": "bb10045443e967e18b4174bdbb27b68d9760388506092fd85b50289e452fd531",
+    "artifact_sha256": "bb10045443e967e18b4174bdbb27b68d9760388506092fd85b50289e452fd531"
+  }
+]

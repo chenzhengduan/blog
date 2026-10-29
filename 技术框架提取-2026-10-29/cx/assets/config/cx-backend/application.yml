@@ -1,0 +1,144 @@
+# cx-backend 本地配置。
+#
+# 技术栈与配置结构参考 reference-projects/xzagent 的 application.yml 改写：
+#   - 保留 spring.application.name / profiles / server.port / management / nacos / log 段。
+#   - 移除 xzagent.* 业务配置段（UI/distributed-run 等）—— 脚手架零业务（spec FR-010，YAGNI）。
+#   - 凭证/密钥一律走环境变量或 Nacos 配置，不入源码（宪法原则 IV）。
+#
+# 注意：spring.application.name 是 Nacos 注册名（网关以 lb:// 寻址用），与对外路由前缀
+# 段 /api/cx/** 的 "cx" 相互独立、不强制同名（澄清 Q2 衍生）。
+
+spring:
+  application:
+    # 服务在 Nacos 的注册名；网关以 lb://cx-backend 寻址本服务
+    name: cx-backend
+  profiles:
+    # 本地开发默认 local（加载 application-local.yml）；生产/测试由 SPRING_PROFILES_ACTIVE 环境变量覆盖
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  webflux:
+    # 所有 WebFlux Controller 自动加上 /cx 前缀，与网关 StripPrefix=1 保留的 /cx 段对齐
+    base-path: /cx
+
+server:
+  # 业务服务端口（参考 xzagent 的 9513 段，可由环境变量覆盖）
+  port: ${SERVER_PORT:9513}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 暴露健康检查与信息端点；健康检查对外经网关 /api/cx/health 访问
+        include: health,info
+
+# Nacos 配置：使用原生 nacos-client 1.4.x，兼容 Nacos 1.3.x/1.4.x HTTP 协议。
+# 不依赖 Spring Cloud Alibaba，避免与 Spring Boot 3.5.x 版本兼容性问题（与 xzagent 一致）。
+nacos:
+  # Nacos 服务器地址，格式 host:port，多节点用逗号分隔
+  server-addr: ${NACOS_SERVER_ADDR:https://service.example.com}
+  # 命名空间 ID（非命名空间名称），为空则使用 public 空间
+  namespace: ${NACOS_NAMESPACE:}
+  # 分组，用于同一命名空间下的业务隔离
+  group: ${NACOS_GROUP:DEFAULT_GROUP}
+  # Nacos 账号；原生 nacos-client 需由代码显式传入 Properties
+  username: ${NACOS_USERNAME:nacos}
+  # Nacos 密码；仅配置环境变量不会自动生效，必须由注册/配置中心客户端显式读取
+  password: ${NACOS_PASSWORD:}
+  # 是否开启服务注册；本地开发无需 Nacos 时设为 false
+  register-enabled: ${NACOS_REGISTER_ENABLED:true}
+  # 是否开启配置中心；从 Nacos 加载 ${spring.application.name}.yml（即 cx-backend.yml）
+  config-enabled: ${NACOS_CONFIG_ENABLED:true}
+
+# TikZ 几何图渲染超时秒数，默认 15 秒（pdflatex 正常耗时 1-2 秒，15 秒为安全上限）
+# 超时时强制终止 pdflatex 进程，diagram_base64 存 null，不阻断出题主流程
+cx:
+    render-timeout-seconds: ${CX_TIKZ_RENDER_TIMEOUT:15}
+    # API 网关前缀：默认 /api（走网关）；本地直连时 application-local.yml 覆盖为空
+    # 影响 OpenApiConfig server URL 和 springdoc swagger-ui config-url / urls
+    api:
+      prefix: ${CX_API_PREFIX:/api}
+    # 录题性能优化参数（029-question-capture-perf）
+    capture:
+      perf:
+        # 录题草稿构建与逐题持久化的 flatMap 并发上限（沿用历史配置键）
+        diagram-locate-concurrency: ${CX_CAPTURE_DIAGRAM_LOCATE_CONCURRENCY:3}
+        # AI 答案异步生成的 flatMap 并发上限；值越大并行度越高但越可能触发模型服务限流
+        ai-answer-concurrency: ${CX_CAPTURE_AI_ANSWER_CONCURRENCY:3}
+    # 内部服务调用基础配置：业务客户端通过 service-key 复用 direct/Nacos 解析、超时和重试。
+    internal-services:
+      default-connect-timeout: ${CX_INTERNAL_SERVICE_CONNECT_TIMEOUT:3s}
+      default-response-timeout: ${CX_INTERNAL_SERVICE_RESPONSE_TIMEOUT:65s}
+      default-retry-times: ${CX_INTERNAL_SERVICE_RETRY_TIMES:1}
+      services:
+        # cx-py 是通用 Python 内网能力服务；题内图检测只是当前首个能力。
+        cx-py:
+          service-name: cx-py
+          # 本地无 Nacos 时可设置 CX_PY_DIRECT_BASE_URL=http://127.0.0.1:9514；为空则走 Nacos 健康实例发现。
+          direct-base-url: ${CX_PY_DIRECT_BASE_URL:}
+          scheme: ${CX_PY_SCHEME:http}
+          connect-timeout: ${CX_PY_CONNECT_TIMEOUT:3s}
+          response-timeout: ${CX_PY_RESPONSE_TIMEOUT:65s}
+          retry-times: ${CX_PY_RETRY_TIMES:1}
+    # 题内图检测能力客户端：业务只依赖 DiagramDetectionClient，不直接拼接 cx-py URL。
+    diagram-detection:
+      enabled: ${CX_DIAGRAM_DETECTION_ENABLED:true}
+      service-key: ${CX_DIAGRAM_DETECTION_SERVICE_KEY:cx-py}
+      path: ${CX_DIAGRAM_DETECTION_PATH:/py/private/diagram-detect}
+    # 图片增强能力客户端：业务只依赖 ImageEnhancementClient，不直接拼接 cx-py URL。
+    image-enhancement:
+      enabled: ${CX_IMAGE_ENHANCEMENT_ENABLED:true}
+      service-key: ${CX_IMAGE_ENHANCEMENT_SERVICE_KEY:cx-py}
+      path: ${CX_IMAGE_ENHANCEMENT_PATH:/py/private/image-enhance}
+    agent:
+      llm:
+        tasks:
+          # 图片答卷识别任务：默认走 default-endpoint，端点列表由 local/Nacos 配置覆盖。
+          photo-submission-parse:
+            max-iters: ${CX_AGENT_PHOTO_PARSE_MAX_ITERS:8}
+
+# MyBatis-Plus 全局配置（持久化规范见 docs/backend-persistence.md）
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted   # 逻辑删除字段名
+      logic-delete-value: 1         # 已删除值
+      logic-not-delete-value: 0     # 正常值
+  mapper-locations: classpath*:mapper/**/*.xml
+
+# 日志开关默认配置，可被 Nacos cx-backend.yml 覆盖
+# 控制台与阿里云 SLS 双 appender 由 logback-spring.xml 按 log.console.enable /
+# log.aliyunlog.enable 开关控制（宪法原则 V：结构化日志 + 可观测性）
+log:
+  console:
+    enable: true   # 默认开启控制台输出
+  level: INFO      # 默认日志级别
+
+# OpenAPI3 接口文档（springdoc-openapi-starter-webflux-ui）
+# 通过 CX_OPENAPI_ENABLED 环境变量控制启用/关闭：本地/测试默认开启，生产设为 false 关闭
+# 因 spring.webflux.base-path=/cx，实际访问路径自动带 /cx 前缀
+# 后端直连：http://localhost:9513/cx/swagger-ui.html
+# 网关访问：http://<gateway>/api/cx/swagger-ui.html
+#
+# CX_API_PREFIX 控制文档内部 URL 的网关前缀：
+#   - 默认 /api（走网关）：Swagger UI 的 config-url 和 urls 带 /api/cx 前缀
+#   - 本地直连：application-local.yml 覆盖为空，URL 仅带 /cx 前缀
+springdoc:
+  api-docs:
+    enabled: ${CX_OPENAPI_ENABLED:true}
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: ${CX_OPENAPI_ENABLED:true}
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    # Swagger UI 拉取 swagger-config 的 URL（默认带 /api 网关前缀）
+    config-url: ${CX_API_PREFIX:/api}/cx/v3/api-docs/swagger-config
+    # Swagger UI 拉取 OpenAPI JSON 的 URL（分组）
+    urls:
+      - url: ${CX_API_PREFIX:/api}/cx/v3/api-docs/cx-backend
+        name: cx-backend
+  group-configs:
+    - group: cx-backend
+      packages-to-scan: com.xiaogj.cx.backend.web
+      # demo 包仅供前端 Demo 使用，接入方不应调用，从 Swagger 文档中排除
+      packages-to-exclude: com.xiaogj.cx.backend.web.demo
+      paths-to-match: /**

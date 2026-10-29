@@ -1,0 +1,111 @@
+{
+  "catalogId": "cx-exam-cards",
+  "name": "试卷生成卡片",
+  "description": "对话式出卷场景的自定义 A2UI catalog：范围确认卡、出卷蓝图卡、出卷结果卡。dataModel 一律绑定出卷工具契约值（年级整数 1-9、题型枚举 choice/multi/apply 等）。",
+  "components": {
+    "ExamScopeCard": {
+      "type": "object",
+      "description": "范围确认卡：向教师确认学科与年级",
+      "properties": {
+        "id": { "type": "string", "description": "组件唯一 ID" },
+        "component": { "const": "ExamScopeCard", "description": "组件类型" },
+        "subject": { "description": "学科绑定值，可为字面量或 {path}",
+          "anyOf": [
+            { "type": "string", "enum": ["math", "chinese", "english"] },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "grade": { "description": "年级绑定值，可为整数或 {path}",
+          "anyOf": [
+            { "type": "integer", "minimum": 1, "maximum": 9 },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "confirmLabel": { "type": "string", "description": "确认按钮文案，默认\"确认\"" },
+        "action": { "type": "object", "description": "确认动作，触发 submit-resume", "properties": { "event": { "type": "object", "properties": { "name": { "type": "string" }, "context": { "type": "object" } } } } }
+      },
+      "required": ["id", "component", "subject", "grade", "action"],
+      "additionalProperties": false
+    },
+    "ExamBlueprintCard": {
+      "type": "object",
+      "description": "出卷蓝图卡：确认出卷参数；与 generate_exam 工具入参同构",
+      "properties": {
+        "id": { "type": "string", "description": "组件唯一 ID" },
+        "component": { "const": "ExamBlueprintCard", "description": "组件类型" },
+        "subject": { "description": "学科（只读展示，契约值或 {path}）",
+          "anyOf": [
+            { "type": "string", "enum": ["math", "chinese", "english"] },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "grade": { "description": "年级（只读展示，整数 1-9 或 {path}）",
+          "anyOf": [
+            { "type": "integer", "minimum": 1, "maximum": 9 },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "difficulty": { "description": "难度（easy/medium/hard 或 {path}）",
+          "anyOf": [
+            { "type": "string", "enum": ["easy", "medium", "hard"] },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "totalScore": { "description": "满分（整数或 {path}）",
+          "anyOf": [
+            { "type": "integer", "minimum": 10, "maximum": 500 },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "topic": { "description": "知识点/考察范围（字符串或 {path}）",
+          "anyOf": [
+            { "type": "string" },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "title": { "description": "试卷标题（字符串或 {path}）",
+          "anyOf": [
+            { "type": "string" },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "extraRequirements": { "description": "补充要求（字符串或 {path}）",
+          "anyOf": [
+            { "type": "string" },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "questionDistribution": { "description": "题型分布（数组或 {path}）；空数组或未提供走工具默认分布",
+          "anyOf": [
+            { "type": "array", "maxItems": 10, "items": { "type": "object", "properties": { "questionType": { "type": "string", "enum": ["choice", "multi", "judge", "fill", "short", "apply", "calculation", "solution", "reading", "writing", "custom"] }, "count": { "type": "integer", "minimum": 1, "maximum": 50 } } } },
+            { "type": "object", "properties": { "path": { "type": "string", "pattern": "^/" } }, "required": ["path"] }
+          ]
+        },
+        "showDistribution": { "type": "boolean", "description": "是否默认展开分布编辑器（默认 false）" },
+        "submitLabel": { "type": "string", "description": "提交按钮文案，默认\"生成题目\"" },
+        "action": { "type": "object", "description": "提交动作，触发 submit-resume；context 应与 generate_exam 工具入参同构", "properties": { "event": { "type": "object", "properties": { "name": { "type": "string" }, "context": { "type": "object" } } } } }
+      },
+      "required": ["id", "component", "subject", "grade", "difficulty", "totalScore", "action"],
+      "additionalProperties": false
+    },
+    "ExamResultCard": {
+      "type": "object",
+      "description": "出卷结果卡：呈现摘要与查看入口；不含题目正文",
+      "properties": {
+        "id": { "type": "string", "description": "组件唯一 ID" },
+        "component": { "const": "ExamResultCard", "description": "组件类型" },
+        "examId": { "type": "string", "description": "试卷标识" },
+        "title": { "type": "string", "description": "试卷标题" },
+        "subject": { "type": "string", "enum": ["math", "chinese", "english"], "description": "学科" },
+        "grade": { "type": "integer", "minimum": 1, "maximum": 9, "description": "年级" },
+        "totalScore": { "type": "integer", "description": "总分" },
+        "examUrl": { "type": "string", "description": "试卷查看链接（CX 前端详情页地址）" },
+        "viewLabel": { "type": "string", "description": "查看按钮文案，默认：查看试卷" },
+        "variantLabel": { "type": "string", "description": "变式按钮文案，默认：生成变式卷" },
+        "variantAction": { "type": "object", "description": "变式动作（上行 submit-resume，context 含 examId）", "properties": { "event": { "type": "object", "properties": { "name": { "type": "string" }, "context": { "type": "object" } } } } }
+      },
+      "required": ["id", "component", "examId", "title", "subject", "grade", "examUrl"],
+      "additionalProperties": false
+    }
+  }
+}

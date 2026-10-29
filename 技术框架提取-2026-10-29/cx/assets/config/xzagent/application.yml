@@ -1,0 +1,122 @@
+spring:
+  application:
+    name: xzagent
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
+
+server:
+  port: ${SERVER_PORT:9513}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  api-docs:
+    # 后端保留 /xzagent 前缀；经网关访问时外部路径为 /api/xzagent/v3/api-docs。
+    path: ${XZAGENT_OPENAPI_API_DOCS_PATH:/xzagent/v3/api-docs}
+    enabled: ${XZAGENT_OPENAPI_API_DOCS_ENABLED:true}
+  swagger-ui:
+    # Swagger UI 仅作为联调入口；经网关访问时外部路径为 /api/xzagent/swagger-ui.html。
+    path: ${XZAGENT_OPENAPI_SWAGGER_UI_PATH:/xzagent/swagger-ui.html}
+    enabled: ${XZAGENT_OPENAPI_SWAGGER_UI_ENABLED:true}
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+# Nacos 配置：使用原生 nacos-client 1.4.x，兼容 Nacos 1.3.x/1.4.x HTTP 协议
+# 不依赖 Spring Cloud Alibaba，避免与 Spring Boot 3.5.x 版本兼容性问题
+nacos:
+  # Nacos 服务器地址，格式 host:port，多节点用逗号分隔
+  server-addr: ${NACOS_SERVER_ADDR:https://service.example.com}
+  # 命名空间 ID（非命名空间名称），为空则使用 public 空间
+  namespace: ${NACOS_NAMESPACE:44294dcd-e6a9-445a-adda-a5377e50c336}
+  # 分组，用于同一命名空间下的业务隔离
+  group: ${NACOS_GROUP:DEFAULT_GROUP}
+  # Nacos 账号；当前项目使用原生 nacos-client，需要由代码显式传入 Properties
+  username: ${NACOS_USERNAME:nacos}
+  # Nacos 密码；仅配置环境变量不会自动生效，必须由注册/配置中心客户端显式读取
+  password: ${NACOS_PASSWORD:}
+  # 是否开启服务注册；本地开发无需 Nacos 时设为 false
+  register-enabled: ${NACOS_REGISTER_ENABLED:true}
+  # 是否开启配置中心；从 Nacos 加载 ${spring.application.name}.yml
+  config-enabled: ${NACOS_CONFIG_ENABLED:true}
+
+xzagent:
+  remote-tool-stream:
+    # SSE 单事件与最终结果都必须有硬上限，防止长连接导致内存无界增长。
+    max-event-bytes: ${XZAGENT_REMOTE_STREAM_MAX_EVENT_BYTES:65536}
+    max-result-bytes: ${XZAGENT_REMOTE_STREAM_MAX_RESULT_BYTES:262144}
+    # 工具业务执行最长 15 分钟；AgentScope 外层多留 60 秒用于失败收口和资源释放。
+    max-total-timeout: ${XZAGENT_REMOTE_STREAM_MAX_TOTAL_TIMEOUT:900s}
+    default-idle-timeout: ${XZAGENT_REMOTE_STREAM_DEFAULT_IDLE_TIMEOUT:60s}
+    agent-tool-timeout: ${XZAGENT_REMOTE_STREAM_AGENT_TOOL_TIMEOUT:960s}
+    # 高频提示在进入 ToolEmitter 前合并，避免事件存储和客户端被微小 chunk 淹没。
+    coalesce-window: ${XZAGENT_REMOTE_STREAM_COALESCE_WINDOW:200ms}
+    coalesce-bytes: ${XZAGENT_REMOTE_STREAM_COALESCE_BYTES:8192}
+    max-tool-events: ${XZAGENT_REMOTE_STREAM_MAX_TOOL_EVENTS:5000}
+    max-run-events: ${XZAGENT_REMOTE_STREAM_MAX_RUN_EVENTS:10000}
+  remote-outbound:
+    # 私网目标默认全部拒绝；内部微服务必须由运维使用精确主机名或 CIDR 显式放行。
+    allowed-private-hosts: ${XZAGENT_REMOTE_ALLOWED_PRIVATE_HOSTS:}
+    allowed-private-cidrs: ${XZAGENT_REMOTE_ALLOWED_PRIVATE_CIDRS:}
+    # 非标准端口同样必须显式加入，避免 Meta 任意探测内部服务。
+    allowed-ports: ${XZAGENT_REMOTE_ALLOWED_PORTS:80,443}
+  ui:
+    # 前端 UI 的路径前缀。直连时为 /xzagent/ui，经 Zuul 网关透传时改为 /api/xzagent/ui
+    path-prefix: ${XZAGENT_UI_PATH_PREFIX:/xzagent/ui}
+  distributed-run:
+    # 当前节点的稳定标识。未显式配置时，默认自动推导为 serviceName:ip:port。
+    node-id: ${XZAGENT_NODE_ID:}
+    # 当前节点对集群内其他节点暴露的内部基地址，用于 run cancel 等内部控制转发；
+    # 未显式配置时默认自动推导为 http://ip:port。
+    internal-base-url: ${XZAGENT_INTERNAL_BASE_URL:}
+    # 活跃运行 lease 时长（秒）。owner 节点需要周期性 heartbeat 续租。
+    active-lease-seconds: ${XZAGENT_ACTIVE_LEASE_SECONDS:120}
+    # heartbeat 刷新间隔（秒）。建议明显小于 lease 时长。
+    heartbeat-interval-seconds: ${XZAGENT_HEARTBEAT_INTERVAL_SECONDS:10}
+    # Redis Stream 中运行事件的保留时长（秒），用于断线补流。
+    event-stream-ttl-seconds: ${XZAGENT_EVENT_STREAM_TTL_SECONDS:3600}
+    # 单次 replay 默认最多补发的事件条数，避免一次重连读出过大数据。
+    replay-batch-size: ${XZAGENT_REPLAY_BATCH_SIZE:200}
+    # live 事件轮询 Redis Stream 的阻塞时长（毫秒）。
+    live-poll-timeout-millis: ${XZAGENT_LIVE_POLL_TIMEOUT_MILLIS:1000}
+    # 内部控制端点路径前缀，供节点间 cancel 转发使用。
+    internal-control-path-prefix: ${XZAGENT_INTERNAL_CONTROL_PATH_PREFIX:/xzagent/private/internal}
+    # 单 Run 的逻辑事件与 JSON 总字节预算；达到非终态额度后保留空间用于明确收口。
+    max-run-events: ${XZAGENT_MAX_RUN_EVENTS:10000}
+    max-run-event-bytes: ${XZAGENT_MAX_RUN_EVENT_BYTES:16777216}
+    terminal-reserved-events: ${XZAGENT_TERMINAL_RESERVED_EVENTS:8}
+    terminal-reserved-bytes: ${XZAGENT_TERMINAL_RESERVED_BYTES:65536}
+    # Pod 硬故障后由其他节点扫描 PostgreSQL，再以 Redis 活跃 lease 二次确认，避免误杀慢任务。
+    orphan-scan-interval-seconds: ${XZAGENT_ORPHAN_SCAN_INTERVAL_SECONDS:30}
+    orphan-threshold-seconds: ${XZAGENT_ORPHAN_THRESHOLD_SECONDS:150}
+    orphan-batch-size: ${XZAGENT_ORPHAN_BATCH_SIZE:100}
+    # 正常停机先停止接收新 Run，并在窗口内等待已有 Run；超时后执行取消和显式收口。
+    shutdown-grace-seconds: ${XZAGENT_SHUTDOWN_GRACE_SECONDS:30}
+  feishu:
+    # 飞书 appSecret 加密密钥（AES-256-GCM），必须通过环境变量注入，不允许写入明文配置文件。
+    secret-key: ${XZAGENT_FEISHU_SECRET_KEY:}
+    # 飞书 WebSocket 长连接建连超时时间（秒）。
+    connect-timeout-seconds: ${XZAGENT_FEISHU_CONNECT_TIMEOUT_SECONDS:30}
+    # 异步处理飞书消息事件的线程池大小。
+    async-thread-pool-size: ${XZAGENT_FEISHU_ASYNC_THREAD_POOL_SIZE:8}
+  channel-run:
+    # 渠道长 Run 与 SDK 短入站线程隔离；容量满时明确繁忙，绝不 CallerRuns。
+    core-pool-size: ${XZAGENT_CHANNEL_RUN_CORE_POOL_SIZE:8}
+    max-pool-size: ${XZAGENT_CHANNEL_RUN_MAX_POOL_SIZE:32}
+    queue-capacity: ${XZAGENT_CHANNEL_RUN_QUEUE_CAPACITY:100}
+
+# 日志开关默认配置，可被 Nacos 覆盖
+log:
+  console:
+    enable: true   # 默认开启控制台输出
+  level: INFO      # 默认日志级别
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID  # 雪花 ID，应用层生成，替代数据库自增

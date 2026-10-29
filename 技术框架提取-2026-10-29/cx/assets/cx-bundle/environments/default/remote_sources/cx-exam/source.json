@@ -1,0 +1,10 @@
+{
+  "sourceId": "cx-exam",
+  "name": "试卷生成与查询",
+  "enabled": true,
+  "timeoutSeconds": 10,
+  "refreshIntervalSeconds": 300,
+  "mode": "inline",
+  "credentialGroup": "cx-core",
+  "clientSecret": "<REQUIRED_SECRET>"
+}

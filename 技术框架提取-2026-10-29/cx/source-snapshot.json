@@ -1,0 +1,67 @@
+{
+  "extracted_date": "2026-10-29",
+  "basis": "current working tree, not only HEAD",
+  "repositories": [
+    {
+      "repo": "cx-ai-doc",
+      "head": "ab05ad95b56cb81ea1b6e5b2227dc579c1230664",
+      "branch": "main",
+      "working_tree_changes": [],
+      "metadata_limit": null
+    },
+    {
+      "repo": "cx-backend",
+      "head": "unavailable",
+      "branch": "unavailable",
+      "working_tree_changes": [
+        "unavailable"
+      ],
+      "metadata_limit": "Git目录访问权限受限；以可读工作树及附件哈希为准"
+    },
+    {
+      "repo": "cx-gateway",
+      "head": "unavailable",
+      "branch": "unavailable",
+      "working_tree_changes": [
+        "unavailable"
+      ],
+      "metadata_limit": "Git目录访问权限受限；以可读工作树及附件哈希为准"
+    },
+    {
+      "repo": "cx-frontend",
+      "head": "unavailable",
+      "branch": "unavailable",
+      "working_tree_changes": [
+        "unavailable"
+      ],
+      "metadata_limit": "Git目录访问权限受限；以可读工作树及附件哈希为准"
+    },
+    {
+      "repo": "cx-py",
+      "head": "unavailable",
+      "branch": "unavailable",
+      "working_tree_changes": [
+        "unavailable"
+      ],
+      "metadata_limit": "Git目录访问权限受限；以可读工作树及附件哈希为准"
+    },
+    {
+      "repo": "cx-agent-skills-workspace",
+      "head": "unavailable",
+      "branch": "unavailable",
+      "working_tree_changes": [
+        "unavailable"
+      ],
+      "metadata_limit": "Git目录访问权限受限；以可读工作树及附件哈希为准"
+    },
+    {
+      "repo": "xzagent",
+      "head": "unavailable",
+      "branch": "unavailable",
+      "working_tree_changes": [
+        "unavailable"
+      ],
+      "metadata_limit": "Git目录访问权限受限；以可读工作树及附件哈希为准"
+    }
+  ]
+}

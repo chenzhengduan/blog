@@ -1,0 +1,8 @@
+{
+    "repository": "juliozhao/DocLayout-YOLO-DocStructBench",
+    "revision": "8c3299a30b8ff29a1503c4431b035b93220f7b11",
+    "filename": "doclayout_yolo_docstructbench_imgsz1024.pt",
+    "size": 40709302,
+    "sha256": "9a2ee0220fe3d9ad31b47e1d9f1282f46959a54e4618fce9cffcc9715b8286e2",
+    "license_note": "DocLayout-YOLO 标注 AGPL-3.0；模型权重许可需单独确认。生产发布前必须完成公司开源合规审批。"
+}

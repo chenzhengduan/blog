@@ -1,0 +1,73 @@
+# =====================================================================
+# cx-gateway Nacos 配置模板。
+# 将本文件内容配置到 Nacos：
+#   Data ID : cx-gateway.yml
+#   Group   : DEFAULT_GROUP（与 cx-backend 同 namespace/group）
+# =====================================================================
+#
+# 本模板参考 reference-projects/xzagent-gateway 的 application-template.yml 改写：
+#   - 路由前缀由 /api/xzagent/** 改为 /api/cx/**（澄清 Q2）。
+#   - StripPrefix 与 xzagent-gateway 规则保持一致用 1（去掉 /api，保留 /cx 段转发后端，
+#     后端内部路径形如 /cx/health）。
+#   - 寻址由 lb://xzagent 改为 lb://cx-backend（注册名独立于前缀段，决策 4）。
+#   - private 路径拒绝不使用动态 deny route，统一由静态前置 PrivatePathDenyGlobalFilter
+#     在 Token 鉴权和路由匹配前终止为空 404。
+#   - 禁止配置 /api/py/** 通配转发；未来公开接口必须新增精确公开路由。
+#   - 路由配置动态生效，Nacos 更新后无需重启（与 xzagent-gateway 一致）。
+# =====================================================================
+
+# ===== 路由配置（动态生效，更新后无需重启） =====
+spring:
+  cloud:
+    gateway:
+      routes:
+        # 将 /api/cx/** 路由到后端业务服务（Nacos 服务名: cx-backend）
+        # StripPrefix=1：去掉 /api 一段，保留 /cx 段转发后端（与 xzagent-gateway 规则一致）
+        # Spring Cloud Gateway 原生支持 WebSocket/SSE 代理，无需额外配置
+        - id: cx-route
+          uri: lb://cx-backend
+          predicates:
+            - Path=/api/cx/**
+          filters:
+            - StripPrefix=1
+
+# ===== CORS 跨域（浏览器访问网关） =====
+# 使用 allowed-origin-patterns 支持二级域名通配；可按环境增删白名单
+cx:
+  gateway:
+    cors:
+      enabled: true
+      allowed-origin-patterns:
+        - "https://*.xiaogj.com"
+        - "https://app.apifox.com"
+      allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      allowed-headers:
+        - "*"
+      allow-credentials: false
+      max-age: 3600
+
+# ===== 日志配置 =====
+log:
+  console:
+    enable: true      # 是否输出控制台日志
+  level: INFO         # 日志级别
+  aliyunlog:
+    enable: true      # 是否上传阿里云 SLS
+
+# 阿里云 SLS 日志配置（配置到 Nacos 的 cx-gateway.yml）
+# 凭证由 Nacos 注入，不提交进源码（宪法原则 IV）；source 留空则自动取本机 IP
+aliyun:
+  log:
+    endpoint: ${CX_SLS_ENDPOINT:cn-hangzhou-intranet.log.aliyuncs.com}
+    accessKeyId: ${CX_SLS_ACCESS_KEY_ID:}
+    accessKeySecret: ${CX_SLS_ACCESS_KEY_SECRET:}
+    project: ${CX_SLS_PROJECT:your-sls-project}
+    logStore: ${CX_SLS_LOGSTORE:your-log-store}
+    topic: cx-gateway
+    source: ""        # 留空则自动取本机 IP

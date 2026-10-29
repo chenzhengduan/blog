@@ -1,0 +1,128 @@
+{
+  "version": "1.1.0",
+  "requiredCapabilities": ["remote-tool-sse-v1"],
+  "provider": {
+    "name": "cx-question-variant",
+    "displayName": "单题变式",
+    "description": "根据结构化原题或完整题目图片 URL 生成一道新的变式题。"
+  },
+  "defaults": {
+    "baseUrl": "__CX_API_BASE_URL__",
+    "timeoutSeconds": 900,
+    "idleTimeoutSeconds": 60,
+    "authFlow": {
+      "type": "oauth2",
+      "authorizationUrl": "__CX_WEB_BASE_URL__/agent/authorize",
+      "tokenUrl": "__CX_API_BASE_URL__/cx/oauth/token",
+      "clientId": "__OAUTH_CLIENT_ID__"
+    }
+  },
+  "tools": [
+    {
+      "name": "generate_variant_question_from_text",
+      "displayName": "根据文本生成单题变式",
+      "description": "根据原题题干和可选的选项、答案、解析、配图 URL 生成一道保持考点和题型一致的新变式题。成功返回新题 ID、题干、选项、答案和解析。",
+      "method": "POST",
+      "path": "/cx/aiagent/variants/questions/from-text",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "stream": true,
+      "timeoutSeconds": 900,
+      "idleTimeoutSeconds": 60,
+      "inputSchema": {
+        "type": "object",
+        "required": ["originalContent"],
+        "properties": {
+          "originalContent": {"type": "string", "maxLength": 10000, "description": "原题题干"},
+          "originalOptions": {
+            "type": "array",
+            "description": "原题选项，非选择题可不传",
+            "items": {
+              "type": "object",
+              "required": ["label", "content"],
+              "properties": {
+                "label": {"type": "string"},
+                "content": {"type": "string"}
+              }
+            }
+          },
+          "originalAnswer": {"type": "array", "items": {"type": "string"}, "description": "原题标准答案"},
+          "originalExplanation": {"type": "string", "maxLength": 10000, "description": "原题解析"},
+          "imageUrls": {
+            "type": "array",
+            "maxItems": 5,
+            "items": {"type": "string"},
+            "description": "原题中的配图 HTTPS URL，最多 5 张"
+          },
+          "subject": {"type": "string", "enum": ["math", "chinese", "english"], "description": "学科提示"},
+          "grade": {"type": "integer", "minimum": 1, "maximum": 9, "description": "年级提示"},
+          "questionType": {
+            "type": "string",
+            "enum": ["choice", "multi", "judge", "fill", "short", "apply", "calculation", "solution", "reading", "writing", "custom"],
+            "description": "题型提示"
+          },
+          "customQuestionTypeName": {"type": "string", "maxLength": 50, "description": "questionType=custom 时填写"},
+          "difficulty": {"type": "string", "enum": ["easy", "medium", "hard"], "description": "目标难度"},
+          "extraRequirements": {"type": "string", "maxLength": 1000, "description": "补充变式要求"}
+        }
+      },
+      "request": {
+        "bodyTemplate": {
+          "originalContent": "{{originalContent}}",
+          "originalOptions": "{{originalOptions}}",
+          "originalAnswer": "{{originalAnswer}}",
+          "originalExplanation": "{{originalExplanation}}",
+          "imageUrls": "{{imageUrls}}",
+          "subject": "{{subject}}",
+          "grade": "{{grade}}",
+          "questionType": "{{questionType}}",
+          "customQuestionTypeName": "{{customQuestionTypeName}}",
+          "difficulty": "{{difficulty}}",
+          "extraRequirements": "{{extraRequirements}}"
+        }
+      },
+      "response": {"contentType": "text/event-stream", "mapping": {"type": "sse_xzagent_v1"}}
+    },
+    {
+      "name": "generate_variant_question_from_image",
+      "displayName": "根据图片生成单题变式",
+      "description": "根据一张包含完整题目的图片 URL 识别原题并生成一道保持考点和题型一致的新变式题。成功返回新题 ID、题干、选项、答案和解析。",
+      "method": "POST",
+      "path": "/cx/aiagent/variants/questions/from-image",
+      "enabled": true,
+      "riskLevel": "WRITE",
+      "stream": true,
+      "timeoutSeconds": 900,
+      "idleTimeoutSeconds": 60,
+      "inputSchema": {
+        "type": "object",
+        "required": ["questionImageUrl"],
+        "properties": {
+          "questionImageUrl": {"type": "string", "description": "包含完整原题的 HTTPS 图片 URL"},
+          "subject": {"type": "string", "enum": ["math", "chinese", "english"], "description": "学科提示"},
+          "grade": {"type": "integer", "minimum": 1, "maximum": 9, "description": "年级提示"},
+          "questionType": {
+            "type": "string",
+            "enum": ["choice", "multi", "judge", "fill", "short", "apply", "calculation", "solution", "reading", "writing", "custom"],
+            "description": "题型提示"
+          },
+          "customQuestionTypeName": {"type": "string", "maxLength": 50, "description": "questionType=custom 时填写"},
+          "difficulty": {"type": "string", "enum": ["easy", "medium", "hard"], "description": "目标难度"},
+          "extraRequirements": {"type": "string", "maxLength": 1000, "description": "补充变式要求"}
+        }
+      },
+      "request": {
+        "bodyTemplate": {
+          "questionImageUrl": "{{questionImageUrl}}",
+          "subject": "{{subject}}",
+          "grade": "{{grade}}",
+          "questionType": "{{questionType}}",
+          "customQuestionTypeName": "{{customQuestionTypeName}}",
+          "difficulty": "{{difficulty}}",
+          "extraRequirements": "{{extraRequirements}}"
+        }
+      },
+      "response": {"contentType": "text/event-stream", "mapping": {"type": "sse_xzagent_v1"}}
+    }
+  ]
+}

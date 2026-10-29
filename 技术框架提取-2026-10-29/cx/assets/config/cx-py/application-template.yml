@@ -1,0 +1,63 @@
+##
+## cx-py Nacos 配置模板（cx-py.yml）。
+##
+## 将本文件内容配置到 Nacos：
+##   Data ID : cx-py.yml
+##   Group   : DEFAULT_GROUP（与 cx-backend 同 namespace/group）
+##
+## 不使用 Spring ${ENV:default} 占位语法。
+## 凭证由环境变量/Secret 注入，不提交进源码。
+##
+
+app:
+  name: cx-py
+  base-path: /py
+  api-prefix: /api
+
+detector:
+  model-path: /opt/models/doclayout_yolo_docstructbench_imgsz1024.pt
+  model-sha256: 9a2ee0220fe3d9ad31b47e1d9f1282f46959a54e4618fce9cffcc9715b8286e2
+  device: cpu
+  image-size: 1024
+  confidence-threshold: 0.20
+  medium-confidence-threshold: 0.40
+  high-confidence-threshold: 0.70
+  duplicate-iou-threshold: 0.85
+  inference-concurrency: 1
+  cpu-threads: 4
+  interop-threads: 1
+
+capacity:
+  max-queued-requests: 2
+  max-queued-image-units: 10
+  queue-wait-timeout-seconds: 2
+  request-timeout-seconds: 60
+  graceful-shutdown-seconds: 30
+
+image:
+  max-batch-size: 10
+  max-request-body-bytes: 44040192    # 42 MiB
+  max-batch-bytes: 31457280           # 30 MiB
+  max-bytes: 15728640                 # 15 MiB
+  max-pixels: 40000000
+  connect-timeout-seconds: 10
+  total-timeout-seconds: 30
+  max-redirects: 3
+
+image-enhance:
+  enabled: true
+  concurrency: 1
+  deskew-max-angle-degrees: 15.0
+  deskew-min-angle-degrees: 0.3
+  clahe-clip-limit: 2.0
+  clahe-tile-grid-size: 8
+  target-short-side: 1024
+  max-short-side: 4096
+
+log:
+  level: INFO
+  json-enabled: true
+
+nacos:
+  register-enabled: true
+  config-enabled: true

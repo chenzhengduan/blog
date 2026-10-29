@@ -1,0 +1,2051 @@
+{
+  "date": "2026-10-29",
+  "sourceRoot": "D:\\code\\Wtwo-project",
+  "files": [
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/enrollment/agent.json",
+      "sha256": "aa97eb55a9c816143cf1c1595b5a71cc4d15092015fd61b8150275be90007cd2",
+      "lines": 26
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/enrollment/Prompts/BEHAVIOR.md",
+      "sha256": "07246fa980eb331bbe9495df7f871c7343866367cef42afa5b2144eda6983f60",
+      "lines": 108
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/enrollment/Prompts/IDENTITY.md",
+      "sha256": "9c0d3588ef5519fcb27bd683d1b1758dd55111b2d71b2365f789e68a164a2fd4",
+      "lines": 19
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/enrollment-sales/agent.json",
+      "sha256": "14ae35c7766d2236e0e134d641be94a6ac4e154d9273a30b2ef61d1bac48cc1d",
+      "lines": 23
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/enrollment-sales/Prompts/BEHAVIOR.md",
+      "sha256": "59cdcc5da65e4bbe38590d266687ea890a676b7587f7a1067a7464613aefb1b2",
+      "lines": 57
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/enrollment-sales/Prompts/IDENTITY.md",
+      "sha256": "07c0b4aa85866af2d77d01482ad5d5c93c654d4e74649c0d62cbaea6940f2dfd",
+      "lines": 19
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/agent.json",
+      "sha256": "fa56cfb5158979afd336c9feb921f0418ba260f00edd0ed799988eeb35171489",
+      "lines": 41
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Prompts/BEHAVIOR.md",
+      "sha256": "97328f13d3434b7e29dde7ff972db8370f024b5c198c1aa49a610a71d8d1e3c4",
+      "lines": 208
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Prompts/IDENTITY.md",
+      "sha256": "74dd287f1ac241846b29b4bc50de68850dd9dd0da5bb15ec5778bb94fec7ce57",
+      "lines": 16
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/01-canvas.md",
+      "sha256": "7885123db74945491ad6c780ad8058f0b61bd2d213731cee3e7def6fb3a77d07",
+      "lines": 82
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/02-design-system.md",
+      "sha256": "58c469dee602b96485e9a06bfa34687d031924f64b561f09f0a9f75b8eb98b91",
+      "lines": 203
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/03-layout.md",
+      "sha256": "2bc9986e621e44ea2961d02523b7489051563a04be3938e183dc049ff2b736b2",
+      "lines": 193
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/04-color-font.md",
+      "sha256": "46107d31f03e8bcc8ca24d42bc8bbb90a4b3a47d6a243fdf411d305af81e1a5f",
+      "lines": 130
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/05-content.md",
+      "sha256": "b5c81b32c7e8956a2c019887b84bd1636e9ec39ac368f59dc115d2ada8e5c6a3",
+      "lines": 397
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/06-workflow.md",
+      "sha256": "4aac5c60eb0d0726bb746e0060e78a979bae02918971643bfcff295eb1c4ad00",
+      "lines": 118
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/html-report-generator/references/07-special-pages.md",
+      "sha256": "1f32a0e541e1fd356f8a1fb9ea931219dafbb4c079f1af60812347bac0bd6d6d",
+      "lines": 275
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/sql-query-examples/class-attendance.md",
+      "sha256": "6f66cb6f0070a07665d1d71afbc06ed8098e4129c75a4562a775f0c85308e2e6",
+      "lines": 260
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/sql-query-examples/fee-finance.md",
+      "sha256": "6da57639782ca2546a0b7df2d9b05d81cc06067d2f077f6fd4aebc651590ac32",
+      "lines": 359
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/sql-query-examples/lead-analysis.md",
+      "sha256": "fd15d5962b4b6386527d10c7c1af36e0d14e09c1d3b80844dab4d7cdc9aad64d",
+      "lines": 126
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw/Skills/sql-query-examples/student-info.md",
+      "sha256": "c5f81a9ffb5c3a99365fcb3dd4705a332894c6564d2c7eeea079bfa3d88f1bec",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/agent.json",
+      "sha256": "a0e2dcf824fd740ebd0df6c7aea47a1588425b241392bd12373a5b73bdf8a3b7",
+      "lines": 43
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Prompts/BEHAVIOR.md",
+      "sha256": "d2af8fba8bc2304e67ad28f04dda1294eb582fab4c914a10d871aaa6b757bc2a",
+      "lines": 8
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Prompts/context-format.md",
+      "sha256": "0095295cef95b0b326960e507427c6cc935ad8e0c2a187c39056fa7c90a2bd45",
+      "lines": 24
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Prompts/IDENTITY.md",
+      "sha256": "f296d06fe2bdf6b233a6f44a6dd012573c5fe3f174166e2469f9ab3c715c6b9d",
+      "lines": 7
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Prompts/role.md",
+      "sha256": "d240f96953ee3867dd464513ec2b3bb6ac67c990354381132fd9e4f8331d4945",
+      "lines": 20
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Prompts/workbench-rules.md",
+      "sha256": "274c98ae324221df8b822aa20bb9d952216e2cff25ffb698fbcc50ed140f5ac8",
+      "lines": 15
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/01-canvas.md",
+      "sha256": "7885123db74945491ad6c780ad8058f0b61bd2d213731cee3e7def6fb3a77d07",
+      "lines": 82
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/02-design-system.md",
+      "sha256": "58c469dee602b96485e9a06bfa34687d031924f64b561f09f0a9f75b8eb98b91",
+      "lines": 203
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/03-layout.md",
+      "sha256": "2bc9986e621e44ea2961d02523b7489051563a04be3938e183dc049ff2b736b2",
+      "lines": 193
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/04-color-font.md",
+      "sha256": "46107d31f03e8bcc8ca24d42bc8bbb90a4b3a47d6a243fdf411d305af81e1a5f",
+      "lines": 130
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/05-content.md",
+      "sha256": "b5c81b32c7e8956a2c019887b84bd1636e9ec39ac368f59dc115d2ada8e5c6a3",
+      "lines": 397
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/06-workflow.md",
+      "sha256": "4aac5c60eb0d0726bb746e0060e78a979bae02918971643bfcff295eb1c4ad00",
+      "lines": 118
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/html-report-generator/references/07-special-pages.md",
+      "sha256": "1f32a0e541e1fd356f8a1fb9ea931219dafbb4c079f1af60812347bac0bd6d6d",
+      "lines": 275
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/sql-query-examples/class-attendance.md",
+      "sha256": "6f66cb6f0070a07665d1d71afbc06ed8098e4129c75a4562a775f0c85308e2e6",
+      "lines": 260
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/sql-query-examples/fee-finance.md",
+      "sha256": "6da57639782ca2546a0b7df2d9b05d81cc06067d2f077f6fd4aebc651590ac32",
+      "lines": 359
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/sql-query-examples/lead-analysis.md",
+      "sha256": "fd15d5962b4b6386527d10c7c1af36e0d14e09c1d3b80844dab4d7cdc9aad64d",
+      "lines": 126
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench/Skills/sql-query-examples/student-info.md",
+      "sha256": "c5f81a9ffb5c3a99365fcb3dd4705a332894c6564d2c7eeea079bfa3d88f1bec",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/agent.json",
+      "sha256": "cfe36d8b06a42fcf7813ac47ed6df87dcb9b9572235e703c7ef35abddbf2ab0a",
+      "lines": 16
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/Prompts/BEHAVIOR.md",
+      "sha256": "daa350629b8077f0aed3f4519ef57a672a39193fc6b30b36726628dfbf998999",
+      "lines": 11
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/Prompts/IDENTITY.md",
+      "sha256": "71457dd4cb8cd010327f4d9191e9f56f700b8522083821ab3a570080b4e47c81",
+      "lines": 5
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/Skills/sql-query-examples/class-attendance.md",
+      "sha256": "6f66cb6f0070a07665d1d71afbc06ed8098e4129c75a4562a775f0c85308e2e6",
+      "lines": 260
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/Skills/sql-query-examples/fee-finance.md",
+      "sha256": "6da57639782ca2546a0b7df2d9b05d81cc06067d2f077f6fd4aebc651590ac32",
+      "lines": 359
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/Skills/sql-query-examples/lead-analysis.md",
+      "sha256": "fd15d5962b4b6386527d10c7c1af36e0d14e09c1d3b80844dab4d7cdc9aad64d",
+      "lines": 126
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/Agents/Instances/gclaw-workbench-trial/Skills/sql-query-examples/student-info.md",
+      "sha256": "c5f81a9ffb5c3a99365fcb3dd4705a332894c6564d2c7eeea079bfa3d88f1bec",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/appsettings.json",
+      "sha256": "7bf0b8150fbffb390357e2f668dc0909a017a35785daeaae60f86ef191765cc4",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/.codex-build/family-school-di/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/.codex-build/webapi-bin/Debug/net8.0/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/.codex-build/webapi-bin/Debug/net8.0/appsettings.json",
+      "sha256": "8a7def6c7e0623e74ba50b9c790bea61f8dff32f26a7250fa3646ae34a83fad7",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/.codex-build/webapi-bin/Debug/net8.0/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/.deploy/Dockerfile.agent",
+      "sha256": "e76aeaef498442da1936f7370ee507b0b5a4304599053666a42f958bd0968759",
+      "lines": 27
+    },
+    {
+      "path": "wtwo-server/.deploy/Dockerfile.agentim-gateway",
+      "sha256": "1f55a466bafb44201d73b789fd2bb0876fd72a58b283ade3518b7e993476cc36",
+      "lines": 19
+    },
+    {
+      "path": "wtwo-server/.gitlab-ci.yml",
+      "sha256": "a623d5c9866b259d76c29a4a1ca08f3aac57c11977fa018f2e033a8236584a08",
+      "lines": 599
+    },
+    {
+      "path": "wtwo-server/.tmp/ai-usage-agent-build/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/.tmp/ai-usage-agent-build/appsettings.json",
+      "sha256": "7bf0b8150fbffb390357e2f668dc0909a017a35785daeaae60f86ef191765cc4",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/.tmp/ai-usage-agent-build/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/.tmp/student-operation-build/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/.tmp/student-operation-build/appsettings.json",
+      "sha256": "8a7def6c7e0623e74ba50b9c790bea61f8dff32f26a7250fa3646ae34a83fad7",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/.tmp/student-operation-build/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/artifacts/codex-parent-satisfaction-webapi/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/artifacts/codex-parent-satisfaction-webapi/appsettings.json",
+      "sha256": "7bf0b8150fbffb390357e2f668dc0909a017a35785daeaae60f86ef191765cc4",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/artifacts/codex-parent-satisfaction-webapi/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/artifacts/codex-webapi-build/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/artifacts/codex-webapi-build/appsettings.json",
+      "sha256": "7bf0b8150fbffb390357e2f668dc0909a017a35785daeaae60f86ef191765cc4",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/artifacts/codex-webapi-build/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-ai-student-smart-list/design.md",
+      "sha256": "a3a9ff8297a25e1c18534c7fee29cfeced8ebf96d7de6fe73a5d6ce2b5def271",
+      "lines": 22
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-aira-academic-scheduling-control/design.md",
+      "sha256": "ca2f53b5c0f20e25bd27ebfc794070c2c2ca20d36d2ce704ce89fc56464e505b",
+      "lines": 49
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-aira-teaching-queries/design.md",
+      "sha256": "3192abaebe07857497cfa48704f5aab0265c4d09ed08a4df5ab8da1c0a8b602a",
+      "lines": 20
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-business-operations-agent/design.md",
+      "sha256": "5a62ecfe6dbd3b5460cea78cff2a9e2c8819b0659106799115de0148b39087d8",
+      "lines": 50
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-free-ai-usage-billing/design.md",
+      "sha256": "a78395b8eb94575eb40ae854cfb1e93b50990fcad21536cd335b5856c821d6ad",
+      "lines": 24
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-free-course-date-specific-plans/design.md",
+      "sha256": "5cdcde4f45efc05fe73269315b7c7afc56467c4dc0328e043e0fb6a227f1ff96",
+      "lines": 111
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-internalproduct-sms-login/design.md",
+      "sha256": "af4bc41bb9f799557fda43ebfd2d6a722d1866e0bb37ebf58e9c68a7ce011006",
+      "lines": 36
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-makeup-scheduling-agent/design.md",
+      "sha256": "3ad0a9d755497acc94ccf1045bcf47126187ae0429d12b82745a8d3a276405d4",
+      "lines": 26
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-multi-date-selection/design.md",
+      "sha256": "823b47e305c7b134843b5a132efe073457f3c3ff93234d3ce9047caf0259dc87",
+      "lines": 97
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-parent-satisfaction-analysis/design.md",
+      "sha256": "a4f317f96a14aa0d3e32dafd187089e2afa878a42ee9aed8dd87852002b7892e",
+      "lines": 32
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-persistent-workbench-reports/design.md",
+      "sha256": "d2860156e05c6f5e8df1b9e494ed0561effa7e64e441f482b847d0109076c025",
+      "lines": 22
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-skill-version-diff/design.md",
+      "sha256": "2bf2f130bffb9dff219eb19242cefe51b3887ca2fede9ae813637632df4b39b2",
+      "lines": 137
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-student-operation-workbench/design.md",
+      "sha256": "8adef970f66b25083f912996becc5d04d0a4161fb693e74b93b894f10e0b839d",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-system-skills-to-aira-picker/design.md",
+      "sha256": "a8e2b73ff1f7fc4281a63fd2d9cde6a0fc6eeb8241eaed9754a680193ca0094b",
+      "lines": 24
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-teaching-growth-planning/design.md",
+      "sha256": "6d19a92d6b2cd71b66646fb9d9d3014e2a7c7af0f9e77ce4f16dfaceffe00a8f",
+      "lines": 50
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-teaching-service-analysis-page/design.md",
+      "sha256": "97d669610fcb931577ce1ac0798d1856237c1623e43cecb01739aaec7bf5f8ab",
+      "lines": 15
+    },
+    {
+      "path": "wtwo-server/openspec/changes/add-team-communication-insight/design.md",
+      "sha256": "86b7d77898d599b7d970244cd68981fb9acc34ca8bd0e3643ba173362dcbeec4",
+      "lines": 67
+    },
+    {
+      "path": "wtwo-server/openspec/changes/optimize-student-operation-query/design.md",
+      "sha256": "5592b6afaf46670a5f20692171a8f22c0b152fb6473c88a440c4fd98e65b8bfb",
+      "lines": 21
+    },
+    {
+      "path": "wtwo-server/openspec/changes/refactor-student-operations-module/design.md",
+      "sha256": "fdcda0828cd9d531b8c6851e39b1a3e298fbddebe3b99cd5e2693d1e500511c6",
+      "lines": 46
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/AgentOAuthServiceTests.cs",
+      "sha256": "7c58d25b3b95366151152d88c8f13edc7e4959683b5f91f269616c6c76637f1e",
+      "lines": 390
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/AgentSkillHistoryTests.cs",
+      "sha256": "20369398663aa6d07badeff53b272e1efbeac66a7d28859dd010edd41311eb67",
+      "lines": 233
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/AgentSkillPublicationTests.cs",
+      "sha256": "908aa264c8dd036e6ba493cc494b3042b101f650494fb3a048aa802da32a7201",
+      "lines": 412
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/ApprovalInterruptMechanismTests.cs",
+      "sha256": "c31e49086dbf2e78a1acb4fa79027372f9c2fd62a5b87654318a7aad73c5c8e1",
+      "lines": 163
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/BotProvisionPollFallbackTests.cs",
+      "sha256": "c98d623e8244f60b55e0eb84f0fad47074fa97b9546949dc898c14b73899df88",
+      "lines": 178
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/CloudDocFeishuTests.cs",
+      "sha256": "c8956c78abe217cdb16fbd9a4a0dea785b90a2860bfe80172d5a0a2afa53d120",
+      "lines": 263
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/CloudDocWecomCliTests.cs",
+      "sha256": "b910b1e230f216dcf0b9c62eb5ead0d2c751d96b296ff2da68b1edb79313587e",
+      "lines": 295
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/DingTalkUserBindingTests.cs",
+      "sha256": "111cba2997afe0a93a376471be21f7c3bbaf74a5118544c6c23f01c05c358a92",
+      "lines": 81
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/QuickSkillSelectionTests.cs",
+      "sha256": "8c8df3c99fa42e2cc37da6b4f9befed9a630cc0e579fe5cdc35b19e4761ab2d1",
+      "lines": 61
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/SkillToolTelemetryPipelineTests.cs",
+      "sha256": "7a585f4e1e2455d7a5849efc17e71297ae78aa23bf6116f5a125e54ed5a0bf2e",
+      "lines": 182
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/agent.json",
+      "sha256": "98e6b140265b2215788d9524a4412f5a05d130b41ed3cd83f3d1be9ed22722d2",
+      "lines": 58
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Prompts/BEHAVIOR.md",
+      "sha256": "02e8f01f7dfc9916ec0f1d1a0edce3275aad8831eec73e1a8f8484fc1790c6fe",
+      "lines": 23
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Prompts/context-format.md",
+      "sha256": "f7c9047c2c8382267509f7e25aeaeadb489264a904d87994b2cccfcaf810bffc",
+      "lines": 28
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Prompts/IDENTITY.md",
+      "sha256": "7d6748f48db8494c812fd256bae4784fabbff8e5512a59249a842f3930296021",
+      "lines": 7
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Prompts/role.md",
+      "sha256": "77884ac1334b92054c9ccecc02e3117d8a7e983907864e717b0fc848ade25905",
+      "lines": 27
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Prompts/workbench-rules.md",
+      "sha256": "892b57edb894af94baf252c9955b9c57989811725b9c1f2c83cad05df0e21735",
+      "lines": 33
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/01-canvas.md",
+      "sha256": "7885123db74945491ad6c780ad8058f0b61bd2d213731cee3e7def6fb3a77d07",
+      "lines": 82
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/02-design-system.md",
+      "sha256": "58c469dee602b96485e9a06bfa34687d031924f64b561f09f0a9f75b8eb98b91",
+      "lines": 203
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/03-layout.md",
+      "sha256": "2bc9986e621e44ea2961d02523b7489051563a04be3938e183dc049ff2b736b2",
+      "lines": 193
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/04-color-font.md",
+      "sha256": "46107d31f03e8bcc8ca24d42bc8bbb90a4b3a47d6a243fdf411d305af81e1a5f",
+      "lines": 130
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/05-content.md",
+      "sha256": "b5c81b32c7e8956a2c019887b84bd1636e9ec39ac368f59dc115d2ada8e5c6a3",
+      "lines": 397
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/06-workflow.md",
+      "sha256": "4aac5c60eb0d0726bb746e0060e78a979bae02918971643bfcff295eb1c4ad00",
+      "lines": 118
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/html-report-generator/references/07-special-pages.md",
+      "sha256": "1f32a0e541e1fd356f8a1fb9ea931219dafbb4c079f1af60812347bac0bd6d6d",
+      "lines": 275
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/schedule-action-guide/references/makeup-plan.md",
+      "sha256": "c69558c9e130c14c450fb2a6a8163bcace29c586b0642e79deaa3d0a3891d96c",
+      "lines": 351
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/schedule-action-guide/references/schedule-preview-design.md",
+      "sha256": "8790d8df0ccbd24bf20fb8a7c9f40f4fc287e9875018b47bd805c5ceda09da9a",
+      "lines": 234
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/sql-query-examples/class-attendance.md",
+      "sha256": "6fabb0344e5aa9762773c3e3a6f1d1cf3c92062ead15075f8bff47dccf20afc9",
+      "lines": 269
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/sql-query-examples/fee-finance.md",
+      "sha256": "6da57639782ca2546a0b7df2d9b05d81cc06067d2f077f6fd4aebc651590ac32",
+      "lines": 359
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/sql-query-examples/lead-analysis.md",
+      "sha256": "fd15d5962b4b6386527d10c7c1af36e0d14e09c1d3b80844dab4d7cdc9aad64d",
+      "lines": 126
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/TestData/gclaw-workbench/Skills/sql-query-examples/student-info.md",
+      "sha256": "c5f81a9ffb5c3a99365fcb3dd4705a332894c6564d2c7eeea079bfa3d88f1bec",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-server/tests/WTwo.Agent.Tests/ToolApprovalTests.cs",
+      "sha256": "394b8fd2d4f310ed8b1b65bada1560544a4034e7ff85a2f59a7613d10233b4e6",
+      "lines": 97
+    },
+    {
+      "path": "wtwo-server/WTwo.Academic.Web/WTwo.Academic.Webapi/appsettings.Development.json",
+      "sha256": "35a427c545a8d82742d5ed1aea2401937f8c8f3dfd2d549b2375af33aa0fab0d",
+      "lines": 30
+    },
+    {
+      "path": "wtwo-server/WTwo.Academic.Web/WTwo.Academic.Webapi/appsettings.json",
+      "sha256": "347c76a8128c4336d5f034a24d08270873770da7cde23de6e5ed21f275da0bd0",
+      "lines": 33
+    },
+    {
+      "path": "wtwo-server/WTwo.Academic.Web/WTwo.Academic.Webapi/appsettings.prd.json",
+      "sha256": "bd78ef72e36e34487c79ad9158afd8f68e8283054324797b32e365d7d0e2653d",
+      "lines": 32
+    },
+    {
+      "path": "wtwo-server/WTwo.Academic.Web/WTwo.Academic.Webapi/Controllers/UserController.cs",
+      "sha256": "11918ea794a5e707307380d619c125079ac408d2a3dc8b36d882ffbbdbc3ddcd",
+      "lines": 108
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/custom-report/references/dynamic-report.md",
+      "sha256": "76f837afc3bad56467ab698375605f843317864024c6c99e24ad1d8d27fc21db",
+      "lines": 176
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/custom-report/references/page-protocol.md",
+      "sha256": "d85df04a0f31eb7715781d74c97f46eb86af1fee930626702c08fa06c5870260",
+      "lines": 704
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/custom-report/references/report-design.md",
+      "sha256": "b481b3dfe79d83d202a0e7108b284865e26a4ee0ce603cf290c93753f1f3d2a8",
+      "lines": 102
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/01-canvas.md",
+      "sha256": "8e709e778f30e408226b2990a5f8a478d65de0b75552191091f5f44935ff66a3",
+      "lines": 118
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/02-design-system.md",
+      "sha256": "3069fa42db1574eb62344998243f6bd4a089e79658abc09ae3c227e9ceb07af0",
+      "lines": 205
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/03-layout.md",
+      "sha256": "b9ba77def0e37b613e3f8e370fb90b0f151be6141ed12e06f8459f7e859b17a9",
+      "lines": 230
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/04-color-font.md",
+      "sha256": "9928d8a6e4226fc9b917c771014aac105d61e208791e8360534c378a4632b5a2",
+      "lines": 137
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/05-content.md",
+      "sha256": "22574b6cce7875c6f77fe974e97386b9276250c9cdd81246caff34a8435864a0",
+      "lines": 402
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/06-workflow.md",
+      "sha256": "5e54afe580a261fdbc7e5dd24440158527646dbbded023f387b6a785daaf2a5a",
+      "lines": 124
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/html-report-generator/references/07-special-pages.md",
+      "sha256": "b1818ad127e88ceb8c5130d7d651a8a5055d0e91d09c64a2c581263543a670b0",
+      "lines": 278
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/schedule-action-guide/references/makeup-plan.md",
+      "sha256": "c69558c9e130c14c450fb2a6a8163bcace29c586b0642e79deaa3d0a3891d96c",
+      "lines": 351
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/schedule-action-guide/references/schedule-preview-design.md",
+      "sha256": "8790d8df0ccbd24bf20fb8a7c9f40f4fc287e9875018b47bd805c5ceda09da9a",
+      "lines": 234
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/class-attendance.md",
+      "sha256": "79cb77829726416a0a4803aac825ef484cae58a0b311a58b8d7a54c15ce90e21",
+      "lines": 269
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/fee-finance.md",
+      "sha256": "4281161dc265532e970d26e2005bfa51698e198846ed6272921c12c6b99c0b83",
+      "lines": 424
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/grade.md",
+      "sha256": "04af6aeee6b2cdf3e1c3604cb041f72529dd052a51c6e5b9bdd420797d8945c0",
+      "lines": 157
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/lead-analysis.md",
+      "sha256": "6576cb4f84da6e557b12da75e0a23d23b36392803be292c668862d9fd1ad4760",
+      "lines": 131
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/student-info.md",
+      "sha256": "c81a0a34d18609a3df196fb81da591d5e561572f5a31155aafe034b97b95d17f",
+      "lines": 103
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/suggestion-feedback.md",
+      "sha256": "6fe1584549c647c4d4aee256ab8b2afe710ee7461ee31db0ecdcf0d2cfc2cc0d",
+      "lines": 29
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/course-dict.md",
+      "sha256": "721a9ab34fe7d53421269d690eae79bed70b2efc68b713f733ebaf13bdd446bc",
+      "lines": 58
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/fee.md",
+      "sha256": "ce69cf0c75f30467befc07160c950a38ed0a9dff52c7c1d02aaf096240a7a3b1",
+      "lines": 167
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/lead.md",
+      "sha256": "37a320c9690dc67d7690ee5ec995f1e3d85f5c33f3b86b292b8ed051780ef469",
+      "lines": 89
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/org.md",
+      "sha256": "dc733cbef2d471792c33c2dc735786cc28b5f813aec5394ecf30992e43486d14",
+      "lines": 101
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/schedule.md",
+      "sha256": "dc621b2eb16eb8759a1f2a7db03a524680836c178da3c6a6dc98ed8444b50cdd",
+      "lines": 50
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/student.md",
+      "sha256": "6a71a8db14c935f568f6c9c8762a1855a98d4ae6feee2dda75da31001c8fd1bd",
+      "lines": 73
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/sql-query-examples/tables/suggestion.md",
+      "sha256": "d3d868751932f593a5b338733df7d10f7f16a4e2da0abbc7022428a6ce0644fa",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/visual-report/references/page-protocol.md",
+      "sha256": "d85df04a0f31eb7715781d74c97f46eb86af1fee930626702c08fa06c5870260",
+      "lines": 704
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/Docs/skill/visual-report/references/report-design.md",
+      "sha256": "b481b3dfe79d83d202a0e7108b284865e26a4ee0ce603cf290c93753f1f3d2a8",
+      "lines": 102
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Model/GenAiObservabilityOptions.cs",
+      "sha256": "f21ef73b44cc45143c64923f0ea7232cc6070dd5211a483f8b2ce1a5f94a9168",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Capabilities/Calibration/SkillAssistService.cs",
+      "sha256": "b0c18057e18692ee96b208c3d4b08ce221ac6dac90af9d311fe2e3fb1c9f8a73",
+      "lines": 161
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Capabilities/ScheduleTask/IScheduleMasterClient.cs",
+      "sha256": "470b5aa272f158196b6211078e439f5f1cf3c2f2f6e446832ed17df5187923fa",
+      "lines": 597
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Assembly/AssistantAgentFactory.cs",
+      "sha256": "2afc189b9371720ebeb3f9c685454988249a08da072590c97cd8de751cc437d8",
+      "lines": 700
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Assembly/AssistantAgentTools.cs",
+      "sha256": "64d81ca5e03ddb09a802dfb9dd488684fbef14159214c87b32b521c3beaef22d",
+      "lines": 1180
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Assembly/AuxiliaryChatClientFactory.cs",
+      "sha256": "40371724bf9673e95dec60edf6fd2dd92a851ccb44e01fef3e97d6af5c594248",
+      "lines": 140
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/ChatClients/ApprovalRequiredAIFunction.cs",
+      "sha256": "2a51ca56cb3accfd903ffb7cd09589fc3d469816bb365fb4a26b058d35c0e24a",
+      "lines": 178
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/ChatClients/RateLimitFallbackChatClient.cs",
+      "sha256": "583c1f8a4b6d4ce4f13d0b467d81d9ca6b489db09b4ca364f378af57e10607e9",
+      "lines": 154
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/ChatClients/VisionAwareChatClient.cs",
+      "sha256": "51afa70c802e969375b2a1b3df4fdbf0e913aa158acdd89ea9a4b88899567b49",
+      "lines": 109
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Context/TenantDbResolver.cs",
+      "sha256": "d5095ff76d45940c97c8cd3a5035f0da21e67dde68641dc952f276b8fb126a15",
+      "lines": 4
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Dataset/AgentDatasetService.cs",
+      "sha256": "ad4ed75b38cccb264ed1886ad397445606a76fe24530dc5c4812a76ce62b9ef2",
+      "lines": 533
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/History/AgentConversationCompactionService.cs",
+      "sha256": "fbb96b2ebc03dbfbc1db256a948ff0413e56b1b014a95a1dde27b540e0020bd9",
+      "lines": 653
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Manage/AgentConfigRepository.cs",
+      "sha256": "0c4d931e2ede6a67847f5cceb9934bf46682c6fbc1d9a1ae7c47e42e3703b912",
+      "lines": 1440
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Manage/AgentInstanceRegistry.cs",
+      "sha256": "fe46fd78c0da231d917515842a79f359bee80af8ecd76406a4f5e9fa381687f7",
+      "lines": 71
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Manage/AgentSkillPublicationPolicy.cs",
+      "sha256": "5ebc0250413c5146b540d24dcdb5c40e17668ca0bb82e0ba77004eeec4ad7cf6",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Providers/AgentChatHistoryProvider.cs",
+      "sha256": "e02e678dc2ea896ea20aeb72580dc662e8ba16517e614be427cd455c5643658c",
+      "lines": 314
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Providers/ConversationContextProvider.cs",
+      "sha256": "a6b8b626e549441f3be0dfc3face65ec7d335b4a1d4c43a22deca10a1af97b7c",
+      "lines": 305
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Providers/RuntimeContextProvider.cs",
+      "sha256": "2bd85a2474f17f3a49508d9da9b58870516c3ad18b72b7dc57e21ed7591a13dc",
+      "lines": 60
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Providers/UiContextProvider.cs",
+      "sha256": "4553814916a52504039ada543e5f25c2f3c01e61604f1d4684199cbf771f3298",
+      "lines": 102
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Providers/UserPreferenceContextProvider.cs",
+      "sha256": "c961c62ecfc9d9e72b399ccd2f212496b1514acd44596b694ac89c61ea246e30",
+      "lines": 76
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Providers/UserSkillContextProvider.cs",
+      "sha256": "28e1aa1c745f838f80f9512d135f6a42338d45209a19c9bf887c6eb29dbe7cbe",
+      "lines": 105
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Telemetry/GenAiUserContextChatClient.cs",
+      "sha256": "259414d61d6dd9d0a1b11149c7d93b788e3302f045578fbba7d33e486976b036",
+      "lines": 131
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/ToolApprovalPolicy.cs",
+      "sha256": "e5151bc2d05df3d9a5f745dd833a4f6b619f211fbea7425e594609b1c9fb978b",
+      "lines": 213
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Turn/AgentInterruptionOptions.cs",
+      "sha256": "3a23677223b7afeb6fa4d58071bc6f4e37dd7fdfa25e453b620551ae440f64c5",
+      "lines": 79
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Turn/AgentTurnCompletionCoordinator.cs",
+      "sha256": "f8eb113beb914bacd19b38923366741cc9390001da03d931ed474dd2397eb030",
+      "lines": 359
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Turn/AgentTurnRunner.cs",
+      "sha256": "4aedd6b2576889ef2ed812de7df81503f080a059a4f0fa909db16b6e7cf388d1",
+      "lines": 1026
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Turn/AgentTurnService.cs",
+      "sha256": "f18bfcbdeaa0b16bb0325b618a0d3f5ad408eafb10d18f3f75c27300881e8b49",
+      "lines": 644
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Framework/Turn/AgentTurnWorker.cs",
+      "sha256": "e4156547feda138c8085a464d93bd086693485051029d3bbc62baef86ff208a8",
+      "lines": 294
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Instances/gclaw-academic/agent.json",
+      "sha256": "e9fdff46f8f5066102097cbe82df360bc9154560ae32b21801fbc9168aab8c11",
+      "lines": 25
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Instances/gclaw-academic/Prompts/BEHAVIOR.md",
+      "sha256": "693bf0c1c8b187988726c024566e85542ea329e9e53d49846d36899f088fcbc2",
+      "lines": 7
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Instances/gclaw-academic/Prompts/IDENTITY.md",
+      "sha256": "5e6d00f5af3bda81e0d5c641fd16105a5b4f97940dea83b5d627cd871d3e87cb",
+      "lines": 14
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Instances/gclaw-renewal/agent.json",
+      "sha256": "90cf8283601d9ff6652d03914a99f718e24fda5ee7a567a5eda2b75e78d5150f",
+      "lines": 24
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Instances/gclaw-renewal/Prompts/BEHAVIOR.md",
+      "sha256": "53213a22a6507847571d45ebfaa88d377ae86422ae6b6c87fb8db9b45dd6fbe0",
+      "lines": 7
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Instances/gclaw-renewal/Prompts/IDENTITY.md",
+      "sha256": "924247f9793bc47bf0d306360bb363852140db0f6de453b37a6f9d30039664c8",
+      "lines": 13
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/OAuth/AgentOAuthOptions.cs",
+      "sha256": "3afb317854a851ae875915899083447523a6b3b061f2a972ef9c20d98bbb0d90",
+      "lines": 57
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/CloudDoc/CloudDocTools.cs",
+      "sha256": "ce15e5a668a8da444e2b16bb13f0aba9eedf23eca5a87f2b41ca0eca3a0e6bb9",
+      "lines": 1843
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/CloudDoc/FeishuOAuthService.cs",
+      "sha256": "6eda7f74059cb19635b41e453ad6fcd709dedce4c3998cd38f863902d9f91921",
+      "lines": 519
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/CloudDoc/FeishuTokenCipher.cs",
+      "sha256": "9af34264cd31fda7f6afed656b7aebec7953ccd6995248cb1b51e51703015133",
+      "lines": 66
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/CloudDoc/LarkCliRunner.cs",
+      "sha256": "876549b8c006acecf552ecc0ddbcdf280f2bb6872e1063beface6b165eba0a67",
+      "lines": 344
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/CloudDoc/WecomCliRunner.cs",
+      "sha256": "fb4a0e4fb7cfb45e3daa4560d075bfd2b41f53c703bd5b8019691b0607e0ac33",
+      "lines": 428
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/Sql/SqlQueryTools.cs",
+      "sha256": "ffd7a1bbe155ba0c8c3b5cce4559c24dbf0cec1b92259ff5e1f63381e11d0dfb",
+      "lines": 1102
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/SystemUtility/AskUserChoiceTools.cs",
+      "sha256": "14aa8dfc620d109b7b0505c70476cde59c44b12f63cd67c78e7a4cf8f46f9624",
+      "lines": 100
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/SystemUtility/ScriptTools.cs",
+      "sha256": "05ff0d3150712a7c7f382c3340f154e63d118d16789c7366c84cabb32d99e9ef",
+      "lines": 126
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Tools/SystemUtility/ToolLoaderTools.cs",
+      "sha256": "f1953d1d8ad2d534125fd3e8b8cfe5d1e76b344e67be6c0e19c4501ae524ee4f",
+      "lines": 170
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/WebMiddleware/OAuthBearerMiddleware.cs",
+      "sha256": "8713e37ea124005ec9bdfa82133e3c0b594febcef9ed03da13b91ab1ee797b17",
+      "lines": 168
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Apps/WorkbenchAppOpToolBuilder.cs",
+      "sha256": "9e2cf582aa8468fe6c1bf0d1879d1c6d102bb31bfbac19c4c8aef47ca7ed392f",
+      "lines": 85
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/ConversationToolMountService.cs",
+      "sha256": "caa2ac4f406b96b4da41da24c47ed381e8371b44a1c946addadb9745e2710c96",
+      "lines": 128
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Hubs/WorkbenchHub.cs",
+      "sha256": "897c860f7d828b1d58272952517c72a155b541267ba94c8f073d73ddde37ab57",
+      "lines": 803
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Objects/ReportObjects.cs",
+      "sha256": "4a41c61e7c3b2384fa5ed444e7ee4106a995d6c95073b0afe8f83af3b4f6ab70",
+      "lines": 429
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Objects/ReportRenderValidator.cs",
+      "sha256": "e19ebc50969b1a880dee83a51f4fae7a2651de48537589db020d85a42b0dee75",
+      "lines": 75
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Push/ImBotProvisionService.cs",
+      "sha256": "763fc6094cafd7e0cf13b65ef5afe8ea6364c6fe2914b884cead41a9d19da361",
+      "lines": 594
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Push/ImMessageDeliveryClient.cs",
+      "sha256": "71902d360fb92fb69f08059c4f003624ea940fd7bfc67a99933a2ef24f4131e1",
+      "lines": 199
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Service/Workbench/Push/ImUserBindingService.cs",
+      "sha256": "d3f93f952db4e672f42e1066379c5f675d75cbc23b922e6ca2581d28f6062e55",
+      "lines": 451
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/appsettings.Development.json",
+      "sha256": "e8fb9b8cc49971d66da6365b9a00579c49f5a2b8d2fe8e1d7a04d00841c3462a",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/appsettings.json",
+      "sha256": "7bf0b8150fbffb390357e2f668dc0909a017a35785daeaae60f86ef191765cc4",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/appsettings.prd.json",
+      "sha256": "3ba5e9c3e6540cdad47b24c802d7e4e47f7d74779f2873738f21bd153691b231",
+      "lines": 39
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/AgentGatewayController.cs",
+      "sha256": "1eb2d86dea5b049acf147f63e242d61b685933b0e25f3a09fb0af97083cacbad",
+      "lines": 187
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/AgentManageController.cs",
+      "sha256": "ae2712bb962f8da7d3359ce9b54337c78439ded8f8485133dc35099f0bfbc077",
+      "lines": 286
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/AgentTraceController.cs",
+      "sha256": "ed55b2ebb67af1cc1175d2657e130ab7c1368800cf1cd157734104da80209a0b",
+      "lines": 101
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/AiUsageController.cs",
+      "sha256": "3aed4160b22b3c0f991e0713e670294eb101d5adbc9edc38b15dbd32e586783e",
+      "lines": 62
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/CalibrationController.cs",
+      "sha256": "39cb45713f380b210c2d67766516fe49941ad0690e656279566bcd221ba8749f",
+      "lines": 325
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ChatController.cs",
+      "sha256": "75add34ef5632dd2ea9f7ab11a21816ecd42872a565e5baf75c62ccc369a26ea",
+      "lines": 230
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ClassQueryController.cs",
+      "sha256": "da9af1eea523c01282f46e713f83161df17d49671ad90415ca9005af5b6676a6",
+      "lines": 63
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/FamilySchoolController.cs",
+      "sha256": "c66b6ac49e2965e7e28d81c26159d68ffb808ba923bfb4202fa0bfb2cfe960da",
+      "lines": 57
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ImBindingController.cs",
+      "sha256": "338540b99f056d4c658d0f5c2005b7a25d25cbfe68a3746092a6896f614b4d0a",
+      "lines": 808
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/LeadQueryController.cs",
+      "sha256": "4de065056e9db62e76338af8b6e0f3597f1aa5f88738256daf1ead0a6bae9b70",
+      "lines": 58
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/LeadScoreController.cs",
+      "sha256": "23f7d10408d0aaeebe8c76effdb8c766153214236d0295c2e87b30d5362f6ffa",
+      "lines": 155
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/LeadScriptController.cs",
+      "sha256": "9aebd63caf4b9ee747cb4a7a1a92939967a8ebcc9c91ddd6cdacb115c7336a92",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/MonitorConfigController.cs",
+      "sha256": "b9a90077c7116414356fec922c8d3a50431f8366fd1421cea8e70ed5cb33f236",
+      "lines": 148
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/OnboardingController.cs",
+      "sha256": "05d51836a80a1ef83899e21ed2e19f665fcc62aa38477d9b95e26b2475910e81",
+      "lines": 46
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/OrganizationController.cs",
+      "sha256": "4398f658e7611127834fdb9c66e0a621dd215af847a6c78b96f48745d17a6da3",
+      "lines": 24
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/PreferenceRuleController.cs",
+      "sha256": "db6c976ec22e07f1bcec11ce974c23f44533ed919571f122889cffe368f5cfe0",
+      "lines": 114
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ReportController.cs",
+      "sha256": "05175b559f263cd8f9ffe7e6fb07face3798fb633c7f6a7008574abf9d31c335",
+      "lines": 205
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ScenarioCollectController.cs",
+      "sha256": "a9842bcf2075dff7a20752b05b962a70eb8c5bf7b2cc2f21e35292aa7414be19",
+      "lines": 86
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ScheduledRunController.cs",
+      "sha256": "b67432a85867b86cedf0d1c1510176e7ab9d0425d1a90c159f36063aebea6185",
+      "lines": 273
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/ScheduleMigrationController.cs",
+      "sha256": "50f192918de73c19774b02b697095201185cf5d2af4dbf9027ad6eaeaef4d9b7",
+      "lines": 72
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/StudentOperationController.cs",
+      "sha256": "b9cb7832b49a40bb2569c6945fc810f8bc8a5f6601d61e2d6d1044c36ecb214e",
+      "lines": 148
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/StudentSmartListController.cs",
+      "sha256": "cfece1552fcde92cc577db8aa682a61de35635b01376d51324d20f27329c1505",
+      "lines": 68
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/TodoController.cs",
+      "sha256": "6c548f817d164beaf4bc17dc51ae21e3cc833e180e6d14e843787118c94044ab",
+      "lines": 81
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/UserController.cs",
+      "sha256": "33194af96dddedace4282dc8a0bf4544791d5d563bb5766d9cfd968324375f53",
+      "lines": 267
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/WorkbenchFootprintController.cs",
+      "sha256": "bcc88ee1ece27c5e67b2f4f984b9ae6f578b7f60928973544e3383bacd14c6a7",
+      "lines": 46
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Controllers/WorkbenchReportController.cs",
+      "sha256": "15105c096f7a13e0c4a53c97902a8d23c5e84198f5b08f75dcc825f0ab9fa366",
+      "lines": 144
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/McpServerRegistration.cs",
+      "sha256": "b145fb3e83b01becf8d22209c65ce629f3ab83856f1ea286f2adcf033c7185eb",
+      "lines": 46
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/OAuth/AgentOAuthEndpoints.cs",
+      "sha256": "6b4e777282e07eded9a76ed187f6769a48826fa1fc17f3fc9e611b24f07d284c",
+      "lines": 432
+    },
+    {
+      "path": "wtwo-server/WTwo.Agent.Web/WTwo.Agent.Webapi/Program.cs",
+      "sha256": "605bd387f99acb5bb419c22386c3d1af445b6b92765033c21196d9bfe7f8cb14",
+      "lines": 965
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/config/nacos.dev.json",
+      "sha256": "9e235920cab59a440f2a4a205fb272ffe29bdc7a56bd562271c640599d5d1731",
+      "lines": 8
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/config/nacos.prd.json",
+      "sha256": "c903caeb0e25492a10d569703a6334f483d1a29cf11b205f52231153c64580a5",
+      "lines": 8
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/config/nacos.test.json",
+      "sha256": "9b59aaea397f397f1ec61f5f850ac09cdfb2d08f72a2cab386962bdf66317137",
+      "lines": 8
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/package.json",
+      "sha256": "916de5c206d5a75d5cd106fb8321c08a9c99c7287f83cbf6a5e8a6d9a3741098",
+      "lines": 50
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/adapter-manager.test.ts",
+      "sha256": "e79b40909a293b4ccd3c6cdcbda05006bf7480e17ba8e063a92def07ef7bdbed",
+      "lines": 305
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/adapter-manager.ts",
+      "sha256": "8479568c47abeeb8397b6a7e15964decd4d76b83b58b8d33449d3fdc5970fa5a",
+      "lines": 289
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/agent/client.ts",
+      "sha256": "d1abdd2aaeea3b42956614ca76379e13db0ca45b14f8539182f3df1bd5bfbf04",
+      "lines": 287
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/api/message-delivery.ts",
+      "sha256": "6cfdad81a9ccc5a9cdaef6e48a6226c31d7244cf857549d23f0d7be6f40cad67",
+      "lines": 151
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/channels/dingtalk/ws-adapter.ts",
+      "sha256": "506b1f3852b3cc2d4ab8e720a705b6a9f27465b79bce6f585aba710393538a3c",
+      "lines": 601
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/channels/feishu/ws-adapter.ts",
+      "sha256": "77ebdd78dea752cdb56abf9912abaebb336ecc6ab3f368d12d0b5005d3f88f4a",
+      "lines": 750
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/channels/wecom/ws-adapter.ts",
+      "sha256": "45c3afdba9165718128cdfd4fb211618d3bf92aa93fef665959f76b91faed274",
+      "lines": 778
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/config/index.ts",
+      "sha256": "86bf03a754655346caeacd30f7222bb5e8f186d9a7fff37a41f04f566f0520ab",
+      "lines": 252
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/core/router.ts",
+      "sha256": "458a10b6b3cb03d6784aa403b8ddd625315bb42f90d6d1a8afc5fb8004e75f2c",
+      "lines": 418
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/index.ts",
+      "sha256": "60dc871805ae17ebb5abb03649d0d5f7e89333a1cbef5fa40d6ee56fcd5987ea",
+      "lines": 289
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/types.ts",
+      "sha256": "7a55b5aa7d22942ae7726f557803062fdcfba71a6216d965487aba805ccc3865",
+      "lines": 108
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/utils/links.test.ts",
+      "sha256": "377a47ba61ddbb7efd4ac97ec754dbbca9ae908736fcc2f5575eaa243bdcd547",
+      "lines": 168
+    },
+    {
+      "path": "wtwo-server/WTwo.AgentIM.Web/WTwo.AgentIM.GateWay/src/utils/markdown.test.ts",
+      "sha256": "422c2471feb9e51b58cae9b547c200b672cd977d88ba14f4e413aed3e5e65a22",
+      "lines": 322
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.BusinessService/Service/OssUploadOptions.cs",
+      "sha256": "7d61a507c325400080cab95d7b11b094b82437d46b73377dec3b21b533e2ee6f",
+      "lines": 29
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.BusinessService/Service/OssUploadService.cs",
+      "sha256": "18d9042651888badcef9f304e1e9fbd2427836d104a254793deb66246311800b",
+      "lines": 375
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.BusinessService/Service/TenantDbResolver.cs",
+      "sha256": "bc30c2973efbffab46b6a1e78a1bab433c47b7e24b2f0b608d098111961cb174",
+      "lines": 133
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentCompanyProfileDO.cs",
+      "sha256": "a5b89e6bfdac13386b37699594b0c72cf56571248992683a98c025e72e6d31b7",
+      "lines": 67
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentConfigVersionDO.cs",
+      "sha256": "cb24cb01b9ddebfcdca86e653c8c451a4940f172853c7db8348ed2dbb7e0ad20",
+      "lines": 74
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentConversationContextDO.cs",
+      "sha256": "73c08ecfca98e78bceaf8d222f6d2b86a0a9b30197ff86ff3d5516d068f3159d",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentConversationDO.cs",
+      "sha256": "90b7c29b0ae74110e2a9792ea0dbc868a77dbbde9c652ed5a21834cdb0406c0d",
+      "lines": 80
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentConversationMessageDO.cs",
+      "sha256": "859a5840df094f8ce5fc527e780cf80e21b72a028e9116944226abb92d43694b",
+      "lines": 88
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentDatasetDO.cs",
+      "sha256": "b3ab13691756068bcbd7e83913dbb541923ecc6ce49c084e652362847e2bb07b",
+      "lines": 74
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentEventTriggerLogDO.cs",
+      "sha256": "248596f95eebdaa0137d1efc26aa5a06348f0ff1584eec74c7866fc5e4af59a2",
+      "lines": 53
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentFeedbackDO.cs",
+      "sha256": "f3bac9d2a371105112678fd326a82040cf80e5eafa68114f6c2f547337efe326",
+      "lines": 78
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentGlobalConfigDO.cs",
+      "sha256": "e4a28c48e4df98adc43589791e939463506c6a69f1282f45f4f55ee0cf9010ff",
+      "lines": 29
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentImUserOAuthDO.cs",
+      "sha256": "defe971e94bc6ada574f543fa41dcb96fc42b954a0a9982610c8116f17e62c48",
+      "lines": 126
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentInstanceDO.cs",
+      "sha256": "eb42ea826a34ecf83c511931ea9c1b66b5fd575e94740dc9e109c4232b17d4e8",
+      "lines": 55
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentLeadScoreRuleDO.cs",
+      "sha256": "3263891d2419363361bd0477d6795350808abd4c4ab18b027f36b25f358d02f3",
+      "lines": 49
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMessageDeliveryDO.cs",
+      "sha256": "1f0fdde7e511fbfedb78ef58add90736b2db5a9b6b7a054716ca85d7606450c2",
+      "lines": 67
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMetricDO.cs",
+      "sha256": "f3e71ec81b5c2dc8dc31ebf185c50199c481a72030d1905e4de7dfbe35db8b1e",
+      "lines": 86
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMonitorAlertDO.cs",
+      "sha256": "f794329cb224fa09157e48e0839bb17083626e552e46c4986e328e7e80963ae5",
+      "lines": 61
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMonitorConfigDO.cs",
+      "sha256": "05e173f76f8d7e3339d5d9f10e9122c8ec5c5724a2dc17fb39a7317b9e279147",
+      "lines": 147
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMonitorDeliveryDO.cs",
+      "sha256": "3e6508adeb5f084921d1262bb6bcf91dec88d9e5364973b9515249b45a3bf110",
+      "lines": 79
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMonitorItemDO.cs",
+      "sha256": "e1ac0f67ed5ec5b2d52dabb64a822b1fd0ab07d11632eb341095c94d1e0b690d",
+      "lines": 79
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentMonitorRunDO.cs",
+      "sha256": "c67aefea5e7f0837207238c666f5a6a697f80f85d68b74f8a5c36f5a3eda0861",
+      "lines": 60
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentOAuthAuditDO.cs",
+      "sha256": "08621a86a52bb238429af4548b73edcb2a56fb785b29e67650b497a8cb304d49",
+      "lines": 43
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentOAuthClientDO.cs",
+      "sha256": "513b65bccedb958ef3e4cd84b19289d6d4523d2ef6c376608d0ec17d30f9bc85",
+      "lines": 46
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentOAuthConsentDO.cs",
+      "sha256": "ab73a9abff858e69fca611c0b8d8dae7fd8e3840de6f7d5d579ee9f1c712f5d3",
+      "lines": 44
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentOAuthTokenDO.cs",
+      "sha256": "bd08ad0bbc2322a0ad68ee4a255d8b56a15377e26f3aee2cb80fd88f9ec897ed",
+      "lines": 63
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentOnboardingProgressDO.cs",
+      "sha256": "9265915e431d0c848db8ddaa1197e87cff6fde3745fbafe6683a06b158253ecd",
+      "lines": 25
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentRunTraceDO.cs",
+      "sha256": "a4763311469665436270ab052d79b1020351f7069ccfd40608d7f8a6f045c397",
+      "lines": 68
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentScenarioCollectDO.cs",
+      "sha256": "a11f1448e0261a90b622984e0479b10b65f76104bd00296e953e329f8ffff7bb",
+      "lines": 54
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentScriptRuleDO.cs",
+      "sha256": "e9fc6b46686a21bb8406a37160c3c05563ac9a504290a321f9b968ffcb6b83e8",
+      "lines": 45
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentSkillBindingDO.cs",
+      "sha256": "754c6390e7aa0bf779d00a5263894b8aad5a3cb449e7353d5734d9fb2d8634a5",
+      "lines": 26
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentSkillDO.cs",
+      "sha256": "f7b1ac01a19306e3b3829d0bd6c0b7bdfd0612e31b658e7e8a1a209e26e9c342",
+      "lines": 55
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentSkillHistoryDO.cs",
+      "sha256": "4df5c3d12d705e8627dff1b93e2462819b55d145b32030342bd9f597d1bf56ba",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentTokenUsageDO.cs",
+      "sha256": "2ea44add2d5a6f82aaaef218843dee08bda366332105e5ef85de3f778e70d40e",
+      "lines": 89
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentTrialRunDO.cs",
+      "sha256": "3c0e4f5afe1a677cb5c11479866fdcbf8d63abe4f9a477510df9b57f27a4e315",
+      "lines": 94
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentTurnDO.cs",
+      "sha256": "b4c18afaef5a6f91149b2cd90580c5cf7b70e11e383f4c8c29b46948bcb49f01",
+      "lines": 145
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentTurnItemDO.cs",
+      "sha256": "083ba4491fcc0bf165aab5dd3d72d770e67567979db4ad4c8628a3519f3dc5a7",
+      "lines": 109
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentUserArtifactDO.cs",
+      "sha256": "5c5418fc27a1642b04f04c35811dfa1175efcda826b49146d8171be1ea4aec53",
+      "lines": 93
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentUserImBindDO.cs",
+      "sha256": "7f3cf3944fb619027767e0f6cb13d9aea66d8e9732df50ea8c5d12f6e7936e56",
+      "lines": 85
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentUserPreferenceRuleDO.cs",
+      "sha256": "335d10615cad841b59df905401ba7707b5a0acf9cd1731bca1c1e25cd6678473",
+      "lines": 56
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentUserTodoDO.cs",
+      "sha256": "6654fc5ea7dd8e481db7afcfe4472309485bb602eac68b7035412b2a34e0d7f5",
+      "lines": 128
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentUserWorkbenchObjectDO.cs",
+      "sha256": "5318d3e75322d17a32ad3b1fe3bb27544d8cb7042de8069a1ebd6a146a312025",
+      "lines": 74
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/AgentUserWorkbenchObjectVersionDO.cs",
+      "sha256": "0e157000dc34d97f0ae3d7570f88a04801eea794abab015bfc57e999b2e9b3a9",
+      "lines": 99
+    },
+    {
+      "path": "wtwo-server/WTwo.Bus.Common/WTwo.Bus.Common.Model/DBEntity/CentraHub/ClawUserBotBindDO.cs",
+      "sha256": "1230b1e65e382a81165aebd0883c3c9c99df656f904b81e1b1f3d24c1b4c8b06",
+      "lines": 134
+    },
+    {
+      "path": "wtwo-server/WTwo.Common/WTwo.Schedule/Extensions/ScheduleServiceCollectionExtensions.cs",
+      "sha256": "dc7f0d50757bc43a586a9e029072bfc2727906291c285adbf8d4ebe48b0b0dc2",
+      "lines": 66
+    },
+    {
+      "path": "wtwo-server/WTwo.Evaluation.Web/WTwo.Evaluation.Webapi/appsettings.Development.json",
+      "sha256": "df9870f6ce81bbe217fbf074b2589aa8f06f2bcea146bc50546e02bfb6094215",
+      "lines": 37
+    },
+    {
+      "path": "wtwo-server/WTwo.Evaluation.Web/WTwo.Evaluation.Webapi/appsettings.json",
+      "sha256": "cc55bc4b30ce84f9f6d2b2a2861b6a0d68f3ec25126a00a1d580cff3f72767fa",
+      "lines": 38
+    },
+    {
+      "path": "wtwo-server/WTwo.Evaluation.Web/WTwo.Evaluation.Webapi/appsettings.prd.json",
+      "sha256": "e8cfaef5f7763c34e44a8ef2d2d0e98b33f36602e3b830001afbe1f774bc5b5e",
+      "lines": 32
+    },
+    {
+      "path": "wtwo-server/WTwo.InternalProduct.Web/appsettings.Development.json",
+      "sha256": "befeaffab6b7a01cc464b6fbaa9a623cc0b6e99ea3158a585606720a70119e5d",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/WTwo.InternalProduct.Web/appsettings.json",
+      "sha256": "08aefc41ad3106ee2bcdd00b996e312ca759f2fff4faa606e2c78216377f22c8",
+      "lines": 43
+    },
+    {
+      "path": "wtwo-server/WTwo.InternalProduct.Web/appsettings.prd.json",
+      "sha256": "d9333e57a9e06e7526986bdf1559b0e9790e5a79d64dcf4c0008474f43d928eb",
+      "lines": 36
+    },
+    {
+      "path": "wtwo-server/WTwo.Report.Web/appsettings.Development.json",
+      "sha256": "1fb878993bd34833e1dcbe2517e54b749d1801c93f1ec804d09a8315db68c734",
+      "lines": 40
+    },
+    {
+      "path": "wtwo-server/WTwo.Report.Web/appsettings.json",
+      "sha256": "365c9797f6d211d319a0740d9a7ec1e3b72a96ac32adbb0e85007c08d2f91ad7",
+      "lines": 35
+    },
+    {
+      "path": "wtwo-server/WTwo.Report.Web/appsettings.prd.json",
+      "sha256": "64eaa7aafd77c6849d70f91fb30fb7a68e6b3d638bc54340768b824e95f13513",
+      "lines": 36
+    },
+    {
+      "path": "wtwo-server/WTwo.Report.Web/Controllers/WorkbenchReportController.cs",
+      "sha256": "65ee866eb9d271c6e7d6f726c15f479369c5e31372a80151dc8f65bd30027637",
+      "lines": 62
+    },
+    {
+      "path": "wtwo-server/WTwo.Share.Web/WTwo.Share.Webapi/appsettings.Development.json",
+      "sha256": "1d60638efbb0094be7e3c5422c38528f98f8d22c1b85d5dddca892af32b0aa6d",
+      "lines": 34
+    },
+    {
+      "path": "wtwo-server/WTwo.Share.Web/WTwo.Share.Webapi/appsettings.json",
+      "sha256": "31616eacfa8104956a16f076b04ea7f761da6c387f6f052934d08328e9f628ee",
+      "lines": 56
+    },
+    {
+      "path": "wtwo-server/WTwo.User.Web/WTwo.User.Webapi/appsettings.Development.json",
+      "sha256": "d666b84c14bbdd951e2387440e83ce212b1c9bb4797b43160a52ff170d528e9a",
+      "lines": 31
+    },
+    {
+      "path": "wtwo-server/WTwo.User.Web/WTwo.User.Webapi/appsettings.json",
+      "sha256": "5f942044326b1190cd6ece578b58294413e099be1441e3ce05f644ad2c06dec0",
+      "lines": 33
+    },
+    {
+      "path": "wtwo-server/WTwo.User.Web/WTwo.User.Webapi/appsettings.prd.json",
+      "sha256": "483bdee47e64b9217fe187fdc8339a78174820e1a0324699c6338996d86652aa",
+      "lines": 33
+    },
+    {
+      "path": "wtwo-web/.gitlab-ci.yml",
+      "sha256": "a59e0f6a8b08e29f7d6747b114a487f23f008c79622ea1df4ff7fbd96a68f492",
+      "lines": 275
+    },
+    {
+      "path": "wtwo-web/common/tool/subcribe/index.ts",
+      "sha256": "3d563148d32ba8cafba2fb9df775ec90d10ebbb6a060d8cda6060cf641322b87",
+      "lines": 71
+    },
+    {
+      "path": "wtwo-web/package.json",
+      "sha256": "ea6cd79c3c9b5166f51b912d9335f9c5697e0255d95ee428c65c92ebe049477d",
+      "lines": 75
+    },
+    {
+      "path": "wtwo-web/report-validator/src/server.ts",
+      "sha256": "793d74fb5475a6a444892070dc85fd3d83efa00413523f3866aaec8dc9624a02",
+      "lines": 92
+    },
+    {
+      "path": "wtwo-web/scripts/build-target.mjs",
+      "sha256": "a25357839b259cdea6600ec5061e94f2e6309444b4f1c7ee361cb8da4408095e",
+      "lines": 24
+    },
+    {
+      "path": "wtwo-web/src/airaScenarioCollect/main.ts",
+      "sha256": "db86d25da492519dcb086fc1caa1ad7063d6d821f8548188106123bf5c74c1e7",
+      "lines": 6
+    },
+    {
+      "path": "wtwo-web/src/api/index.ts",
+      "sha256": "ea8523973262ddbb6e02c7d7687a0758d7a58fff3dc5f15c6e558dd0bb34c207",
+      "lines": 38
+    },
+    {
+      "path": "wtwo-web/src/main.ts",
+      "sha256": "b0e7731cb82919796b5efb0f18c4b8df19fa37af8b3d572c7802c0b268a519d1",
+      "lines": 313
+    },
+    {
+      "path": "wtwo-web/src/router/index.ts",
+      "sha256": "01ceb4be95693efe9703cfb1abd8e324bce266aeafec3c87993f133a7b6c2671",
+      "lines": 36
+    },
+    {
+      "path": "wtwo-web/src/router/modules/student.ts",
+      "sha256": "90953c22bcca453ab223b5530219f251c8a078f2076b1107d67dfd6c4021951f",
+      "lines": 7
+    },
+    {
+      "path": "wtwo-web/src/store/index.ts",
+      "sha256": "00f0746574e285db6b0adcf6aac9d1a07e45dcd6078225dfdd2bb5e9c88fc53a",
+      "lines": 130
+    },
+    {
+      "path": "wtwo-web/src/utils/index.ts",
+      "sha256": "66c91fc20f6df030cf8090ce099552187a3e11e22a03b85c467e1782f18bf772",
+      "lines": 814
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/aiUsage.ts",
+      "sha256": "15df4a7a7e15542bf05a100eab58704503380beca5d321f12df005bb1247f762",
+      "lines": 306
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/calibration.ts",
+      "sha256": "3dbe61d016899d6a7f389df791ebb3ab7ae771240cca59c0e91f92552bf8c557",
+      "lines": 347
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/course.ts",
+      "sha256": "b5355884ad13b434fb1e06c19053568c649776e058b2a4b91465cf9d4bf4afec",
+      "lines": 99
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/enrollmentReport.ts",
+      "sha256": "25732d2911b9d2f1a8e3a72714517adc71417de27a57cffcebc670c112b57ae2",
+      "lines": 216
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/familySchool.ts",
+      "sha256": "3ac4a7d25522c40d7487d33fbed2f5fcbac9301074257e4d738906e63bf0d06a",
+      "lines": 70
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/fee.ts",
+      "sha256": "5a6210d82ea89fc654ea17dc27cf5231e5829f48b6dff357a4889ddd675b9ff6",
+      "lines": 917
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/imBinding.ts",
+      "sha256": "c61474ff522d42bf5830fa265054708b899420dc9463fa8243c3a4f458bc3c3d",
+      "lines": 309
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/leadQuery.ts",
+      "sha256": "be540184e624d3ae2fc1aad4561faa71418cd6bff9a64c690d390112646e0cae",
+      "lines": 225
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/leadScore.ts",
+      "sha256": "1e3e9f78edb686a475414f2d769dc63b4908aad1cca941b2bae9aacf3ecb42a3",
+      "lines": 120
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/leadScript.ts",
+      "sha256": "efa4f65451089de4f5a744a7b3e34224ab0ff29d7e973885933a00f9847f4478",
+      "lines": 97
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/makeupClass.ts",
+      "sha256": "6eaaaef713bf5d68eb3e4515b5f6c31e4b6dfce86f28f62352a53af982cd712b",
+      "lines": 120
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/monitor.ts",
+      "sha256": "1cc2454af0d4269465490bfc2209f296e99b8a03ffb4a213f94d06ba7f009377",
+      "lines": 468
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/onboarding.ts",
+      "sha256": "f45ce84fdb72d8d65be16552f44a8f84680ba2c8b589a882f306d288b4cd6214",
+      "lines": 38
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/order.ts",
+      "sha256": "0d9ba06aa3ad9da8063c6078ca599ba0ee8ad7bdbd0b5c35b9bb487e1fc13843",
+      "lines": 269
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/preference.ts",
+      "sha256": "d02b5c4da827a1b42cb524086667ae3df2d4534bcccfd4473e0d9aaae22c9a77",
+      "lines": 52
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/refund.ts",
+      "sha256": "93a0ecbad6e3f60f198dd4962368e725dee4ac919c8126007f5c806bcc4ae848",
+      "lines": 351
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/reportQueries.ts",
+      "sha256": "10b183f9895d873132dc6c6b0b45de0cb9d27586aabc539fa606dbb1727939a2",
+      "lines": 548
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/student.ts",
+      "sha256": "8cc2a848e74a8ee8964e288567fd3c586b7436585da4c578218a3b7433a6225b",
+      "lines": 288
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/studentOperation.ts",
+      "sha256": "084ddfa1763719a82bfc17ab8dd021d7e1a143dfca257a01638c3a4512a71d19",
+      "lines": 925
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/studentSmartList.ts",
+      "sha256": "be26c29577e6d213a581454ba66bbc655739b131a4f1803b0dc5bbe88af1cd1b",
+      "lines": 240
+    },
+    {
+      "path": "wtwo-web/src/workbench/api/workbench.ts",
+      "sha256": "1201fd5890b96879aaf2b8b2d1b825f4ff038e611166871d7eab0cefdbefca4d",
+      "lines": 679
+    },
+    {
+      "path": "wtwo-web/src/workbench/capabilities/artifactRegistry.ts",
+      "sha256": "6bd02d31c8298ad81aa606535e5595fb177433ed3407ff3b720084a6a466d26b",
+      "lines": 90
+    },
+    {
+      "path": "wtwo-web/src/workbench/components/index.ts",
+      "sha256": "84c15c60c35c756639fabbe18a162b5fff2b32ee99d30529ac00ed354015f64e",
+      "lines": 19
+    },
+    {
+      "path": "wtwo-web/src/workbench/components/WorkbenchPreviewLoading.vue",
+      "sha256": "4f50d0eaa81991e264b41d0ca2682f73a605615b180d1a43de70ced99288e7e5",
+      "lines": 72
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/index.ts",
+      "sha256": "7674514e7e507bb222a96be2eac57b524f307147b63e4276b2311d483771a0c7",
+      "lines": 87
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/calibration.ts",
+      "sha256": "cb9e4296e47c65dc53df794da3fd0484834fdeb0000b24d490ba3f3dce670945",
+      "lines": 236
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/chat.ts",
+      "sha256": "91b48bd84351c634091c50d85dfc40bdbe314dd0685c4dff33e834024368ad46",
+      "lines": 205
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/familySchool.ts",
+      "sha256": "2d05e46f432d874eb0be50d68decf8c69fb25b11922a8ed9f448e5a254e05abf",
+      "lines": 340
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/leadQuery.ts",
+      "sha256": "aaa0bba6b065308297dcd2d0a31172a7703feb43bcc7d858e248e0066bdffe65",
+      "lines": 186
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/leadScore.ts",
+      "sha256": "e42d725be9023bc30d7f4314fa697fe7e91901af63849b76e44cf84f6d6179f0",
+      "lines": 185
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/leadScript.ts",
+      "sha256": "ea9df20c49212805086efaadae290fe34f5f3521361a1df8a68c11f5a7545cb3",
+      "lines": 77
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/monitor.ts",
+      "sha256": "0a0b345320a02059cadbf86a9576026448823eb6e82aea813e4db476bba591cc",
+      "lines": 489
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/mockData/studentOperation.ts",
+      "sha256": "801fc3eff53915f02dc81c405faa307c53fc84be5fd09c3ad3d05916f0d78a8f",
+      "lines": 429
+    },
+    {
+      "path": "wtwo-web/src/workbench/demo/scenes/feature-demonstrations/index.ts",
+      "sha256": "4a82e48e7c8235955ec64a5bd99bf892081fb469a45157b976304589bff85974",
+      "lines": 161
+    },
+    {
+      "path": "wtwo-web/src/workbench/footprint/api.ts",
+      "sha256": "390643c154851d27429ec265f6be544e0cd33593c8fc219a1ca68622333aff37",
+      "lines": 65
+    },
+    {
+      "path": "wtwo-web/src/workbench/footprint/types.ts",
+      "sha256": "5824f5894e75e7b2bff9762639c69c76cdffd2162f999dc3e7ca083cb2c01a7d",
+      "lines": 18
+    },
+    {
+      "path": "wtwo-web/src/workbench/imBind/api.ts",
+      "sha256": "fe98dc677631616e58b7ab94d0a4a0e629234793189719f96b692487e836d654",
+      "lines": 53
+    },
+    {
+      "path": "wtwo-web/src/workbench/main.ts",
+      "sha256": "58dccb9dd86f8732d3d84689ea660f84a66a9e76b4dd958b62b760f985f48c8b",
+      "lines": 278
+    },
+    {
+      "path": "wtwo-web/src/workbench/MODE_SUPPORT.md",
+      "sha256": "14668629d366df9d6de2f6143777af3cde4c9f7ab65456788e1ccc409bbbd533",
+      "lines": 251
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/ai-settings/manifest.ts",
+      "sha256": "d80116d6540f7f09e6b007f66de8ee79845bb7f5009d160ff5c060d517c9c248",
+      "lines": 65
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/business-suite/manifest.ts",
+      "sha256": "69f534f492d02b4793ad1f54d1993056f3bfe5f31d19131814a0d030b214caf4",
+      "lines": 302
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/index.ts",
+      "sha256": "935bd8fc1d31b5defb58d4b25f1c82c8e05ad87420ea4c5f21924b53ae1fa5b4",
+      "lines": 26
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/lead-workbench/manifest.ts",
+      "sha256": "8652f207b05e366a78d6f030f77178ee70fc9fdde25e4207e6c91d71493f08bd",
+      "lines": 737
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/monitor-report/manifest.ts",
+      "sha256": "558f46d9130971afec1533f693222f1eaf672a71ab02f5a0306bbb4a82e75f51",
+      "lines": 47
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/onboarding/manifest.ts",
+      "sha256": "3324173aacdedcb8b21222ce92b42a5b508e128571e34572731170106aafb419",
+      "lines": 18
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/apps/student-operation/manifest.ts",
+      "sha256": "9daf4775749e6bbfc90010307aaf8f26a570a1c1e31c24d82cfeeaab2f3fe8fd",
+      "lines": 348
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/components/AppContainer.vue",
+      "sha256": "129181949c81fc5e0b33e64b00b91c1669506523d72a08d5dcd4c29141a70223",
+      "lines": 594
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/components/ChatBody.vue",
+      "sha256": "5efc0b00ff213a57403acad24b70bdc123171f532924d931e05f088600dd73bb",
+      "lines": 5123
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/components/DesktopCanvas.vue",
+      "sha256": "5976cb54a2838a8d251277ff1a21b26677b32b0a8baf6de02fa8456878bee371",
+      "lines": 125
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/components/ProfessionalWorkspace.vue",
+      "sha256": "f3dc92c7903fc365bdfd12fd568dae939f91e66369734c19773c3b29e43669f2",
+      "lines": 591
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/components/viewers/FileDeliveryViewer.vue",
+      "sha256": "fc582d9e383319ea39f37fe23c47cde6bf3d86b5f7f8ad49679881488496c27c",
+      "lines": 501
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/components/viewers/index.ts",
+      "sha256": "890ea87eab5ff56188fed353c178e91ac50cdfbb526c13cd732ce52514368208",
+      "lines": 16
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/types/app.ts",
+      "sha256": "35969b1b139602196ec46c4ad98154c4e93191e9f186c8bf5c4d8f5517062ca1",
+      "lines": 194
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/types/index.ts",
+      "sha256": "42504bc1be3193ebecd4f58c25b082b2acc8e3df191cf39f65ed77d2b4d5856b",
+      "lines": 139
+    },
+    {
+      "path": "wtwo-web/src/workbench/pages/Workbench.vue",
+      "sha256": "b433846c729906e8303d080bb8cee061e994639c91cd1d034f4a1a7b5d90874e",
+      "lines": 375
+    },
+    {
+      "path": "wtwo-web/src/workbench/reports/api.ts",
+      "sha256": "6cb08b1441a68d159b3b9d8c67a95e685fbf074a93b4d6a1d90a246d8a0f4302",
+      "lines": 101
+    },
+    {
+      "path": "wtwo-web/src/workbench/reports/components-report/types.ts",
+      "sha256": "727fb8c863e9c82485656b8713a8e6718a0e34d9fec9940714e9f3a4ee797487",
+      "lines": 98
+    },
+    {
+      "path": "wtwo-web/src/workbench/reports/contract.ts",
+      "sha256": "9208ff002b1719e213ac9315aad90b7db794bd2b51738ac1ad76b92ea39680da",
+      "lines": 132
+    },
+    {
+      "path": "wtwo-web/src/workbench/reports/renderReport.ts",
+      "sha256": "fb86bea51f765a1a643296efb11fb15122c28135e69ee8e2be1c6f1636deb3ab",
+      "lines": 335
+    },
+    {
+      "path": "wtwo-web/src/workbench/reports/ReportRenderer.vue",
+      "sha256": "ed19c524427c230a89f54dcc8881fb721e9787fb78c2d2efd6b960a72fe2ce0c",
+      "lines": 86
+    },
+    {
+      "path": "wtwo-web/src/workbench/reports/window.ts",
+      "sha256": "54781a551438015285c5a247e1dac897a39312ad1bf9795fa7d42088679acba2",
+      "lines": 9
+    },
+    {
+      "path": "wtwo-web/src/workbench/runtime/appManifest.ts",
+      "sha256": "f7e495ee193b2c58797600ad0650073677179da55a10a008d4cec1fdd0d18427",
+      "lines": 182
+    },
+    {
+      "path": "wtwo-web/src/workbench/runtime/interactionRuntime.ts",
+      "sha256": "880bcf62bb0f8db81b9a2fd14bc2f3a18d21f5b792c4e843245c0ef15186bef1",
+      "lines": 158
+    },
+    {
+      "path": "wtwo-web/src/workbench/services/ossLoader.ts",
+      "sha256": "ff2146f39041fa199f4d8bffcd6195e97e32d77f1c77507144aa5e58c05e7230",
+      "lines": 65
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/appRegistry.ts",
+      "sha256": "7cc1e10d5c941349436f50fc6c8faea860913ccfa840dc23a283a516167c9b3d",
+      "lines": 158
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/chat.ts",
+      "sha256": "7fe48715211ef57bf7599bacd1c2e8ba2fab7567e0ef9a740cfe7d0cf1cd5cad",
+      "lines": 1936
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/chatHistory.ts",
+      "sha256": "a768dd823c9823692d49744ff10b646369e3904c69e9fdbd2c77d0b73630d939",
+      "lines": 456
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/chatReplay.ts",
+      "sha256": "cf5fb4e6a93695ff8ffc53463ff43331256f659b459f0728e42f66d55492c6e5",
+      "lines": 381
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/connection.ts",
+      "sha256": "a6abc04e14ccc7286f972d6a2308e646e390b90d01207d377c0b94ac85aeda3c",
+      "lines": 290
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/object.ts",
+      "sha256": "2c25ea0ffab071e4405d2a283200111c79867167a3320e18ab2f5f4e4841be52",
+      "lines": 298
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/onboarding.ts",
+      "sha256": "61fe7841aae8e0bf00629913698b59caa172bfe18480d2fee6e81be1cd39b76d",
+      "lines": 284
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/opRpc.ts",
+      "sha256": "b88e8311d59569d96117559e071f4e78c3864df9b5ff662958e951ce7a58a55e",
+      "lines": 929
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/stateMirror.ts",
+      "sha256": "1ca6a7f32295726f34b52fb805705a37bdbc466997d2319a0349b345a3db1736",
+      "lines": 237
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/window.ts",
+      "sha256": "9f9356a346cd0c31d3078bfaa835a3f8e0e30d94205a7e81c6c8376b299e6b3c",
+      "lines": 520
+    },
+    {
+      "path": "wtwo-web/src/workbench/store/workbenchMode.ts",
+      "sha256": "5941af6bf3b669641dafc94cb8e8e9c51aadba00d036dc0dafc041158dc1814e",
+      "lines": 142
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/app-manifest-registry.test.mjs",
+      "sha256": "c6e8a8c524abf89a64165072bdc8c8dc1d7bba6be637b6117ee3f617dd47eddb",
+      "lines": 95
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/artifact-registry.test.mjs",
+      "sha256": "31cdbaf2f1994346792f1f441a5dc57c55b0f7af3450e1a8287bc0f292369180",
+      "lines": 38
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/footprint-versions.test.mjs",
+      "sha256": "e787e84dfa2426c9ba54ef6f6ca4796f44a98d026906a4f4e0c659ec7100a90a",
+      "lines": 267
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/image-upload-contract.test.mjs",
+      "sha256": "80ba6ac88260fc6ae8a3061ca630b1d953152f5d0477fef5e45082db6cfc4082",
+      "lines": 30
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/interaction-runtime.test.mjs",
+      "sha256": "e5e86ff4a22412ed5684a239f6c1fc504e32a91b0d73e9c96bf8eb62424bc0b2",
+      "lines": 131
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/mobile-artifact-viewers.browser.test.mjs",
+      "sha256": "188135e66464deb0a91ec0336a849bce92775d5ee6f48cfa94efedb85a58407e",
+      "lines": 182
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/mobile-entry.browser.test.mjs",
+      "sha256": "e2df5cde45d64156b61e5855564cdb75e1d2231a844caeca2f002ceaf1b61b09",
+      "lines": 153
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/object-load-race.test.mjs",
+      "sha256": "cffeda3b4ecd84d2cb1fcd53358e1217c5cfac2c2e310a48b7f076f4ebb68a07",
+      "lines": 119
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/op-rpc-conversation-race.test.mjs",
+      "sha256": "c503158899d7aa947ac958821afbe3485a54f503d057bdd8ed4232c11de0c17c",
+      "lines": 215
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/op-rpc-defer-entry-card.test.mjs",
+      "sha256": "4aa978c5fd1070fb84a8b2e58efe2d2796f48563e991fb1b0f0d6f661aa37af3",
+      "lines": 139
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/professional-mode.browser.test.mjs",
+      "sha256": "c0b8d5abfdfd9c4df35b9a0ce6bcd91d5c7a85defeb719f4e2b43b68d1cab160",
+      "lines": 1530
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/professional-mode.test.mjs",
+      "sha256": "a17a0959ca9657dad420fd21981670ab0c7fa41687c3180a312bab04e86713b4",
+      "lines": 361
+    },
+    {
+      "path": "wtwo-web/src/workbench/tests/skill-invocation-source.test.mjs",
+      "sha256": "e1510d75c4091db239520b028932524679cd8bfaea5424f991e21a651fc21f8e",
+      "lines": 66
+    },
+    {
+      "path": "wtwo-web/src/workbench/woneScheduleApi.ts",
+      "sha256": "48043ca22d58be94b2803f1cad2196d2b2eb9de6e814753de5705b8a49044ddf",
+      "lines": 79
+    },
+    {
+      "path": "wtwo-web/vite.config.ts",
+      "sha256": "91ddc79d3720d8605b6cf2f15468f06de4628afea9640cfe4b6e5201a52417ad",
+      "lines": 251
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+##
+## cx-py 默认配置。
+##
+## 可提交的默认配置，不含凭证。默认与 cx-backend 一致开启 Nacos；
+## 本地开发由 application-local.yml 覆盖关闭。
+##
+
+bootstrap:
+  server-port: 9514
+  profile: local
+  nacos-server-addr: https://service.example.com:443
+  nacos-namespace: ""
+  nacos-group: DEFAULT_GROUP
+  nacos-username: nacos
+  nacos-password: "<REQUIRED_SECRET>"
+  nacos-register-enabled: true
+  nacos-config-enabled: true
+  nacos-fail-fast: false
+  nacos-ca-file: ""
+  nacos-request-timeout-seconds: 3
+  nacos-config-timeout-seconds: 5
+  nacos-heartbeat-interval-seconds: 5
+  pod-ip: ""
+  app-version: 0.1.0+dev
+
+app:
+  name: cx-py
+  base-path: /py
+  api-prefix: /api
+
+detector:
+  model-path: ""           # 本地开发通过环境变量 CX_DETECTOR_MODEL_PATH 指定
+  model-sha256: "9a2ee0220fe3d9ad31b47e1d9f1282f46959a54e4618fce9cffcc9715b8286e2"
+  device: cpu
+  image-size: 1024
+  confidence-threshold: 0.20
+  medium-confidence-threshold: 0.40
+  high-confidence-threshold: 0.70
+  duplicate-iou-threshold: 0.85
+  inference-concurrency: 1
+  cpu-threads: 4
+  interop-threads: 1
+
+capacity:
+  max-queued-requests: 2
+  max-queued-image-units: 10
+  queue-wait-timeout-seconds: 2
+  request-timeout-seconds: 60
+  graceful-shutdown-seconds: 30
+
+image:
+  max-batch-size: 10
+  max-request-body-bytes: 44040192    # 42 MiB
+  max-batch-bytes: 31457280           # 30 MiB
+  max-bytes: 15728640                 # 15 MiB
+  max-pixels: 40000000
+  connect-timeout-seconds: 10
+  total-timeout-seconds: 30
+  max-redirects: 3
+
+# 试卷图片增强固定管线参数（不通过请求体暴露算法开关）
+image-enhance:
+  enabled: true
+  concurrency: 1
+  deskew-max-angle-degrees: 15.0
+  deskew-min-angle-degrees: 0.3
+  clahe-clip-limit: 2.0
+  clahe-tile-grid-size: 8
+  target-short-side: 1024
+  max-short-side: 4096
+
+log:
+  level: INFO
+  json-enabled: true
+
+nacos:
+  register-enabled: true              # 默认开启注册；本地 profile 覆盖关闭
+  config-enabled: true                # 默认开启配置中心；本地 profile 覆盖关闭
